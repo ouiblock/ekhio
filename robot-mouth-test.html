@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { background:#050D05; display:flex; flex-wrap:wrap; gap:24px; padding:32px; font-family:monospace; }
+  .card { display:flex; flex-direction:column; align-items:center; gap:8px; }
+  .label { color:#0f0; font-size:11px; }
+  svg { background:#050D05; border:1px solid rgba(0,255,80,.2); border-radius:6px; }
+  path { fill:none; stroke-linecap:round; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <svg width="152" height="56" viewBox="-4 -4 46 22">
+    <path d="M8,7 Q19,7 30,7" stroke="#00D4FF" stroke-width="2.5"
+          filter="url(#glow)" />
+    <defs>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="1.5" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+  </svg>
+  <div class="label">NEUTRAL</div>
+  <div style="color:rgba(0,255,80,.4);font-size:9px;max-width:150px;text-align:center">Neutre — ligne droite</div>
+</div>
+<div class="card">
+  <svg width="152" height="56" viewBox="-4 -4 46 22">
+    <path d="M4,3 Q19,13 34,3" stroke="#FFB800" stroke-width="2.5"
+          filter="url(#glow)" />
+    <defs>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="1.5" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+  </svg>
+  <div class="label">HAPPY</div>
+  <div style="color:rgba(0,255,80,.4);font-size:9px;max-width:150px;text-align:center">Heureux — U profond</div>
+</div>
+<div class="card">
+  <svg width="152" height="56" viewBox="-4 -4 46 22">
+    <path d="M2,2 Q8,13 19,8 Q30,13 36,2" stroke="#2ECC71" stroke-width="2.5"
+          filter="url(#glow)" />
+    <defs>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="1.5" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+  </svg>
+  <div class="label">EXCITED</div>
+  <div style="color:rgba(0,255,80,.4);font-size:9px;max-width:150px;text-align:center">Enthousiaste — W ouvert</div>
+</div>
+<div class="card">
+  <svg width="152" height="56" viewBox="-4 -4 46 22">
+    <path d="M8,8 Q14,3 19,4 Q24,3 30,8" stroke="#A070FF" stroke-width="2.5"
+          filter="url(#glow)" />
+    <defs>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="1.5" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+  </svg>
+  <div class="label">PROUD</div>
+  <div style="color:rgba(0,255,80,.4);font-size:9px;max-width:150px;text-align:center">Fier — demi-lune haute</div>
+</div>
+<div class="card">
+  <svg width="152" height="56" viewBox="-4 -4 46 22">
+    <path d="M10,8 Q19,9 28,8" stroke="#666" stroke-width="2.5"
+          filter="url(#glow)" />
+    <defs>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="1.5" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+  </svg>
+  <div class="label">SLEEPING</div>
+  <div style="color:rgba(0,255,80,.4);font-size:9px;max-width:150px;text-align:center">Endormi — courbée bas</div>
+</div>
+<div class="card">
+  <svg width="152" height="56" viewBox="-4 -4 46 22">
+    <path d="M4,3 Q19,11 34,3" stroke="#4A90B8" stroke-width="2.5"
+          filter="url(#glow)" />
+    <defs>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="1.5" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+  </svg>
+  <div class="label">SAD</div>
+  <div style="color:rgba(0,255,80,.4);font-size:9px;max-width:150px;text-align:center">Triste — arc tombant</div>
+</div>
+<div class="card">
+  <svg width="152" height="56" viewBox="-4 -4 46 22">
+    <path d="M6,8 Q14,5 22,7 Q28,9 32,6" stroke="#00D4FF" stroke-width="2.5"
+          filter="url(#glow)" />
+    <defs>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="1.5" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+  </svg>
+  <div class="label">CURIOUS</div>
+  <div style="color:rgba(0,255,80,.4);font-size:9px;max-width:150px;text-align:center">Curieux — asymétrique</div>
+</div>
+<div class="card">
+  <svg width="152" height="56" viewBox="-4 -4 46 22">
+    <path d="M13,4 Q19,13 25,4" stroke="#FF6B35" stroke-width="2.5"
+          filter="url(#glow)" />
+    <defs>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="1.5" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+  </svg>
+  <div class="label">SURPRISED</div>
+  <div style="color:rgba(0,255,80,.4);font-size:9px;max-width:150px;text-align:center">Surpris — ovale ouvert</div>
+</div>
+<div class="card">
+  <svg width="152" height="56" viewBox="-4 -4 46 22">
+    <path d="M8,7 Q14,6 20,8 Q26,7 30,9" stroke="#00D4FF" stroke-width="2.5"
+          filter="url(#glow)" />
+    <defs>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="1.5" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+  </svg>
+  <div class="label">THINKING</div>
+  <div style="color:rgba(0,255,80,.4);font-size:9px;max-width:150px;text-align:center">Pensif — ondulé</div>
+</div></body></html>

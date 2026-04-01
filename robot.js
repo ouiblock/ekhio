@@ -5,15 +5,15 @@
 
 // Expressions de bouche SVG par mood (viewBox 0 0 38 14)
 const MOUTH_PATHS = {
-  neutral:    "M8,7 Q19,7 30,7",                          // ligne droite
-  happy:      "M4,10 Q11,3 19,3 Q27,3 34,10",             // grand sourire
-  excited:    "M3,11 Q10,2 19,2 Q28,2 35,11",             // sourire maximal + ouvert
-  curious:    "M6,8 Q14,5 22,7 Q28,9 32,6",               // asymétrique curieux
-  proud:      "M7,5 Q13,2 19,3 Q25,4 31,5",               // léger sourire satisfait
-  sleeping:   "M10,8 Q19,9 28,8",                          // ligne légèrement courbée bas
-  sad:        "M5,5 Q12,10 19,11 Q26,10 33,5",             // courbe triste inversée
-  surprised:  "M14,5 Q19,12 24,5 Q21,11 19,12 Q17,11 14,5", // bouche ouverte ovale
-  thinking:   "M8,7 Q14,6 20,8 Q26,7 30,9",               // irrégulier pensif
+  neutral:   "M8,7 Q19,7 30,7",
+  happy:   "M4,3 Q19,13 34,3",
+  excited:   "M2,2 Q8,13 19,8 Q30,13 36,2",
+  curious:   "M6,8 Q14,5 22,7 Q28,9 32,6",
+  proud:   "M8,8 Q14,3 19,4 Q24,3 30,8",
+  sleeping:   "M10,8 Q19,9 28,8",
+  sad:   "M4,3 Q19,11 34,3",
+  surprised:   "M13,4 Q19,13 25,4",
+  thinking:   "M8,7 Q14,6 20,8 Q26,7 30,9",
 };
 
 // Blink aléatoire
