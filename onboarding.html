@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="fr" id="html-root">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Ekhio — Bienvenue</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sun:#FFB800; --sun-d:#E8A000; --dark:#0F0A1E; --dark2:#1A1030;
+      --green:#2ECC71; --red:#E8344A; --cyan:#00D4FF; --purple:#8B5CF6;
+      --white:#fff; --text:#1A1208; --muted:#6B5B3E;
+      --accent: #FFB800;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    html,body { height:100%; overflow:hidden; }
+    body {
+      font-family:'Nunito',sans-serif;
+      background: linear-gradient(160deg, #0F0A1E 0%, #1A0A3E 60%, #0A1A2E 100%);
+      color:#fff;
+      display:flex; align-items:center; justify-content:center;
+    }
+
+    /* ===== STARS BG ===== */
+    #stars { position:fixed; inset:0; pointer-events:none; z-index:0; }
+
+    /* ===== MAIN WRAP ===== */
+    .ob-wrap {
+      position:relative; z-index:1;
+      width:100%; max-width:420px;
+      min-height:100vh;
+      display:flex; flex-direction:column;
+      padding:24px 20px 32px;
+    }
+
+    /* ===== TOP BAR ===== */
+    .ob-topbar {
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:8px;
+    }
+    .ob-logo { font-family:'Fredoka One',cursive; font-size:18px; color:var(--sun); }
+    .lang-pills { display:flex; gap:5px; }
+    .lang-pill {
+      background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12);
+      border-radius:999px; padding:4px 10px; font-size:11px; font-weight:800;
+      color:rgba(255,255,255,.5); cursor:pointer; transition:.2s;
+    }
+    .lang-pill.active { background:var(--sun); color:#000; border-color:var(--sun); }
+
+    /* ===== PROGRESS ===== */
+    .ob-progress {
+      display:flex; gap:6px; justify-content:center;
+      margin-bottom:20px;
+    }
+    .ob-dot {
+      width:8px; height:8px; border-radius:50%;
+      background:rgba(255,255,255,.15); transition:.4s;
+    }
+    .ob-dot.active { background:var(--accent); transform:scale(1.3); }
+    .ob-dot.done { background:rgba(255,255,255,.4); }
+
+    /* ===== ROBOT ===== */
+    .robot-stage {
+      display:flex; flex-direction:column; align-items:center;
+      margin-bottom:16px; min-height:160px; justify-content:center;
+    }
+    .robot-body {
+      position:relative; width:110px; height:110px;
+      cursor:pointer; user-select:none;
+    }
+    /* Robot SVG-like with CSS */
+    .r-body {
+      width:90px; height:90px; background:linear-gradient(135deg,#2A2060,#1A1040);
+      border-radius:28px; border:2.5px solid rgba(255,184,0,.3);
+      position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      box-shadow: 0 8px 32px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.1);
+      transition: transform .3s, border-color .3s;
+    }
+    .r-body:hover { transform:translateX(-50%) scale(1.03); }
+    .r-antenna {
+      width:3px; height:18px; background:rgba(255,184,0,.5);
+      position:absolute; top:-18px; left:50%; transform:translateX(-50%);
+      border-radius:999px;
+    }
+    .r-antenna::after {
+      content:''; position:absolute; top:-5px; left:50%; transform:translateX(-50%);
+      width:8px; height:8px; border-radius:50%;
+      background:var(--sun); box-shadow:0 0 8px var(--sun);
+      animation: antenna-pulse 2s ease-in-out infinite;
+    }
+    @keyframes antenna-pulse { 0%,100%{opacity:1;transform:translateX(-50%) scale(1)} 50%{opacity:.5;transform:translateX(-50%) scale(.7)} }
+    .r-eyes {
+      display:flex; gap:12px; margin-bottom:6px;
+    }
+    .r-eye {
+      width:18px; height:18px; border-radius:50%;
+      background:linear-gradient(135deg,#00D4FF,#0080FF);
+      position:relative; overflow:hidden;
+      box-shadow:0 0 8px rgba(0,212,255,.6);
+      transition: all .3s;
+    }
+    .r-eye::after {
+      content:''; position:absolute; top:3px; left:3px;
+      width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.8);
+    }
+    .r-mouth {
+      width:28px; height:12px;
+      border-radius:0 0 14px 14px;
+      border:2px solid rgba(255,255,255,.2);
+      border-top:none;
+      transition: all .4s;
+    }
+    .r-chest-star {
+      position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
+      font-size:14px; opacity:.6; transition: all .3s;
+    }
+    .r-arms {
+      position:absolute; bottom:20px; width:110px;
+      display:flex; justify-content:space-between;
+    }
+    .r-arm {
+      width:10px; height:24px; background:linear-gradient(135deg,#2A2060,#1A1040);
+      border-radius:999px; border:2px solid rgba(255,184,0,.2);
+    }
+
+    /* Robot moods via classes */
+    .robot-body.happy .r-eye { background:linear-gradient(135deg,#FFB800,#FF6B35); box-shadow:0 0 10px rgba(255,184,0,.8); }
+    .robot-body.happy .r-mouth { width:36px; height:16px; border-color:rgba(255,184,0,.6); }
+    .robot-body.happy .r-body { border-color:rgba(255,184,0,.6); }
+    .robot-body.excited .r-antenna::after { animation:antenna-pulse .5s ease-in-out infinite; background:#2ECC71; box-shadow:0 0 12px #2ECC71; }
+    .robot-body.curious .r-eye { border-radius:4px; width:20px; height:22px; }
+    .robot-body.sleeping .r-eye { height:4px; border-radius:2px; background:#444; box-shadow:none; }
+    .robot-body.sleeping .r-mouth { height:6px; border-color:rgba(255,255,255,.1); }
+    .robot-body.proud .r-chest-star { opacity:1; transform:translateX(-50%) scale(1.4); filter:drop-shadow(0 0 6px gold); }
+
+    /* Float animation */
+    .robot-float { animation: rf 3.5s ease-in-out infinite; }
+    @keyframes rf { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+    /* Robot bounce on action */
+    .robot-bounce { animation: rb .4s cubic-bezier(.36,.07,.19,.97); }
+    @keyframes rb { 0%,100%{transform:scale(1)} 30%{transform:scale(1.15)} 60%{transform:scale(.95)} }
+
+    /* Robot celebration */
+    .robot-celebrate { animation: rc .6s ease-in-out; }
+    @keyframes rc { 0%{transform:rotate(0) scale(1)} 25%{transform:rotate(-8deg) scale(1.1)} 75%{transform:rotate(8deg) scale(1.1)} 100%{transform:rotate(0) scale(1)} }
+
+    /* Bubble */
+    .robot-bubble {
+      position:relative;
+      background:rgba(255,255,255,.1); backdrop-filter:blur(8px);
+      border:1px solid rgba(255,255,255,.15); border-radius:16px;
+      padding:10px 16px; font-size:13px; font-weight:700;
+      color:#fff; text-align:center; max-width:260px;
+      margin-top:8px;
+      animation: bubble-in .3s ease-out;
+    }
+    .robot-bubble::before {
+      content:''; position:absolute; top:-8px; left:50%; transform:translateX(-50%);
+      border:8px solid transparent; border-bottom-color:rgba(255,255,255,.1);
+      border-top:none;
+    }
+    @keyframes bubble-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+
+    /* ===== SLIDE CONTENT ===== */
+    .ob-slide {
+      flex:1; display:none; flex-direction:column;
+      animation: slide-in .35s ease-out;
+    }
+    .ob-slide.active { display:flex; }
+    @keyframes slide-in { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
+
+    .ob-title {
+      font-family:'Fredoka One',cursive;
+      font-size:clamp(22px,6vw,30px); color:#fff;
+      text-align:center; margin-bottom:8px; line-height:1.2;
+    }
+    .ob-title em { color:var(--accent); font-style:normal; }
+    .ob-sub {
+      font-size:14px; color:rgba(255,255,255,.6); text-align:center;
+      line-height:1.7; margin-bottom:20px; font-weight:600;
+    }
+
+    /* ===== INPUTS ===== */
+    .ob-input-wrap { margin-bottom:16px; }
+    .ob-input {
+      width:100%; background:rgba(255,255,255,.08);
+      border:2px solid rgba(255,255,255,.15); border-radius:16px;
+      padding:16px 20px; font-size:18px; font-weight:800;
+      color:#fff; font-family:'Nunito',sans-serif;
+      text-align:center; outline:none; transition:.3s;
+    }
+    .ob-input::placeholder { color:rgba(255,255,255,.25); font-weight:600; }
+    .ob-input:focus { border-color:var(--accent); background:rgba(255,184,0,.08); }
+
+    /* ===== AGE SLIDER ===== */
+    .age-slider-wrap { text-align:center; margin-bottom:16px; }
+    .age-display {
+      font-family:'Fredoka One',cursive; font-size:64px;
+      color:var(--accent); line-height:1; margin-bottom:4px;
+      text-shadow: 0 0 30px rgba(255,184,0,.4);
+      transition: color .3s;
+    }
+    .age-label { font-size:13px; color:rgba(255,255,255,.5); font-weight:700; margin-bottom:16px; }
+    .age-bracket {
+      display:inline-block; background:rgba(255,184,0,.15);
+      border:1px solid rgba(255,184,0,.3); border-radius:999px;
+      padding:5px 14px; font-size:12px; font-weight:800; color:var(--sun);
+      margin-bottom:14px;
+    }
+    input[type=range] {
+      width:100%; -webkit-appearance:none; appearance:none;
+      height:6px; border-radius:3px;
+      background:rgba(255,255,255,.15); outline:none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance:none; appearance:none;
+      width:28px; height:28px; border-radius:50%;
+      background:var(--accent); cursor:pointer;
+      box-shadow:0 0 12px rgba(255,184,0,.5);
+      transition: transform .2s;
+    }
+    input[type=range]::-webkit-slider-thumb:active { transform:scale(1.2); }
+
+    /* ===== AVATAR PICKER ===== */
+    .avatar-grid {
+      display:grid; grid-template-columns:repeat(4,1fr); gap:10px;
+      margin-bottom:16px;
+    }
+    .avatar-opt {
+      aspect-ratio:1; border-radius:16px;
+      border:2.5px solid rgba(255,255,255,.1);
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      cursor:pointer; transition:.2s; font-size:24px;
+      background:rgba(255,255,255,.05);
+    }
+    .avatar-opt span { font-size:10px; font-weight:800; margin-top:4px; color:rgba(255,255,255,.4); }
+    .avatar-opt:hover { border-color:rgba(255,255,255,.3); background:rgba(255,255,255,.1); }
+    .avatar-opt.selected { border-color:var(--accent); background:rgba(255,184,0,.12); }
+    .avatar-opt.selected span { color:var(--sun); }
+
+    /* ===== BASE SOCLE ===== */
+    .socle-intro {
+      background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
+      border-radius:18px; padding:18px; margin-bottom:12px;
+    }
+    .socle-intro p { font-size:13px; color:rgba(255,255,255,.6); line-height:1.7; }
+    .socle-intro strong { color:#fff; }
+
+    .socle-grid { display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
+    .socle-item {
+      display:flex; align-items:center; gap:12px;
+      background:rgba(255,255,255,.05); border-radius:14px; padding:12px 16px;
+      border:1.5px solid rgba(255,255,255,.08);
+    }
+    .socle-item .si-icon { font-size:22px; flex-shrink:0; }
+    .socle-item .si-info { flex:1; }
+    .socle-item .si-label { font-size:13px; font-weight:800; color:#fff; margin-bottom:2px; }
+    .socle-item .si-desc { font-size:11px; color:rgba(255,255,255,.45); line-height:1.5; }
+    .socle-item .si-stars {
+      background:rgba(255,184,0,.15); color:var(--sun);
+      border-radius:999px; padding:3px 10px; font-size:12px; font-weight:800;
+      flex-shrink:0;
+    }
+    .socle-toggle {
+      display:flex; align-items:center; justify-content:space-between;
+      font-size:12px; color:rgba(255,255,255,.45); margin-bottom:16px;
+      font-weight:700;
+    }
+    .toggle-switch {
+      width:40px; height:22px; background:rgba(255,255,255,.15);
+      border-radius:999px; position:relative; cursor:pointer; transition:.3s;
+    }
+    .toggle-switch.on { background:var(--green); }
+    .toggle-switch::after {
+      content:''; position:absolute; top:3px; left:3px;
+      width:16px; height:16px; border-radius:50%; background:#fff;
+      transition:.3s; box-shadow:0 1px 4px rgba(0,0,0,.3);
+    }
+    .toggle-switch.on::after { left:21px; }
+
+    /* ===== BOUTON PRINCIPAL ===== */
+    .ob-btn {
+      width:100%; background:linear-gradient(135deg,var(--sun),#FF6B35);
+      color:#fff; border:none; border-radius:999px;
+      padding:16px; font-family:'Nunito',sans-serif;
+      font-weight:900; font-size:16px; cursor:pointer;
+      box-shadow:0 8px 28px rgba(255,184,0,.35);
+      transition:.2s; margin-top:auto;
+    }
+    .ob-btn:hover { transform:translateY(-2px); box-shadow:0 12px 36px rgba(255,184,0,.45); }
+    .ob-btn:active { transform:scale(.98); }
+    .ob-btn:disabled { opacity:.4; cursor:not-allowed; transform:none; }
+
+    .ob-btn-ghost {
+      width:100%; background:transparent;
+      color:rgba(255,255,255,.35); border:none;
+      padding:12px; font-family:'Nunito',sans-serif;
+      font-weight:700; font-size:13px; cursor:pointer;
+      margin-top:8px;
+    }
+
+    /* ===== CONFETTI ===== */
+    .confetti { position:fixed; inset:0; pointer-events:none; z-index:999; overflow:hidden; }
+    .confetti-piece {
+      position:absolute; width:8px; height:8px; border-radius:2px;
+      animation: confetti-fall linear forwards;
+    }
+    @keyframes confetti-fall {
+      0% { transform:translateY(-20px) rotate(0deg); opacity:1; }
+      100% { transform:translateY(100vh) rotate(720deg); opacity:0; }
+    }
+
+    /* ===== SCIENCE NOTE ===== */
+    .science-note {
+      background:rgba(0,212,255,.06); border-left:3px solid rgba(0,212,255,.3);
+      border-radius:0 12px 12px 0; padding:10px 14px; margin-bottom:14px;
+    }
+    .science-note p { font-size:11.5px; color:rgba(255,255,255,.45); line-height:1.6; }
+    .science-note strong { color:rgba(0,212,255,.8); }
+
+  </style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+<div class="confetti" id="confetti"></div>
+
+<div class="ob-wrap">
+
+  <!-- TOP BAR -->
+  <div class="ob-topbar">
+    <div class="ob-logo">☀️ Ekhio</div>
+    <div class="lang-pills">
+      <div class="lang-pill active" onclick="setLang('fr')">FR</div>
+      <div class="lang-pill" onclick="setLang('en')">EN</div>
+      <div class="lang-pill" onclick="setLang('es')">ES</div>
+      <div class="lang-pill" onclick="setLang('eu')">EU</div>
+    </div>
+  </div>
+
+  <!-- PROGRESS DOTS -->
+  <div class="ob-progress" id="progress-dots"></div>
+
+  <!-- ROBOT -->
+  <div class="robot-stage">
+    <div class="robot-float">
+      <div class="robot-body curious" id="robot" onclick="tapRobot()">
+        <div class="r-arms"><div class="r-arm"></div><div class="r-arm"></div></div>
+        <div class="r-body">
+          <div class="r-antenna"></div>
+          <div class="r-eyes">
+            <div class="r-eye" id="eye-l"></div>
+            <div class="r-eye" id="eye-r"></div>
+          </div>
+          <div class="r-mouth" id="mouth"></div>
+          <div class="r-chest-star" id="chest-star">⭐</div>
+        </div>
+      </div>
+    </div>
+    <div class="robot-bubble" id="robot-bubble">...</div>
+  </div>
+
+  <!-- ===== SLIDE 0 — WELCOME ===== -->
+  <div class="ob-slide active" id="slide-0">
+    <h1 class="ob-title" id="s0-title">Bonjour !<br>Je suis <em>Ekhio</em> ☀️</h1>
+    <p class="ob-sub" id="s0-sub">Je suis ton compagnon de croissance. Je vais t'aider à grandir chaque jour, avec tes parents.</p>
+    <div class="science-note">
+      <p><strong>🧠 Neurosciences :</strong> Les rituels de reconnaissance quotidiens activent le système de récompense du cerveau (dopamine) et renforcent le lien d'attachement parent-enfant.</p>
+    </div>
+    <button class="ob-btn" id="s0-btn" onclick="nextSlide()">C'est parti ! →</button>
+  </div>
+
+  <!-- ===== SLIDE 1 — PRÉNOM ===== -->
+  <div class="ob-slide" id="slide-1">
+    <h1 class="ob-title" id="s1-title">Comment tu<br>t'<em>appelles</em> ?</h1>
+    <p class="ob-sub" id="s1-sub">Dis-moi ton prénom pour qu'on se connaisse bien.</p>
+    <div class="ob-input-wrap">
+      <input class="ob-input" type="text" id="name-input" placeholder="Ton prénom..." maxlength="20" autocomplete="off" oninput="onNameInput()">
+    </div>
+    <button class="ob-btn" id="s1-btn" onclick="nextSlide()" disabled>Continuer →</button>
+  </div>
+
+  <!-- ===== SLIDE 2 — ÂGE ===== -->
+  <div class="ob-slide" id="slide-2">
+    <h1 class="ob-title" id="s2-title">Quel âge<br>as-tu <em id="name-display-2"></em> ?</h1>
+    <p class="ob-sub" id="s2-sub">Ça m'aide à t'proposer les bonnes choses.</p>
+    <div class="age-slider-wrap">
+      <div class="age-display" id="age-display">8</div>
+      <div class="age-label" id="age-label-txt">ans</div>
+      <div class="age-bracket" id="age-bracket">🌱 7 – 10 ans</div>
+      <input type="range" id="age-slider" min="3" max="18" value="8" oninput="onAgeChange(this.value)">
+    </div>
+    <div class="science-note" id="age-science-note">
+      <p id="age-science-txt"><strong>🌱 Logique concrète (7-10 ans) :</strong> L'enfant comprend les règles, aime les défis concrets. Rewards à l'échelle de la semaine, badges de progression.</p>
+    </div>
+    <button class="ob-btn" id="s2-btn" onclick="nextSlide()">C'est mon âge ! →</button>
+  </div>
+
+  <!-- ===== SLIDE 3 — AVATAR ROBOT ===== -->
+  <div class="ob-slide" id="slide-3">
+    <h1 class="ob-title" id="s3-title">Choisis la<br>couleur d'<em>Ekhio</em></h1>
+    <p class="ob-sub" id="s3-sub">On personnalise notre robot ensemble !</p>
+    <div class="avatar-grid" id="avatar-grid">
+      <div class="avatar-opt selected" data-color="#FFB800" data-name="Soleil" onclick="selectAvatar(this)">☀️<span>Soleil</span></div>
+      <div class="avatar-opt" data-color="#2ECC71" data-name="Nature" onclick="selectAvatar(this)">🌿<span>Nature</span></div>
+      <div class="avatar-opt" data-color="#00D4FF" data-name="Océan" onclick="selectAvatar(this)">🌊<span>Océan</span></div>
+      <div class="avatar-opt" data-color="#8B5CF6" data-name="Galaxie" onclick="selectAvatar(this)">🌌<span>Galaxie</span></div>
+      <div class="avatar-opt" data-color="#E8344A" data-name="Feu" onclick="selectAvatar(this)">🔥<span>Feu</span></div>
+      <div class="avatar-opt" data-color="#FF6B35" data-name="Coucher" onclick="selectAvatar(this)">🌅<span>Sunset</span></div>
+      <div class="avatar-opt" data-color="#EC4899" data-name="Rose" onclick="selectAvatar(this)">🌸<span>Fleur</span></div>
+      <div class="avatar-opt" data-color="#ffffff" data-name="Neige" onclick="selectAvatar(this)">❄️<span>Neige</span></div>
+    </div>
+    <button class="ob-btn" id="s3-btn" onclick="nextSlide()" id="s3-btn">C'est lui ! →</button>
+  </div>
+
+  <!-- ===== SLIDE 4 — SOCLE DE BASE (PARENT) ===== -->
+  <div class="ob-slide" id="slide-4">
+    <h1 class="ob-title" id="s4-title">Le socle<br>de <em>départ</em></h1>
+    <p class="ob-sub" id="s4-sub">Voici les comportements et récompenses de base. Tout est personnalisable ensuite en mode parent.</p>
+
+    <div class="socle-intro">
+      <p id="s4-intro-txt"><strong>🧠 Pourquoi un socle ?</strong> La recherche en pédopsychiatrie montre qu'un cadre minimal bienveillant aide l'enfant à comprendre les attentes. Vous pouvez tout modifier, ajouter ou supprimer librement.</p>
+    </div>
+
+    <div class="socle-toggle">
+      <span id="s4-toggle-label">Activer le socle de base recommandé</span>
+      <div class="toggle-switch on" id="socle-toggle" onclick="toggleSocle()"></div>
+    </div>
+
+    <div id="socle-content">
+      <div class="socle-grid" id="socle-behaviors-list"></div>
+    </div>
+
+    <button class="ob-btn" id="s4-btn" onclick="nextSlide()">Parfait, on y va ! →</button>
+    <button class="ob-btn-ghost" onclick="nextSlide()" id="s4-skip">Commencer sans socle →</button>
+  </div>
+
+  <!-- ===== SLIDE 5 — CODE PARENT ===== -->
+  <div class="ob-slide" id="slide-5">
+    <h1 class="ob-title" id="s5-title">Code <em>parent</em></h1>
+    <p class="ob-sub" id="s5-sub">Créez un code PIN à 4 chiffres pour accéder aux paramètres. Seuls les parents peuvent modifier les règles.</p>
+    <div class="science-note">
+      <p><strong>🔒 Pourquoi un code parent ?</strong> La séparation claire entre l'espace enfant et l'espace parent renforce la confiance et la cohérence du système — clé de l'efficacité du renforcement positif.</p>
+    </div>
+    <div class="ob-input-wrap">
+      <input class="ob-input" type="password" inputmode="numeric" id="pin-input" placeholder="• • • •" maxlength="4" oninput="onPinInput()">
+    </div>
+    <div class="ob-input-wrap">
+      <input class="ob-input" type="password" inputmode="numeric" id="pin-confirm" placeholder="Confirmer..." maxlength="4" oninput="onPinConfirm()">
+    </div>
+    <p id="pin-error" style="font-size:12px;color:#E8344A;text-align:center;min-height:18px;margin-bottom:8px"></p>
+    <button class="ob-btn" id="s5-btn" onclick="nextSlide()" disabled>Créer mon code →</button>
+    <button class="ob-btn-ghost" onclick="skipPin()" id="s5-skip">Ignorer pour l'instant →</button>
+  </div>
+
+  <!-- ===== SLIDE 6 — READY ===== -->
+  <div class="ob-slide" id="slide-6">
+    <h1 class="ob-title" id="s6-title">C'est parti<br><em id="name-display-6"></em> ! 🚀</h1>
+    <p class="ob-sub" id="s6-sub">Ekhio est prêt à t'accompagner. Chaque jour, chaque effort compte.</p>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px" id="s6-recap">
+      <div class="socle-item"><div class="si-icon">👤</div><div class="si-info"><div class="si-label" id="s6-name"></div><div class="si-desc" id="s6-age-bracket"></div></div></div>
+      <div class="socle-item"><div class="si-icon">🎨</div><div class="si-info"><div class="si-label" id="s6-avatar"></div><div class="si-desc" id="s6-avatar-desc">Couleur du robot Ekhio</div></div></div>
+      <div class="socle-item"><div class="si-icon">⭐</div><div class="si-info"><div class="si-label" id="s6-behaviors-count"></div><div class="si-desc" id="s6-customize">Tout est personnalisable en mode parent</div></div></div>
+    </div>
+    <button class="ob-btn" id="s6-btn" onclick="launchApp()">Ouvrir Ekhio ☀️</button>
+  </div>
+
+</div><!-- /ob-wrap -->
+
+<script>
+// ===== STARS =====
+(function(){
+  const cv=document.getElementById('stars');
+  const ctx=cv.getContext('2d');
+  let st=[];
+  function rsz(){cv.width=window.innerWidth;cv.height=window.innerHeight;}
+  rsz(); window.addEventListener('resize',rsz);
+  for(let i=0;i<100;i++) st.push({x:Math.random()*9999,y:Math.random()*9999,r:Math.random()*1.2,b:Math.random()*Math.PI*2,s:.015+Math.random()*.025});
+  function draw(){ctx.clearRect(0,0,cv.width,cv.height);st.forEach(s=>{s.b+=s.s;const a=.2+.5*Math.sin(s.b);ctx.fillStyle=`rgba(255,255,255,${a})`;ctx.beginPath();ctx.arc(s.x%cv.width,s.y%cv.height,s.r,0,Math.PI*2);ctx.fill();});requestAnimationFrame(draw);}
+  draw();
+})();
+
+// ===== I18N =====
+const T = {
+  fr: {
+    s0_title:"Bonjour !<br>Je suis <em>Ekhio</em> ☀️", s0_sub:"Je suis ton compagnon de croissance. Je vais t'aider à grandir chaque jour, avec tes parents.", s0_btn:"C'est parti ! →",
+    s1_title:"Comment tu<br>t'<em>appelles</em> ?", s1_sub:"Dis-moi ton prénom pour qu'on se connaisse bien.", s1_placeholder:"Ton prénom...", s1_btn:"Continuer →",
+    s2_title:"Quel âge<br>as-tu", s2_sub:"Ça m'aide à te proposer les bonnes choses.", s2_label:"ans", s2_btn:"C'est mon âge ! →",
+    s3_title:"Choisis la<br>couleur d'<em>Ekhio</em>", s3_sub:"On personnalise notre robot ensemble !", s3_btn:"C'est lui ! →",
+    s4_title:"Le socle<br>de <em>départ</em>", s4_sub:"Voici les comportements de base. Tout est personnalisable en mode parent.",
+    s4_intro:"<strong>🧠 Pourquoi un socle ?</strong> La recherche montre qu'un cadre minimal bienveillant aide l'enfant à comprendre les attentes.",
+    s4_toggle:"Activer le socle recommandé", s4_btn:"Parfait, on y va ! →", s4_skip:"Commencer sans socle →",
+    s5_title:"Code <em>parent</em>", s5_sub:"Créez un code PIN à 4 chiffres pour accéder aux paramètres.", s5_btn:"Créer mon code →", s5_skip:"Ignorer pour l'instant →",
+    pin_placeholder:"• • • •", pin_confirm:"Confirmer...", pin_error:"Les codes ne correspondent pas.",
+    s6_title:"C'est parti", s6_sub:"Ekhio est prêt à t'accompagner. Chaque jour, chaque effort compte.", s6_btn:"Ouvrir Ekhio ☀️",
+    s6_avatar_desc:"Couleur du robot Ekhio", s6_customize:"Tout est personnalisable en mode parent",
+    bubbles: ["Salut ! Tap sur moi 😄","Je suis là pour toi !","Chaque étoile compte ⭐","Tu vas tout déchirer !","Prêt à commencer ?","On est une équipe !"],
+    age_brackets: {
+      "3-6":"🐣 3 – 6 ans", "7-10":"🌱 7 – 10 ans", "11-13":"🚀 11 – 13 ans", "14-16":"⚡ 14 – 16 ans", "17-18":"🎓 17 – 18 ans"
+    },
+    age_science: {
+      "3-6":"<strong>🐣 Pensée magique (3-6 ans) :</strong> L'enfant apprend par imitation. Rewards immédiats, visuels, chaleureux. Routines simples et répétitives.",
+      "7-10":"<strong>🌱 Logique concrète (7-10 ans) :</strong> Comprend les règles, aime les défis. Rewards à l'échelle de la semaine, badges de progression.",
+      "11-13":"<strong>🚀 Identité naissante (11-13 ans) :</strong> Besoin d'autonomie et de reconnaissance par les pairs. Co-construire les règles ensemble.",
+      "14-16":"<strong>⚡ Paire central (14-16 ans) :</strong> Le regard des autres est tout. Objectifs à moyen terme, négociation des rewards.",
+      "17-18":"<strong>🎓 Adulte en construction (17-18 ans) :</strong> Responsabilisation progressive. Projets à long terme, autonomie financière."
+    },
+    behaviors_label:"comportements de base chargés",
+  },
+  en: {
+    s0_title:"Hello!<br>I'm <em>Ekhio</em> ☀️", s0_sub:"I'm your growth companion. I'll help you grow every day, with your parents.", s0_btn:"Let's go! →",
+    s1_title:"What's your<br><em>name</em>?", s1_sub:"Tell me your first name so we can get to know each other.", s1_placeholder:"Your name...", s1_btn:"Continue →",
+    s2_title:"How old<br>are you", s2_sub:"It helps me suggest the right things for you.", s2_label:"years old", s2_btn:"That's my age! →",
+    s3_title:"Choose<br><em>Ekhio's</em> color", s3_sub:"Let's customize our robot together!", s3_btn:"That's him! →",
+    s4_title:"The starting<br><em>base</em>", s4_sub:"Here are the default behaviors. Everything is customizable in parent mode.",
+    s4_intro:"<strong>🧠 Why a base?</strong> Research shows that a minimal, caring framework helps children understand expectations.",
+    s4_toggle:"Enable recommended base", s4_btn:"Perfect, let's go! →", s4_skip:"Start without base →",
+    s5_title:"Parent <em>PIN</em>", s5_sub:"Create a 4-digit PIN code to access settings.", s5_btn:"Create my code →", s5_skip:"Skip for now →",
+    pin_placeholder:"• • • •", pin_confirm:"Confirm...", pin_error:"Codes don't match.",
+    s6_title:"Here we go", s6_sub:"Ekhio is ready to support you. Every day, every effort counts.", s6_btn:"Open Ekhio ☀️",
+    s6_avatar_desc:"Ekhio robot color", s6_customize:"Everything is customizable in parent mode",
+    bubbles:["Hi! Tap me 😄","I'm here for you!","Every star counts ⭐","You're going to crush it!","Ready to start?","We're a team!"],
+    age_brackets:{"3-6":"🐣 3 – 6 yrs","7-10":"🌱 7 – 10 yrs","11-13":"🚀 11 – 13 yrs","14-16":"⚡ 14 – 16 yrs","17-18":"🎓 17 – 18 yrs"},
+    age_science:{
+      "3-6":"<strong>🐣 Magical thinking (3-6):</strong> Children learn by imitation. Immediate, visual, warm rewards. Simple repetitive routines.",
+      "7-10":"<strong>🌱 Concrete logic (7-10):</strong> Understands rules, loves challenges. Weekly rewards, progress badges.",
+      "11-13":"<strong>🚀 Emerging identity (11-13):</strong> Need for autonomy and peer recognition. Co-create rules together.",
+      "14-16":"<strong>⚡ Peer-centric (14-16):</strong> Others' opinions matter most. Mid-term goals, negotiated rewards.",
+      "17-18":"<strong>🎓 Adult in progress (17-18):</strong> Progressive accountability. Long-term projects, financial autonomy."
+    },
+    behaviors_label:"default behaviors loaded",
+  },
+  es: {
+    s0_title:"¡Hola!<br>Soy <em>Ekhio</em> ☀️", s0_sub:"Soy tu compañero de crecimiento. Te ayudaré a crecer cada día, con tus padres.", s0_btn:"¡Vamos! →",
+    s1_title:"¿Cómo te<br><em>llamas</em>?", s1_sub:"Dime tu nombre para conocernos bien.", s1_placeholder:"Tu nombre...", s1_btn:"Continuar →",
+    s2_title:"¿Cuántos años<br>tienes", s2_sub:"Me ayuda a sugerirte las cosas correctas.", s2_label:"años", s2_btn:"¡Esa es mi edad! →",
+    s3_title:"Elige el color<br>de <em>Ekhio</em>", s3_sub:"¡Personalicemos nuestro robot juntos!", s3_btn:"¡Es él! →",
+    s4_title:"La base<br>de <em>partida</em>", s4_sub:"Aquí están los comportamientos base. Todo es personalizable en modo padre.",
+    s4_intro:"<strong>🧠 ¿Por qué una base?</strong> La investigación muestra que un marco mínimo y cálido ayuda al niño a entender las expectativas.",
+    s4_toggle:"Activar la base recomendada", s4_btn:"¡Perfecto, vamos! →", s4_skip:"Empezar sin base →",
+    s5_title:"PIN de <em>padres</em>", s5_sub:"Crea un código PIN de 4 dígitos para acceder a los ajustes.", s5_btn:"Crear mi código →", s5_skip:"Omitir por ahora →",
+    pin_placeholder:"• • • •", pin_confirm:"Confirmar...", pin_error:"Los códigos no coinciden.",
+    s6_title:"¡Adelante", s6_sub:"Ekhio está listo para acompañarte. Cada día, cada esfuerzo cuenta.", s6_btn:"Abrir Ekhio ☀️",
+    s6_avatar_desc:"Color del robot Ekhio", s6_customize:"Todo es personalizable en modo padre",
+    bubbles:["¡Hola! Tócame 😄","¡Estoy aquí para ti!","Cada estrella cuenta ⭐","¡Lo vas a romper!","¿Listo para empezar?","¡Somos un equipo!"],
+    age_brackets:{"3-6":"🐣 3 – 6 años","7-10":"🌱 7 – 10 años","11-13":"🚀 11 – 13 años","14-16":"⚡ 14 – 16 años","17-18":"🎓 17 – 18 años"},
+    age_science:{
+      "3-6":"<strong>🐣 Pensamiento mágico (3-6):</strong> El niño aprende por imitación. Recompensas inmediatas, visuales y cálidas.",
+      "7-10":"<strong>🌱 Lógica concreta (7-10):</strong> Entiende las reglas, le gustan los retos. Recompensas semanales, insignias.",
+      "11-13":"<strong>🚀 Identidad emergente (11-13):</strong> Necesita autonomía. Co-construir las normas juntos.",
+      "14-16":"<strong>⚡ Grupos de pares (14-16):</strong> La opinión de los demás importa. Objetivos a medio plazo.",
+      "17-18":"<strong>🎓 Adulto en construcción (17-18):</strong> Responsabilización progresiva. Proyectos a largo plazo."
+    },
+    behaviors_label:"comportamientos base cargados",
+  },
+  eu: {
+    s0_title:"Kaixo!<br>Ni <em>Ekhio</em> naiz ☀️", s0_sub:"Zure hazkunde laguna naiz. Egunero hazten lagunduko dizut, zure gurasoekin.", s0_btn:"Goazen! →",
+    s1_title:"Nola deitzen<br>zara <em>zu</em>?", s1_sub:"Esan iezadazu zure izena elkar ezagutzeko.", s1_placeholder:"Zure izena...", s1_btn:"Jarraitu →",
+    s2_title:"Zenbat urte<br>dituzu", s2_sub:"Gauzak egokiak proposatzen laguntzen dit.", s2_label:"urte", s2_btn:"Hori da nire adina! →",
+    s3_title:"Aukeratu<br><em>Ekhio</em>-ren kolorea", s3_sub:"Elkarrekin pertsonalizatuko dugu gure robota!", s3_btn:"Hori da! →",
+    s4_title:"Hasierako<br><em>oinarria</em>", s4_sub:"Hemen daude oinarrizko portaerak. Dena pertsonalizagarria da guraso moduan.",
+    s4_intro:"<strong>🧠 Zergatik oinarri bat?</strong> Ikerketak erakusten du gutxieneko esparru batek haurrak itxaropenak ulertzen laguntzen diola.",
+    s4_toggle:"Gomendatutako oinarria gaitu", s4_btn:"Perfektua, goazen! →", s4_skip:"Oinarririk gabe hasi →",
+    s5_title:"Guraso <em>kodea</em>", s5_sub:"Sortu 4 digituko PIN kodea ezarpenak atzitzeko.", s5_btn:"Nire kodea sortu →", s5_skip:"Oraingoz saltatu →",
+    pin_placeholder:"• • • •", pin_confirm:"Berretsi...", pin_error:"Kodeak ez datoz bat.",
+    s6_title:"Goazen", s6_sub:"Ekhio prest dago laguntzeko. Egunero, ahalegin bakoitza garrantzitsua da.", s6_btn:"Ekhio ireki ☀️",
+    s6_avatar_desc:"Ekhio robotaren kolorea", s6_customize:"Dena pertsonalizagarria da guraso moduan",
+    bubbles:["Kaixo! Ukitu ni 😄","Hemen nago zuretzat!","Izar bakoitza garrantzitsua ⭐","Bikaina izango zara!","Prest hasteko?","Talde bat gara!"],
+    age_brackets:{"3-6":"🐣 3 – 6 urte","7-10":"🌱 7 – 10 urte","11-13":"🚀 11 – 13 urte","14-16":"⚡ 14 – 16 urte","17-18":"🎓 17 – 18 urte"},
+    age_science:{
+      "3-6":"<strong>🐣 Pentsamendu magikoa (3-6):</strong> Haurrak imitazioz ikasten du. Berehalako sariak, ikusgarriak eta beroak.",
+      "7-10":"<strong>🌱 Logika konkretua (7-10):</strong> Arauak ulertzen ditu, erronkak gustatzen zaizkio. Asteko sariak, aurrerapen txapak.",
+      "11-13":"<strong>🚀 Nortasun sortzen ari (11-13):</strong> Autonomia beharra. Arauak elkarrekin sortu.",
+      "14-16":"<strong>⚡ Kideak nagusi (14-16):</strong> Besteen iritzia garrantzitsua. Epe ertaineko helburuak.",
+      "17-18":"<strong>🎓 Heldu eraikitzen (17-18):</strong> Erantzukizun progresiboa. Epe luzeko proiektuak."
+    },
+    behaviors_label:"oinarrizko portaerak kargatuta",
+  }
+};
+
+// ===== SOCLE DE BASE PAR TRANCHE ====
+const SOCLE = {
+  "3-6": [
+    {icon:"🌅", label:{fr:"Routine du matin complète",en:"Complete morning routine",es:"Rutina de mañana completa",eu:"Goizeko errutina osoa"}, stars:2, cat:"routine"},
+    {icon:"🦷", label:{fr:"Se laver les dents seul",en:"Brush teeth alone",es:"Cepillarse los dientes solo",eu:"Hortzak bakarrik garbitu"}, stars:1, cat:"routine"},
+    {icon:"🧸", label:{fr:"Ranger ses jouets",en:"Tidy up toys",es:"Recoger los juguetes",eu:"Jostailuak jaso"}, stars:1, cat:"maison"},
+    {icon:"😊", label:{fr:"Dire bonjour et merci",en:"Say hello and thank you",es:"Decir hola y gracias",eu:"Kaixo eta eskerrik asko esan"}, stars:1, cat:"social"},
+    {icon:"🤝", label:{fr:"Partager avec un ami",en:"Share with a friend",es:"Compartir con un amigo",eu:"Lagun batekin partekatu"}, stars:2, cat:"social"},
+    {icon:"😤", label:{fr:"Rester calme quand déçu",en:"Stay calm when disappointed",es:"Mantener la calma cuando decepcionado",eu:"Lasai egon etsita dagoenean"}, stars:3, cat:"emotion"},
+  ],
+  "7-10": [
+    {icon:"📚", label:{fr:"Devoirs sans rappel",en:"Homework without reminder",es:"Deberes sin recordatorio",eu:"Etxeko lanak gogorarazpenik gabe"}, stars:3, cat:"scolaire"},
+    {icon:"🎒", label:{fr:"Préparer le cartable seul",en:"Pack schoolbag alone",es:"Preparar la mochila solo",eu:"Eskola-zorroa bakarrik prestatu"}, stars:2, cat:"routine"},
+    {icon:"🍽️", label:{fr:"Débarrasser la table",en:"Clear the table",es:"Recoger la mesa",eu:"Mahaia jaso"}, stars:1, cat:"maison"},
+    {icon:"📖", label:{fr:"Lire 15 minutes",en:"Read for 15 minutes",es:"Leer 15 minutos",eu:"15 minutu irakurri"}, stars:2, cat:"scolaire"},
+    {icon:"💬", label:{fr:"Gérer un conflit avec les mots",en:"Resolve conflict with words",es:"Resolver un conflicto con palabras",eu:"Gatazka hitzez konpondu"}, stars:3, cat:"emotion"},
+    {icon:"🛏️", label:{fr:"Chambre rangée toute la semaine",en:"Tidy room all week",es:"Habitación ordenada toda la semana",eu:"Gela astean zehar txukun"}, stars:3, cat:"maison"},
+  ],
+  "11-13": [
+    {icon:"📅", label:{fr:"Gérer son agenda seul",en:"Manage own schedule",es:"Gestionar su agenda solo",eu:"Agenda bakarrik kudeatu"}, stars:3, cat:"scolaire"},
+    {icon:"⏰", label:{fr:"Respecter les horaires",en:"Respect schedules",es:"Respetar los horarios",eu:"Ordutegiak errespetatu"}, stars:2, cat:"routine"},
+    {icon:"🍳", label:{fr:"Cuisiner un repas simple",en:"Cook a simple meal",es:"Cocinar una comida sencilla",eu:"Otordu sinple bat prestatu"}, stars:3, cat:"maison"},
+    {icon:"📵", label:{fr:"Pas d'écran pendant les repas",en:"No screen during meals",es:"Sin pantalla durante las comidas",eu:"Pantailarik ez otorduetan"}, stars:2, cat:"routine"},
+    {icon:"💭", label:{fr:"Exprimer une émotion difficile",en:"Express a difficult emotion",es:"Expresar una emoción difícil",eu:"Emozio zail bat adierazi"}, stars:4, cat:"emotion"},
+    {icon:"🤗", label:{fr:"Aider un plus jeune spontanément",en:"Help a younger person spontaneously",es:"Ayudar a un más joven espontáneamente",eu:"Gazteago bat modu autonomoan lagundu"}, stars:3, cat:"social"},
+  ],
+  "14-16": [
+    {icon:"🎯", label:{fr:"Ponctuel(le) toute la semaine",en:"Punctual all week",es:"Puntual toda la semana",eu:"Astean zehar puntuala"}, stars:4, cat:"routine"},
+    {icon:"💰", label:{fr:"Tenir un budget argent de poche",en:"Manage pocket money budget",es:"Gestionar el presupuesto de bolsillo",eu:"Poltsiko diru aurrekontua kudeatu"}, stars:3, cat:"scolaire"},
+    {icon:"✅", label:{fr:"Finir un projet personnel",en:"Finish a personal project",es:"Terminar un proyecto personal",eu:"Proiektu pertsonal bat bukatu"}, stars:5, cat:"scolaire"},
+    {icon:"😴", label:{fr:"Dormir à heure fixe 5j/7",en:"Sleep at fixed time 5d/7",es:"Dormir a hora fija 5d/7",eu:"Ordu finko batean lo egin 5 egun/7"}, stars:3, cat:"routine"},
+    {icon:"💡", label:{fr:"Prendre une initiative à la maison",en:"Take initiative at home",es:"Tomar una iniciativa en casa",eu:"Etxean ekimena hartu"}, stars:4, cat:"maison"},
+  ],
+  "17-18": [
+    {icon:"📋", label:{fr:"Gérer ses démarches admin seul",en:"Handle admin tasks alone",es:"Gestionar trámites administrativos solo",eu:"Administrazio-kudeaketa bakarrik egin"}, stars:4, cat:"scolaire"},
+    {icon:"🤝", label:{fr:"Tenir un engagement sur 1 mois",en:"Keep a commitment for 1 month",es:"Mantener un compromiso durante 1 mes",eu:"Konpromiso bat hilabetez bete"}, stars:5, cat:"social"},
+    {icon:"👶", label:{fr:"Mentorer un plus jeune",en:"Mentor a younger person",es:"Mentorizar a un más joven",eu:"Gazteago bat tutoretzan lagundu"}, stars:4, cat:"social"},
+    {icon:"🗣️", label:{fr:"Participer aux décisions familiales",en:"Participate in family decisions",es:"Participar en las decisiones familiares",eu:"Familia erabakietan parte hartu"}, stars:3, cat:"social"},
+  ]
+};
+
+// ===== STATE =====
+let lang = 'fr';
+let currentSlide = 0;
+let totalSlides = 7;
+let childName = '';
+let childAge = 8;
+let selectedAvatar = {color:'#FFB800', name:'Soleil'};
+let socleEnabled = true;
+let parentPin = null;
+let ageBracket = '7-10';
+let bubbleInterval;
+
+// ===== INIT DOTS =====
+function initDots(){
+  const d = document.getElementById('progress-dots');
+  d.innerHTML = '';
+  for(let i=0;i<totalSlides;i++){
+    const dot = document.createElement('div');
+    dot.className = 'ob-dot' + (i===0?' active':'');
+    dot.id = `dot-${i}`;
+    d.appendChild(dot);
+  }
+}
+initDots();
+
+// ===== LANG =====
+function setLang(l){
+  lang = l;
+  document.querySelectorAll('.lang-pill').forEach((p,i)=>p.classList.toggle('active',['fr','en','es','eu'][i]===l));
+  document.getElementById('html-root').lang = l;
+  applyTranslations();
+  renderSocleBehaviors();
+  updateAgeBracket(childAge);
+}
+
+function applyTranslations(){
+  const t = T[lang];
+  const s = (id,v)=>{ const el=document.getElementById(id); if(el&&v!==undefined) el.innerHTML=v; };
+  const sa = (id,v)=>{ const el=document.getElementById(id); if(el&&v!==undefined) el.setAttribute('placeholder',v); };
+
+  s('s0-title',t.s0_title); s('s0-sub',t.s0_sub); s('s0-btn',t.s0_btn);
+  s('s1-title',t.s1_title); s('s1-sub',t.s1_sub); s('s1-btn',T[lang].s1_btn); sa('name-input',t.s1_placeholder);
+  s('s2-title',t.s2_title+(childName?` <em>${childName}</em>`:'')+' ?'); s('s2-sub',t.s2_sub); s('s2-btn',t.s2_btn); s('age-label-txt',t.s2_label);
+  s('s3-title',t.s3_title); s('s3-sub',t.s3_sub); s('s3-btn',t.s3_btn);
+  s('s4-title',t.s4_title); s('s4-sub',t.s4_sub); s('s4-intro-txt',t.s4_intro); s('s4-toggle-label',t.s4_toggle); s('s4-btn',t.s4_btn); s('s4-skip',t.s4_skip);
+  s('s5-title',t.s5_title); s('s5-sub',t.s5_sub); s('s5-btn',t.s5_btn); s('s5-skip',t.s5_skip);
+  sa('pin-input',t.pin_placeholder); sa('pin-confirm',t.pin_confirm);
+  s('s6-title',t.s6_title+' <em id="name-display-6">'+childName+'</em> ! 🚀'); s('s6-sub',t.s6_sub); s('s6-btn',t.s6_btn);
+  s('s6-avatar-desc',t.s6_avatar_desc); s('s6-customize',t.s6_customize);
+  updateBubble();
+}
+
+// ===== ROBOT =====
+function setRobotMood(mood){
+  const r = document.getElementById('robot');
+  r.className = `robot-body ${mood}`;
+}
+function bounceRobot(){
+  const r = document.getElementById('robot');
+  r.classList.add('robot-bounce');
+  setTimeout(()=>r.classList.remove('robot-bounce'),400);
+}
+function celebrateRobot(){
+  const r = document.getElementById('robot');
+  r.classList.add('robot-celebrate');
+  setTimeout(()=>r.classList.remove('robot-celebrate'),600);
+  launchConfetti();
+}
+function tapRobot(){
+  bounceRobot();
+  const bubbles = T[lang].bubbles;
+  setBubble(bubbles[Math.floor(Math.random()*bubbles.length)]);
+}
+function setBubble(text){
+  const b = document.getElementById('robot-bubble');
+  b.style.opacity='0';
+  setTimeout(()=>{ b.textContent=text; b.style.opacity='1'; b.style.transition='opacity .3s'; },150);
+}
+function updateBubble(){
+  const bubbles = T[lang].bubbles;
+  setBubble(bubbles[Math.floor(Math.random()*bubbles.length)]);
+}
+
+// ===== CONFETTI =====
+function launchConfetti(){
+  const c = document.getElementById('confetti');
+  c.innerHTML = '';
+  const colors=['#FFB800','#2ECC71','#00D4FF','#8B5CF6','#E8344A','#FF6B35','#fff'];
+  for(let i=0;i<40;i++){
+    const p=document.createElement('div');
+    p.className='confetti-piece';
+    p.style.cssText=`left:${Math.random()*100}%;top:-10px;background:${colors[i%colors.length]};width:${6+Math.random()*6}px;height:${6+Math.random()*6}px;animation-duration:${1.5+Math.random()*1.5}s;animation-delay:${Math.random()*.5}s;border-radius:${Math.random()>0.5?'50%':'2px'}`;
+    c.appendChild(p);
+  }
+  setTimeout(()=>c.innerHTML='', 3500);
+}
+
+// ===== AGE =====
+function getAgeBracket(age){
+  age=parseInt(age);
+  if(age<=6) return '3-6';
+  if(age<=10) return '7-10';
+  if(age<=13) return '11-13';
+  if(age<=16) return '14-16';
+  return '17-18';
+}
+const ACCENT_BY_BRACKET = {'3-6':'#FFB800','7-10':'#2ECC71','11-13':'#00D4FF','14-16':'#8B5CF6','17-18':'#E8344A'};
+
+function onAgeChange(val){
+  childAge = parseInt(val);
+  document.getElementById('age-display').textContent = val;
+  updateAgeBracket(val);
+  bounceRobot();
+}
+function updateAgeBracket(age){
+  ageBracket = getAgeBracket(age);
+  const t = T[lang];
+  document.getElementById('age-bracket').textContent = t.age_brackets[ageBracket];
+  document.getElementById('age-science-txt').innerHTML = t.age_science[ageBracket];
+  const accent = ACCENT_BY_BRACKET[ageBracket];
+  document.documentElement.style.setProperty('--accent', accent);
+  document.getElementById('age-display').style.color = accent;
+  const moods = {'3-6':'happy','7-10':'happy','11-13':'curious','14-16':'curious','17-18':'proud'};
+  setRobotMood(moods[ageBracket]||'happy');
+  renderSocleBehaviors();
+}
+
+// ===== NAME =====
+function onNameInput(){
+  const v = document.getElementById('name-input').value.trim();
+  childName = v;
+  document.getElementById('s1-btn').disabled = v.length < 2;
+  if(v.length >= 2){ bounceRobot(); setBubble(v + ' ! 🎉'); }
+}
+
+// ===== AVATAR =====
+function selectAvatar(el){
+  document.querySelectorAll('.avatar-opt').forEach(a=>a.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedAvatar = { color: el.dataset.color, name: el.dataset.name };
+  document.documentElement.style.setProperty('--accent', el.dataset.color);
+  // Change robot eye color
+  document.querySelectorAll('.r-eye').forEach(e=>{
+    e.style.background = `linear-gradient(135deg, ${el.dataset.color}, ${el.dataset.color}88)`;
+    e.style.boxShadow = `0 0 8px ${el.dataset.color}99`;
+  });
+  bounceRobot();
+  setBubble('✨ ' + el.dataset.name + ' !');
+}
+
+// ===== SOCLE =====
+function toggleSocle(){
+  socleEnabled = !socleEnabled;
+  const t = document.getElementById('socle-toggle');
+  t.classList.toggle('on', socleEnabled);
+  document.getElementById('socle-content').style.opacity = socleEnabled ? '1' : '.3';
+}
+
+function renderSocleBehaviors(){
+  const list = document.getElementById('socle-behaviors-list');
+  if(!list) return;
+  const behaviors = SOCLE[ageBracket] || SOCLE['7-10'];
+  list.innerHTML = behaviors.map(b=>`
+    <div class="socle-item">
+      <div class="si-icon">${b.icon}</div>
+      <div class="si-info">
+        <div class="si-label">${b.label[lang]||b.label.fr}</div>
+        <div class="si-desc">${getCatLabel(b.cat)}</div>
+      </div>
+      <div class="si-stars">+${b.stars}⭐</div>
+    </div>
+  `).join('');
+}
+function getCatLabel(cat){
+  const cats={
+    fr:{routine:'🌅 Routine',scolaire:'📚 Scolaire',emotion:'❤️ Émotions',maison:'🏠 Maison',social:'🤝 Social'},
+    en:{routine:'🌅 Routine',scolaire:'📚 School',emotion:'❤️ Emotions',maison:'🏠 Home',social:'🤝 Social'},
+    es:{routine:'🌅 Rutina',scolaire:'📚 Escolar',emotion:'❤️ Emociones',maison:'🏠 Casa',social:'🤝 Social'},
+    eu:{routine:'🌅 Errutina',scolaire:'📚 Eskola',emotion:'❤️ Emozioak',maison:'🏠 Etxea',social:'🤝 Gizartea'}
+  };
+  return (cats[lang]||cats.fr)[cat]||cat;
+}
+
+// ===== PIN =====
+function onPinInput(){
+  checkPinMatch();
+}
+function onPinConfirm(){
+  checkPinMatch();
+}
+function checkPinMatch(){
+  const p1 = document.getElementById('pin-input').value;
+  const p2 = document.getElementById('pin-confirm').value;
+  const err = document.getElementById('pin-error');
+  const btn = document.getElementById('s5-btn');
+  if(p1.length===4 && p2.length===4){
+    if(p1===p2){ err.textContent=''; btn.disabled=false; parentPin=p1; }
+    else { err.textContent = T[lang].pin_error; btn.disabled=true; }
+  } else { btn.disabled=true; err.textContent=''; }
+}
+function skipPin(){
+  parentPin = null;
+  nextSlide();
+}
+
+// ===== NAVIGATION =====
+function nextSlide(){
+  // Pre-slide logic
+  if(currentSlide===1){
+    const name = document.getElementById('name-input').value.trim();
+    if(name.length<2) return;
+    childName = name;
+    document.getElementById('name-display-2').textContent = childName;
+    setRobotMood('excited'); celebrateRobot();
+    setBubble(childName + ' ! 🎉');
+  }
+  if(currentSlide===2){
+    setRobotMood('happy'); bounceRobot();
+  }
+  if(currentSlide===3){
+    setRobotMood('proud'); bounceRobot();
+  }
+  if(currentSlide===4){
+    setRobotMood('excited');
+  }
+  if(currentSlide===5){
+    // Build recap
+    const t = T[lang];
+    const behaviors = SOCLE[ageBracket]||[];
+    document.getElementById('s6-title').innerHTML = t.s6_title+' <em>'+childName+'</em> ! 🚀';
+    document.getElementById('s6-name').textContent = childName;
+    document.getElementById('s6-age-bracket').textContent = t.age_brackets[ageBracket];
+    document.getElementById('s6-avatar').textContent = 'Robot ' + selectedAvatar.name;
+    document.getElementById('s6-behaviors-count').textContent = (socleEnabled?behaviors.length:0)+' '+ t.behaviors_label;
+    setRobotMood('excited'); celebrateRobot();
+  }
+
+  // Hide current
+  document.getElementById(`slide-${currentSlide}`).classList.remove('active');
+  document.getElementById(`dot-${currentSlide}`).classList.remove('active');
+  document.getElementById(`dot-${currentSlide}`).classList.add('done');
+
+  currentSlide++;
+
+  // Show next
+  document.getElementById(`slide-${currentSlide}`).classList.add('active');
+  document.getElementById(`dot-${currentSlide}`).classList.add('active');
+
+  // Slide-specific setup
+  if(currentSlide===2){ applyTranslations(); updateAgeBracket(childAge); }
+  if(currentSlide===4){ renderSocleBehaviors(); }
+  updateBubble();
+}
+
+// ===== LAUNCH APP =====
+function launchApp(){
+  // Save profile to localStorage
+  const profileId = 'profile_' + Date.now();
+  const profile = {
+    id: profileId, name: childName, age: childAge,
+    ageBracket: ageBracket, avatar: selectedAvatar,
+    createdAt: new Date().toISOString(), lang: lang
+  };
+  const behaviors = socleEnabled ? (SOCLE[ageBracket]||[]).map((b,i)=>({
+    id:'b'+i, icon:b.icon,
+    label: b.label[lang]||b.label.fr,
+    stars: b.stars, cat: b.cat, active:true
+  })) : [];
+
+  localStorage.setItem('ekhio_profiles', JSON.stringify([profile]));
+  localStorage.setItem('ekhio_active_profile', profileId);
+  localStorage.setItem('ekhio_stars_'+profileId, '0');
+  localStorage.setItem('ekhio_behaviors_'+profileId, JSON.stringify(behaviors));
+  localStorage.setItem('ekhio_rewards_'+profileId, JSON.stringify(getDefaultRewards()));
+  localStorage.setItem('ekhio_history_'+profileId, JSON.stringify([]));
+  localStorage.setItem('ekhio_onboarding_done', '1');
+  localStorage.setItem('ekhio_app_lang', lang);
+  if(parentPin) localStorage.setItem('ekhio_pin_'+profileId, btoa(parentPin));
+
+  // Celebrate then redirect
+  celebrateRobot();
+  setTimeout(()=>{ window.location.href = 'app.html'; }, 1200);
+}
+
+function getDefaultRewards(){
+  const rewardsByBracket = {
+    "3-6":[
+      {id:'r0',icon:'🍦',label:{fr:'Une glace',en:'An ice cream',es:'Un helado',eu:'Izozki bat'},cost:5},
+      {id:'r1',icon:'📖',label:{fr:'Une histoire avant de dormir',en:'A bedtime story',es:'Un cuento antes de dormir',eu:'Lo aurretiko ipuin bat'},cost:3},
+      {id:'r2',icon:'🎮',label:{fr:'30 min de dessin animé',en:'30 min cartoon',es:'30 min de dibujos',eu:'30 min marrazki bizidunak'},cost:8},
+      {id:'r3',icon:'🎨',label:{fr:'Activité créative au choix',en:'Creative activity of choice',es:'Actividad creativa a elegir',eu:'Nahi den jarduera sortzailea'},cost:10},
+    ],
+    "7-10":[
+      {id:'r0',icon:'🎮',label:{fr:'1h de jeu vidéo',en:'1h video game',es:'1h videojuego',eu:'1h bideo-joko'},cost:10},
+      {id:'r1',icon:'🍕',label:{fr:'Choisir le dîner du vendredi',en:'Choose Friday dinner',es:'Elegir la cena del viernes',eu:'Ostiraleko afaria aukeratu'},cost:15},
+      {id:'r2',icon:'🏊',label:{fr:'Sortie piscine',en:'Pool outing',es:'Salida a la piscina',eu:'Igerilekura irteera'},cost:20},
+      {id:'r3',icon:'👟',label:{fr:'Nouvel accessoire',en:'New accessory',es:'Nuevo accesorio',eu:'Osagarri berria'},cost:30},
+    ],
+    "11-13":[
+      {id:'r0',icon:'📱',label:{fr:'30 min d'écran bonus',en:'30 min bonus screen time',es:'30 min de pantalla extra',eu:'30 min pantaila gehigarri'},cost:10},
+      {id:'r1',icon:'🎬',label:{fr:'Soirée cinéma',en:'Movie night',es:'Noche de cine',eu:'Zinema-gaua'},cost:20},
+      {id:'r2',icon:'🛒',label:{fr:'Budget shopping 10€',en:'Shopping budget €10',es:'Presupuesto compras 10€',eu:'Erosketa aurrekontua 10€'},cost:35},
+      {id:'r3',icon:'🏕️',label:{fr:'Week-end chez un ami',en:'Weekend at a friend's',es:'Fin de semana en casa de un amigo',eu:'Lagun baten etxean asteburua'},cost:50},
+    ],
+    "14-16":[
+      {id:'r0',icon:'💵',label:{fr:'Argent de poche bonus 5€',en:'Bonus pocket money €5',es:'Paga extra 5€',eu:'Poltsa diru gehigarria 5€'},cost:15},
+      {id:'r1',icon:'🎵',label:{fr:'Concert / événement',en:'Concert / event',es:'Concierto / evento',eu:'Kontzertua / ekitaldia'},cost:40},
+      {id:'r2',icon:'🛵',label:{fr:'Liberté de sortie supplémentaire',en:'Extra outing freedom',es:'Libertad de salida extra',eu:'Irteera-askatasun gehigarria'},cost:30},
+      {id:'r3',icon:'✈️',label:{fr:'Voyage / camp ado',en:'Trip / teen camp',es:'Viaje / campamento',eu:'Bidaia / nerabeen kanpaldia'},cost:80},
+    ],
+    "17-18":[
+      {id:'r0',icon:'💰',label:{fr:'Contribution budget personnel',en:'Personal budget contribution',es:'Contribución presupuesto personal',eu:'Aurrekontu pertsonalaren ekarpena'},cost:20},
+      {id:'r1',icon:'🚗',label:{fr:'Utilisation de la voiture',en:'Car usage',es:'Uso del coche',eu:'Autoa erabiltzea'},cost:25},
+      {id:'r2',icon:'🌍',label:{fr:'Voyage entre amis',en:'Trip with friends',es:'Viaje con amigos',eu:'Lagunekin bidaia'},cost:60},
+      {id:'r3',icon:'🎓',label:{fr:'Financement projet perso',en:'Personal project funding',es:'Financiación proyecto personal',eu:'Proiektu pertsonalaren finantzazioa'},cost:100},
+    ]
+  };
+  return (rewardsByBracket[ageBracket]||rewardsByBracket['7-10']).map(r=>({
+    ...r, label: r.label[lang]||r.label.fr, unlocked:false
+  }));
+}
+
+// ===== INIT =====
+// Check if already onboarded
+if(localStorage.getItem('ekhio_onboarding_done')==='1'){
+  window.location.href = 'app.html';
+}
+
+updateAgeBracket(8);
+setLang('fr');
+renderSocleBehaviors();
+
+// Bubble rotation
+setInterval(updateBubble, 8000);
+</script>
+</body>
+</html>

@@ -1,32 +1,22 @@
 [build]
   publish = "."
 
-# No-cache sur les pages HTML
 [[headers]]
   for = "/*.html"
   [headers.values]
     Cache-Control = "no-cache, no-store, must-revalidate"
-    Pragma = "no-cache"
-    Expires = "0"
 
-# Redirect /app -> app.html
 [[redirects]]
   from = "/app"
   to = "/app.html"
   status = 200
 
-# Cache long sur assets statiques
-[[headers]]
-  for = "/icons/*"
-  [headers.values]
-    Cache-Control = "public, max-age=604800, immutable"
+[[redirects]]
+  from = "/onboarding"
+  to = "/onboarding.html"
+  status = 200
 
 [[headers]]
   for = "/*.png"
-  [headers.values]
-    Cache-Control = "public, max-age=604800, immutable"
-
-[[headers]]
-  for = "/*.jpg"
   [headers.values]
     Cache-Control = "public, max-age=604800, immutable"

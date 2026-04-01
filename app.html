@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+<script>
+// Redirect to onboarding if not done
+if(!localStorage.getItem('ekhio_onboarding_done')){
+  window.location.replace('onboarding.html');
+}
+// Load profile
+(function(){
+  const pid = localStorage.getItem('ekhio_active_profile');
+  if(pid){
+    const profiles = JSON.parse(localStorage.getItem('ekhio_profiles')||'[]');
+    const p = profiles.find(x=>x.id===pid);
+    if(p){ window.__ekhioProfile = p; }
+  }
+})();
+</script>
+
 <meta charset="UTF-8">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
