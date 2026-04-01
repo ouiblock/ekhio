@@ -123,6 +123,7 @@
     <button class="lang-btn active" onclick="setLang('fr')">FR</button>
     <button class="lang-btn" onclick="setLang('en')">EN</button>
     <button class="lang-btn" onclick="setLang('es')">ES</button>
+    <button class="lang-btn" onclick="setLang('eu')">EU</button>
     <a href="https://github.com/ouiblock/kidzreward" class="nav-cta" target="_blank" data-i18n="nav.cta">Télécharger</a>
   </div>
 </nav>
@@ -211,7 +212,7 @@
       <p data-i18n="dl.sub">Une seule page HTML. Aucune installation. Fonctionne sur iPhone, Android, tablette et ordinateur. Ajoutez-la à votre écran d'accueil en 10 secondes.</p>
       <div class="dl-badges">
         <a href="https://github.com/ouiblock/kidzreward" class="dl-badge" target="_blank" data-i18n="dl.gh">⭐ GitHub</a>
-        <a href="/app" class="dl-badge" target="_blank" data-i18n="dl.web">🌐 Ouvrir l'app</a>
+        <a href="https://kidzreward.netlify.app" class="dl-badge" target="_blank" data-i18n="dl.web">🌐 Ouvrir l'app</a>
         <a href="https://github.com/ouiblock/kidzreward/archive/refs/heads/main.zip" class="dl-badge" target="_blank" data-i18n="dl.zip">⬇ Télécharger ZIP</a>
       </div>
     </div>
@@ -422,12 +423,55 @@ const T={
     "foot.cgv2":"Condiciones de venta","foot.ml":"Aviso legal","foot.rgpd2":"Privacidad","foot.lic2":"Licencia",
     "foot.discl":"⚠️ Herramienta lúdica únicamente — No constituye consejo médico ni psicológico"
   }
+,
+  eu:{
+    "nav.app":"Aplikazioa","nav.science":"Zientzia","nav.ages":"Adina","nav.download":"Deskargatu","nav.legal":"Legala","nav.cta":"Deskargatu doan",
+    "hero.badge":"🌟 %100 Doan · Kode Irekia · Daturik gabe",
+    "hero.h1":"Hazi,<br><em>egun bat aldi batean.</em>",
+    "hero.sub":"Ekhio-k 3 eta 18 urte arteko haurrak laguntzen ditu neuroentzien, garapen psikologiaren eta haurren psikiatriaren oinarritutako sari sisteman.",
+    "hero.btn1":"⬇ Doan deskargatu","hero.btn2":"Gehiago jakin →",
+    "pill.neuro":"🧠 Neuroentziak","pill.ages":"👶 3tik 18ra","pill.data":"🔒 Daturik ez","pill.oss":"🌍 Kode Irekia","pill.origin":"🏔️ Euskal Herria, Frantzia",
+    "discl.label":"⚠️ Garrantzitsua:","discl.hero":"Ekhio familia laguntzeko tresna ludiko eta informatibo hutsa da. Ez da inola ere mediku, psikologiko edo terapeutiko aholku. Zailtasunen kasuan, osasun profesional kualifikatu batekin kontsultatu.",
+    "val.badge":"Zergatik Ekhio?","val.title":"Zure haurrekin batera<br>hazten den laguntzailea","val.sub":"Gurasoek ez dute maitasunik falta — eguneroko erronkak konexio uneetara bihurtzeko adinari egokitutako tresnak falta zaizkie.",
+    "v1.t":"Adinari egokitua","v1.p":"Portaerak, sariak eta hiztegia automatikoki eboluzionatzen dira. 4 urteko haur batek ez ditu 15 urteko nerabeak bezalako beharrak.",
+    "v2.t":"Zientzian oinarritua","v2.p":"Piaget, Self-Determination Theory (Deci eta Ryan) eta haurren psikiatriako azken ikerketetan kalibratua.",
+    "v3.t":"Loturan zentratua","v3.p":"Ekhio-k ez du kontrolatzen — konektatzen du. Guraso eta haurren arteko eguneroko ezagutza erritualak.",
+    "v4.t":"Datu bilketarik ez","v4.p":"Guztiz lokalean funtzionatzen du. Konturik ez, zerbitzaririk ez. Zure datuak zure gailuan geratzen dira.",
+    "v5.t":"%100 Doan","v5.p":"Borondatez garatua eta Herrichain elkarteak banatua, Bidart-en (Lapurdi) egoitza duena.",
+    "v6.t":"Kode Irekia","v6.p":"Kode irekia, ikusgarria eta laguntzailea. Merkataritza erabilera debekatua Artean Digital-en idatzizko baimenik gabe.",
+    "sci.badge":"Oinarri zientifikoak","sci.title":"Zergatik zientziak<br>dena aldatzen duen","sci.sub":"Sari aplikazio gehienak digitalizatutako itsasgarri taulak dira. Ekhio garapen zientzietako hiru hamarkadako ikerketan eraikita dago.",
+    "sc1.tag":"Neuroentziak","sc1.t":"Garatzen ari den garuna","sc1.p":"Sistema linbikoa kortex prefrontalaren aurretik garatzen da. Ekhio-k atzerapenarekiko errespetua du — arauak garunaren heldutasun errealetera egokitzen dira.",
+    "sc2.tag":"Psikologia","sc2.t":"Autodeterminazio Teoria","sc2.p":"Deci eta Ryan (1985-2024): iraunkorreko motibazioa = Autonomia + Gaitasuna + Kidetasuna. Ekhio-k hirurak elikatzen ditu.",
+    "sc3.tag":"Haurren psikiatria","sc3.t":"Zuzendutako saria","sc3.p":"Ahaleginaren gaineko indarpen positiboa. Gehiegizko justifikazioaren efektuaren prebentzioa (Lepper, 1973).",
+    "sc4.tag":"Pedagogia","sc4.t":"Denbora-horizontea","sc4.p":"4 urte → berehalako saria. 16 urte → hiruhileko helburua. Piaget-en faseen arabera modulatua.",
+    "sc5.tag":"Emozioak","sc5.t":"Emozioen erregulazioa","sc5.p":"Saritzen diren portaerek sistematikoki gaitasun emozionalak dituzte: izendatu, adierazi, erregulatu.",
+    "sc6.tag":"Nerabezaroa","sc6.t":"Arauak elkarrekin sortu","sc6.p":"11 urtetik aurrera, haurrak bere arauak sortzen parte hartzen du. Parte-hartzeak atxikipena sortzen du.",
+    "age.badge":"Egokigarria","age.title":"Zure haurrekin batera<br>hazten den aplikazioa","age.sub":"5 garapen fase, 5 egokitutako interfaze, etapa kognitibo bakoitzerako kalibratutako portaerak eta sariak.",
+    "a1":"Errutinak · Oinarrizko emozioak · Partekatu · Berehalako ikusizko sariak",
+    "a2":"Erantzukizunak · Eskola ahalegina · Txapak · Asteko helburuak",
+    "a3":"Autonomia · Emozioen erregulazioa · Arauak elkarrekin sortu",
+    "a4":"Fidagarritasuna · Denbora kudeaketa · Hiruhileko helburuak",
+    "a5":"Erantzukizuna · Autonomia · Bizitza proiektuak",
+    "dl.title":"Ekhio doan deskargatu","dl.sub":"HTML fitxategi bakarra. iPhone, Android, tableta eta ordenagailuan funtzionatzen du. Gehitu zure hasierako pantailara 10 segundoan.",
+    "dl.gh":"⭐ GitHub","dl.web":"🌐 Aplikazioa ireki","dl.zip":"⬇ ZIP deskargatu",
+    "discl.title":"⚠️ Ohartarazpen garrantzitsua",
+    "discl.p1":"<strong>Ekhio familia laguntzeko tresna ludiko eta hezitzaile hutsa da.</strong> Ez da inola ere gailu mediko, aholku terapeutiko, psikologiko edo psikiatriko bat.",
+    "discl.p2":"Neuroentziei, garapen psikologiari eta haurren psikiatriari buruzko edukiak dibulgaziorako soilik ematen dira.",
+    "discl.p3":"<strong>Zure haurrak portaera, emozio edo garapen zailtasunak baditu, mediku, haurren psikiatra edo psikologo batekin kontsultatu.</strong>",
+    "discl.p4":"Herrichain elkarteak eta Artean Digital-ek ez dute erantzukizunik aplikazioaren erabileragatik. Erabilera gurasoen edo tutoreen erantzukizun osopean dago.",
+    "foot.tagline":"Hazi, egun bat aldi batean. — Growing up, one day at a time.",
+    "foot.app":"Aplikazioa","foot.legal":"Legala","foot.orga":"Erakundea","foot.links":"Estekak",
+    "foot.cgu":"Erabilera baldintzak","foot.rgpd":"Pribatutasuna & GDPR","foot.lic":"Kode irekiko lizentzia",
+    "foot.assoc":"Herrichain Elkartea<br>RNA: W641015204<br>Bidart 64210, Frantzia",
+    "foot.cgv2":"Salmenta baldintzak","foot.ml":"Lege oharra","foot.rgpd2":"Pribatutasuna","foot.lic2":"Lizentzia",
+    "foot.discl":"⚠️ Tresna ludikoa soilik — Ez da mediku edo psikologiko aholku"
+  }
 };
 
 let lang='fr';
 function setLang(l){
   lang=l;
-  document.querySelectorAll('.lang-btn').forEach((b,i)=>{b.classList.toggle('active',['fr','en','es'][i]===l);});
+  document.querySelectorAll('.lang-btn').forEach((b,i)=>{b.classList.toggle('active',['fr','en','es','eu'][i]===l);});
   document.getElementById('html-root').lang=l;
   document.querySelectorAll('[data-i18n]').forEach(el=>{
     const k=el.getAttribute('data-i18n');
@@ -658,11 +702,25 @@ const _origSetLang = typeof setLang !== 'undefined' ? setLang : null;
       dh3:'⚠️ Advertencia', dp3:'Si tu hijo tiene dificultades, consulta a un profesional de salud.',
       dfull:'Documentos completos:', cgulabel:'He leído y acepto las <a href="licence.html" target="_blank">Condiciones de uso y la Política de privacidad</a> de Ekhio.',
       btn2:'Entrar a la app →', note2:'Versión CU 1.0 — 1 de abril de 2026 — Artean Digital / Asociación Herrichain'
+    },
+    eu:{
+      title:'Ongi etorri Ekhio-ra', sub:'Hasi aurretik, informazio garrantzitsu batzuk.',
+      s1title:'Cookieak eta tokiko biltegiratzea',
+      s1body:'Ekhio-k zure <strong>nabigatzailearen localStorage</strong> soilik erabiltzen du zure haurraren aurrerapena gordetzeko. <strong>Ez da daturik zerbitzarira bidaltzen.</strong>',
+      ck1:'Funtzionalak (derrigorrezkoak)', ck1d:'Haurraren aurrerapena, izarrak, ezarpenak — lokalean gordeta',
+      ck2:'Analitika, publizitatea, jarraipena', ck2d:'Ez erabilia — inoiz',
+      btn1:'Onartu eta jarraitu →', note1:'Baimen hau edozein unetan baliogabetu dezakezu ezarpenetan.',
+      s2title:'Erabilera baldintzak eta Datu pertsonalak',
+      dh1:'🔒 Datu pertsonalak', dp1:'Ekhio-k ez du daturik biltzen. Dena zure gailuan geratzen da.',
+      dh2:'📄 Erabilera baldintzak', dp2:'Familia tresna ludikoa soilik. Ez da mediku aholku. Merkataritza erabilera debekatua.',
+      dh3:'⚠️ Ohartarazpena', dp3:'Zure haurrak zailtasunak baditu, osasun profesional batekin kontsultatu.',
+      dfull:'Dokumentu osoak:', cgulabel:'Irakurri eta onartu ditut Ekhio-ren <a href="licence.html" target="_blank">Erabilera baldintzak eta Pribatutasun politika</a>.',
+      btn2:'Aplikazioan sartu →', note2:'EU bertsioa 1.0 — 2026ko apirilaren 1a — Artean Digital / Herrichain Elkartea'
     }
   };
 
   window.ekhioSetConsentLang = function(l){
-    const t = CONSENT_T[l] || CONSENT_T.fr;
+    const t = CONSENT_T[l] || CONSENT_T.fr; // supports fr,en,es,eu
     const s = function(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;};
     s('ecm-title',t.title); s('ecm-sub',t.sub);
     s('ecm-s1-title',t.s1title); s('ecm-s1-body',t.s1body);
@@ -683,7 +741,7 @@ const _origSetLang = typeof setLang !== 'undefined' ? setLang : null;
 <script>
 // Patch: update consent lang when page lang changes
 const __origSL = setLang;
-setLang = function(l){ __origSL(l); if(window.ekhioSetConsentLang) window.ekhioSetConsentLang(l); };
+setLang = function(l){ __origSL(l); if(window.ekhioSetConsentLang) window.ekhioSetConsentLang(l); document.getElementById('html-root').lang = l==='eu'?'eu':l; };
 </script>
 </body>
 </html>
