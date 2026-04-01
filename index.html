@@ -211,7 +211,7 @@
       <p data-i18n="dl.sub">Une seule page HTML. Aucune installation. Fonctionne sur iPhone, Android, tablette et ordinateur. Ajoutez-la à votre écran d'accueil en 10 secondes.</p>
       <div class="dl-badges">
         <a href="https://github.com/ouiblock/kidzreward" class="dl-badge" target="_blank" data-i18n="dl.gh">⭐ GitHub</a>
-        <a href="https://kidzreward.netlify.app" class="dl-badge" target="_blank" data-i18n="dl.web">🌐 Ouvrir l'app</a>
+        <a href="/app" class="dl-badge" target="_blank" data-i18n="dl.web">🌐 Ouvrir l'app</a>
         <a href="https://github.com/ouiblock/kidzreward/archive/refs/heads/main.zip" class="dl-badge" target="_blank" data-i18n="dl.zip">⬇ Télécharger ZIP</a>
       </div>
     </div>
@@ -273,6 +273,8 @@
     <p style="margin-top:6px"><a href="licence.html" data-i18n="foot.cgu">CGU</a> · <a href="licence.html#cgv" data-i18n="foot.cgv2">CGV</a> · <a href="licence.html#mentions" data-i18n="foot.ml">Mentions légales</a> · <a href="licence.html#confidentialite" data-i18n="foot.rgpd2">Données personnelles</a> · <a href="licence.html#licence" data-i18n="foot.lic2">Licence</a></p>
     <p style="margin-top:8px;color:rgba(255,255,255,.2);font-size:11px" data-i18n="foot.discl">⚠️ Application à visée ludique uniquement — Ne constitue pas un avis médical ou psychologique</p>
   </div>
+
+  <p style="margin-top:8px;font-size:12px"><a href="javascript:void(0)" onclick="ekhioRevokeConsent&&ekhioRevokeConsent()" style="color:rgba(255,255,255,.3);text-decoration:none">🍪 Gérer mes cookies / consentement</a></p>
 </footer>
 
 <script>
@@ -435,6 +437,253 @@ function setLang(l){
 }
 // Init
 setLang('fr');
+</script>
+
+<script>
+// Hook setLang to update consent modal language
+const _origSetLang = typeof setLang !== 'undefined' ? setLang : null;
+</script>
+<script>
+
+/* ============================================================
+   EKHIO — CONSENT MANAGER v1.0
+   Gère : cookies fonctionnels, acceptation CGU/RGPD
+   Stockage : localStorage uniquement, aucune donnée externe
+   ============================================================ */
+(function(){
+  const KEYS = {
+    consent: 'ekhio_consent_v1',   // {accepted: bool, date: iso, version: '1.0'}
+    cgu: 'ekhio_cgu_v1',           // {accepted: bool, date: iso}
+  };
+  const CGU_VERSION = '1.0';
+
+  // ---- helpers ----
+  function getConsent(){ try{return JSON.parse(localStorage.getItem(KEYS.consent));}catch(e){return null;} }
+  function getCGU(){ try{return JSON.parse(localStorage.getItem(KEYS.cgu));}catch(e){return null;} }
+  function saveConsent(){ localStorage.setItem(KEYS.consent, JSON.stringify({accepted:true,date:new Date().toISOString(),version:CGU_VERSION})); }
+  function saveCGU(){ localStorage.setItem(KEYS.cgu, JSON.stringify({accepted:true,date:new Date().toISOString(),version:CGU_VERSION})); }
+  function revokeAll(){ localStorage.removeItem(KEYS.consent); localStorage.removeItem(KEYS.cgu); location.reload(); }
+  window.ekhioRevokeConsent = revokeAll;
+
+  // ---- Check if consent needed ----
+  const consent = getConsent();
+  const cgu = getCGU();
+  const needConsent = !consent || !consent.accepted;
+  const needCGU = !cgu || !cgu.accepted;
+
+  // Expose status globally
+  window.ekhioConsent = { hasConsent: !needConsent, hasCGU: !needCGU, getConsent, getCGU };
+
+  if(!needConsent && !needCGU) return; // All good, nothing to show
+
+  // ---- Build overlay ----
+  const overlay = document.createElement('div');
+  overlay.id = 'ekhio-consent-overlay';
+  overlay.innerHTML = `
+    <div id="ekhio-consent-modal">
+      <div class="ecm-logo">☀️ <span>Ekhio</span></div>
+      <div class="ecm-robot">🤖</div>
+      <h2 class="ecm-title" id="ecm-title">Bienvenue sur Ekhio</h2>
+      <p class="ecm-sub" id="ecm-sub">Avant de commencer, quelques informations importantes.</p>
+
+      <div class="ecm-steps">
+        <!-- STEP 1: Cookies -->
+        <div class="ecm-step" id="ecm-step-1">
+          <div class="ecm-step-icon">🍪</div>
+          <h3 id="ecm-s1-title">Cookies & stockage local</h3>
+          <p id="ecm-s1-body">Ekhio utilise uniquement le <strong>localStorage de votre navigateur</strong> pour mémoriser la progression de votre enfant (étoiles, comportements, préférences). <strong>Aucune donnée n'est envoyée sur un serveur.</strong> Pas de tracking, pas de pub, pas de compte.</p>
+          <div class="ecm-cookie-list">
+            <div class="ecm-cookie-item">
+              <span class="ecm-cookie-dot required"></span>
+              <div>
+                <strong id="ecm-ck1">Fonctionnels (obligatoires)</strong>
+                <p id="ecm-ck1d">Progression enfant, étoiles, paramètres, historique — stockés localement</p>
+              </div>
+            </div>
+            <div class="ecm-cookie-item">
+              <span class="ecm-cookie-dot blocked"></span>
+              <div>
+                <strong id="ecm-ck2">Analytiques, pub, tracking</strong>
+                <p id="ecm-ck2d">Non utilisés — jamais</p>
+              </div>
+            </div>
+          </div>
+          <button class="ecm-btn-p" id="ecm-accept-cookies">Accepter et continuer →</button>
+          <p class="ecm-note" id="ecm-note1">En acceptant, vous autorisez le stockage local nécessaire au fonctionnement de l'app. Vous pouvez révoquer à tout moment dans les paramètres.</p>
+        </div>
+
+        <!-- STEP 2: CGU + RGPD -->
+        <div class="ecm-step" id="ecm-step-2" style="display:none">
+          <div class="ecm-step-icon">📄</div>
+          <h3 id="ecm-s2-title">Conditions d'utilisation & Données personnelles</h3>
+          <div class="ecm-doc-box" id="ecm-doc-scroll">
+            <h4 id="ecm-doc-h1">🔒 Données personnelles</h4>
+            <p id="ecm-doc-p1">Ekhio ne collecte, ne transmet et ne stocke aucune donnée personnelle sur des serveurs. Tout reste sur votre appareil.</p>
+            <h4 id="ecm-doc-h2">📄 Conditions d'utilisation (résumé)</h4>
+            <p id="ecm-doc-p2">Ekhio est un outil familial ludique et éducatif uniquement. Il ne constitue pas un avis médical ou psychologique. Usage commercial interdit. L'utilisation est sous votre entière responsabilité.</p>
+            <h4 id="ecm-doc-h3">⚠️ Avertissement</h4>
+            <p id="ecm-doc-p3">En cas de difficultés comportementales ou de santé mentale chez votre enfant, consultez un professionnel de santé qualifié.</p>
+            <p style="margin-top:12px;font-size:11px;color:#999" id="ecm-doc-full">Documents complets : <a href="licence.html" target="_blank" style="color:#FFB800">licence.html</a></p>
+          </div>
+          <label class="ecm-checkbox">
+            <input type="checkbox" id="ecm-cgu-check">
+            <span id="ecm-cgu-label">J'ai lu et j'accepte les <a href="licence.html" target="_blank">CGU, CGV et la politique de confidentialité</a> d'Ekhio.</span>
+          </label>
+          <button class="ecm-btn-p" id="ecm-accept-cgu" disabled>Accéder à l'app →</button>
+          <p class="ecm-note" id="ecm-note2">Version CGU 1.0 — 1er avril 2026 — Artean Digital / Association Herrichain</p>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // ---- Styles ----
+  const style = document.createElement('style');
+  style.textContent = `
+    #ekhio-consent-overlay{position:fixed;inset:0;z-index:99999;background:rgba(10,5,30,.92);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;font-family:'Nunito',sans-serif}
+    #ekhio-consent-modal{background:#fff;border-radius:24px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;padding:36px 32px;box-shadow:0 24px 80px rgba(0,0,0,.4);text-align:center}
+    .ecm-logo{font-family:'Fredoka One',cursive;font-size:20px;color:#0F0A1E;margin-bottom:4px}
+    .ecm-logo span{color:#FFB800}
+    .ecm-robot{font-size:52px;margin:8px 0;animation:ecm-float 3s ease-in-out infinite}
+    @keyframes ecm-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    .ecm-title{font-family:'Fredoka One',cursive;font-size:24px;color:#0F0A1E;margin-bottom:6px}
+    .ecm-sub{font-size:14px;color:#8B7355;margin-bottom:20px}
+    .ecm-step-icon{font-size:32px;margin-bottom:10px}
+    .ecm-step h3{font-family:'Fredoka One',cursive;font-size:19px;color:#0F0A1E;margin-bottom:12px}
+    .ecm-step p{font-size:13.5px;color:#6B5B3E;line-height:1.7;margin-bottom:16px;text-align:left}
+    .ecm-cookie-list{text-align:left;margin-bottom:18px}
+    .ecm-cookie-item{display:flex;align-items:flex-start;gap:10px;padding:10px;background:#F9F6F0;border-radius:10px;margin-bottom:8px}
+    .ecm-cookie-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px}
+    .ecm-cookie-dot.required{background:#2ECC71}
+    .ecm-cookie-dot.blocked{background:#E8344A}
+    .ecm-cookie-item strong{font-size:13px;color:#1A1208;display:block;margin-bottom:2px}
+    .ecm-cookie-item p{font-size:12px;color:#8B7355;margin:0;line-height:1.5}
+    .ecm-btn-p{background:linear-gradient(135deg,#FFB800,#FF6B35);color:#fff;border:none;border-radius:999px;padding:13px 32px;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;cursor:pointer;width:100%;margin:8px 0;transition:.2s;box-shadow:0 6px 20px rgba(255,184,0,.35)}
+    .ecm-btn-p:hover:not(:disabled){transform:translateY(-2px)}
+    .ecm-btn-p:disabled{opacity:.4;cursor:not-allowed;transform:none}
+    .ecm-note{font-size:11px;color:#B8A898;line-height:1.6;margin-top:6px}
+    .ecm-doc-box{background:#F9F6F0;border-radius:14px;padding:18px;text-align:left;max-height:200px;overflow-y:auto;margin-bottom:16px;border:1.5px solid #EDE5D5}
+    .ecm-doc-box h4{font-size:13px;font-weight:800;color:#0F0A1E;margin:12px 0 5px}
+    .ecm-doc-box h4:first-child{margin-top:0}
+    .ecm-doc-box p{font-size:12px;color:#6B5B3E;line-height:1.6;margin:0}
+    .ecm-checkbox{display:flex;align-items:flex-start;gap:10px;text-align:left;cursor:pointer;padding:12px;background:#FFF8E1;border-radius:10px;border:1.5px solid #FFD95A;margin-bottom:12px}
+    .ecm-checkbox input{width:18px;height:18px;flex-shrink:0;margin-top:2px;accent-color:#FFB800;cursor:pointer}
+    .ecm-checkbox span{font-size:13px;color:#664d03;line-height:1.6}
+    .ecm-checkbox a{color:#FFB800}
+    @media(max-width:480px){#ekhio-consent-modal{padding:24px 18px;border-radius:18px}}
+  `;
+
+  document.head.appendChild(style);
+  document.body.appendChild(overlay);
+
+  // Block app interaction until consent
+  document.body.style.overflow = 'hidden';
+
+  // ---- Step logic ----
+  let step = needConsent ? 1 : 2;
+
+  function showStep(n){
+    document.getElementById('ecm-step-1').style.display = n===1?'block':'none';
+    document.getElementById('ecm-step-2').style.display = n===2?'block':'none';
+  }
+  showStep(step);
+
+  // Step 1: accept cookies
+  document.getElementById('ecm-accept-cookies').addEventListener('click', function(){
+    saveConsent();
+    if(!needCGU){ finalize(); return; }
+    step = 2;
+    showStep(2);
+  });
+
+  // Step 2: checkbox enables button
+  document.getElementById('ecm-cgu-check').addEventListener('change', function(){
+    document.getElementById('ecm-accept-cgu').disabled = !this.checked;
+  });
+
+  // Step 2: accept CGU
+  document.getElementById('ecm-accept-cgu').addEventListener('click', function(){
+    if(!document.getElementById('ecm-cgu-check').checked) return;
+    saveCGU();
+    finalize();
+  });
+
+  function finalize(){
+    overlay.style.transition = 'opacity .4s';
+    overlay.style.opacity = '0';
+    setTimeout(()=>{ overlay.remove(); document.body.style.overflow=''; }, 420);
+    window.ekhioConsent.hasConsent = true;
+    window.ekhioConsent.hasCGU = true;
+  }
+
+  // ---- i18n for consent (hook into main lang system if available) ----
+  const CONSENT_T = {
+    fr:{
+      title:'Bienvenue sur Ekhio', sub:'Avant de commencer, quelques informations importantes.',
+      s1title:'Cookies & stockage local',
+      s1body:'Ekhio utilise uniquement le <strong>localStorage de votre navigateur</strong> pour mémoriser la progression de votre enfant. <strong>Aucune donnée n\'est envoyée sur un serveur.</strong>',
+      ck1:'Fonctionnels (obligatoires)', ck1d:'Progression enfant, étoiles, paramètres — stockés localement',
+      ck2:'Analytiques, pub, tracking', ck2d:'Non utilisés — jamais',
+      btn1:'Accepter et continuer →', note1:'Vous pouvez révoquer ce consentement à tout moment dans les paramètres.',
+      s2title:'Conditions d\'utilisation & Données personnelles',
+      dh1:'🔒 Données personnelles', dp1:'Ekhio ne collecte aucune donnée. Tout reste sur votre appareil.',
+      dh2:'📄 Conditions d\'utilisation', dp2:'Outil familial ludique uniquement. Pas d\'avis médical. Usage commercial interdit.',
+      dh3:'⚠️ Avertissement', dp3:'En cas de difficultés chez votre enfant, consultez un professionnel de santé.',
+      dfull:'Documents complets :', cgulabel:'J\'ai lu et j\'accepte les <a href="licence.html" target="_blank">CGU, CGV et la politique de confidentialité</a> d\'Ekhio.',
+      btn2:'Accéder à l\'app →', note2:'Version CGU 1.0 — 1er avril 2026 — Artean Digital / Association Herrichain'
+    },
+    en:{
+      title:'Welcome to Ekhio', sub:'Before we start, a few important points.',
+      s1title:'Cookies & local storage',
+      s1body:'Ekhio only uses your <strong>browser\'s localStorage</strong> to remember your child\'s progress. <strong>No data is sent to any server.</strong>',
+      ck1:'Functional (required)', ck1d:'Child progress, stars, settings — stored locally',
+      ck2:'Analytics, ads, tracking', ck2d:'Not used — ever',
+      btn1:'Accept and continue →', note1:'You can revoke this consent at any time in settings.',
+      s2title:'Terms of use & Personal data',
+      dh1:'🔒 Personal data', dp1:'Ekhio collects no data. Everything stays on your device.',
+      dh2:'📄 Terms of use', dp2:'Family fun tool only. Not medical advice. Commercial use prohibited.',
+      dh3:'⚠️ Disclaimer', dp3:'If your child has difficulties, consult a qualified health professional.',
+      dfull:'Full documents:', cgulabel:'I have read and accept the <a href="licence.html" target="_blank">Terms of use and Privacy policy</a> of Ekhio.',
+      btn2:'Enter the app →', note2:'ToU version 1.0 — April 1, 2026 — Artean Digital / Herrichain Association'
+    },
+    es:{
+      title:'Bienvenido a Ekhio', sub:'Antes de empezar, algunos puntos importantes.',
+      s1title:'Cookies y almacenamiento local',
+      s1body:'Ekhio solo usa el <strong>localStorage de tu navegador</strong> para recordar el progreso de tu hijo. <strong>Ningún dato se envía a un servidor.</strong>',
+      ck1:'Funcionales (obligatorios)', ck1d:'Progreso del niño, estrellas, ajustes — almacenados localmente',
+      ck2:'Analítica, publicidad, seguimiento', ck2d:'No utilizados — nunca',
+      btn1:'Aceptar y continuar →', note1:'Puedes revocar este consentimiento en cualquier momento en los ajustes.',
+      s2title:'Condiciones de uso & Datos personales',
+      dh1:'🔒 Datos personales', dp1:'Ekhio no recopila datos. Todo permanece en tu dispositivo.',
+      dh2:'📄 Condiciones de uso', dp2:'Herramienta familiar lúdica únicamente. No es consejo médico. Uso comercial prohibido.',
+      dh3:'⚠️ Advertencia', dp3:'Si tu hijo tiene dificultades, consulta a un profesional de salud.',
+      dfull:'Documentos completos:', cgulabel:'He leído y acepto las <a href="licence.html" target="_blank">Condiciones de uso y la Política de privacidad</a> de Ekhio.',
+      btn2:'Entrar a la app →', note2:'Versión CU 1.0 — 1 de abril de 2026 — Artean Digital / Asociación Herrichain'
+    }
+  };
+
+  window.ekhioSetConsentLang = function(l){
+    const t = CONSENT_T[l] || CONSENT_T.fr;
+    const s = function(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;};
+    s('ecm-title',t.title); s('ecm-sub',t.sub);
+    s('ecm-s1-title',t.s1title); s('ecm-s1-body',t.s1body);
+    s('ecm-ck1',t.ck1); s('ecm-ck1d',t.ck1d); s('ecm-ck2',t.ck2); s('ecm-ck2d',t.ck2d);
+    s('ecm-accept-cookies',t.btn1); s('ecm-note1',t.note1);
+    s('ecm-s2-title',t.s2title);
+    s('ecm-doc-h1',t.dh1); s('ecm-doc-p1',t.dp1);
+    s('ecm-doc-h2',t.dh2); s('ecm-doc-p2',t.dp2);
+    s('ecm-doc-h3',t.dh3); s('ecm-doc-p3',t.dp3);
+    s('ecm-doc-full',t.dfull+' <a href="licence.html" target="_blank" style="color:#FFB800">licence.html</a>');
+    s('ecm-cgu-label',t.cgulabel); s('ecm-accept-cgu',t.btn2); s('ecm-note2',t.note2);
+  };
+  window.ekhioSetConsentLang('fr');
+
+})();
+
+</script>
+<script>
+// Patch: update consent lang when page lang changes
+const __origSL = setLang;
+setLang = function(l){ __origSL(l); if(window.ekhioSetConsentLang) window.ekhioSetConsentLang(l); };
 </script>
 </body>
 </html>

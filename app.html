@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <!-- PWA -->
+  
+  <script>
+    // On iOS standalone: hide status bar overlay trick
+    if (window.navigator.standalone) {
+      document.documentElement.style.setProperty('--safe-top', '44px');
+    }
+  </script>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#E8344A">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Iron Chat">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Iron Chat & Bixente</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:#FFF9F0;color:#1A1208;padding-bottom:90px;min-height:100dvh}
+button{cursor:pointer;background:none;border:none;font:inherit}
+ul{list-style:none}
+:root{--gold:#FFB800;--gold-light:#FFD95A;--red:#E8344A;--green:#2ECC71;--blue:#3B7FE0;--purple:#8B5CF6;--orange:#F97316;--surface:#FFF;--bg:#FFF9F0;--border:rgba(0,0,0,0.08);--text:#1A1208;--muted:#6B5B3E;--faint:#B8A898}
+.topbar{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#C02030,#E8344A,#FF6B35);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 20px rgba(232,52,74,.4)}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-icon{width:40px;height:40px;background:rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid rgba(255,255,255,.3)}
+.logo h1{font-family:'Fredoka One',cursive;color:#fff;font-size:19px;line-height:1.1}
+.logo h1 span{display:block;font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;opacity:.8;text-transform:uppercase;letter-spacing:.08em}
+.topbar-btn{width:36px;height:36px;background:rgba(255,255,255,.18);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;border:1px solid rgba(255,255,255,.25);margin-left:8px}
+.main{max-width:480px;margin:0 auto;padding:16px}
+.hero{background:linear-gradient(135deg,#1A1208,#2D1F0A,#3D2815);border-radius:24px;padding:22px;margin-bottom:16px;position:relative;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.14)}
+.hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(255,184,0,.2),transparent 70%);pointer-events:none}
+.hero-date{font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.hero-title{font-family:'Fredoka One',cursive;font-size:24px;color:#fff;margin-bottom:14px;line-height:1.2}
+.hero-title .name{color:#FFD95A}
+.stars-row{display:flex;gap:6px;margin-bottom:14px;align-items:center}
+.star{font-size:32px;cursor:pointer;user-select:none;filter:grayscale(1) opacity(.28);transition:transform .3s cubic-bezier(.34,1.56,.64,1),filter .3s}
+.star.on{filter:grayscale(0) drop-shadow(0 0 8px rgba(255,184,0,.8));transform:scale(1.1)}
+.star:hover{transform:scale(1.2)}
+.total-badge{margin-left:auto;text-align:right}
+.total-badge .num{font-family:'Fredoka One',cursive;font-size:48px;color:#FFD95A;line-height:1;text-shadow:0 0 20px rgba(255,184,0,.5)}
+.total-badge .lbl{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em}
+.progress-bar{background:rgba(255,255,255,.1);border-radius:999px;height:9px;overflow:hidden;margin-bottom:7px}
+.progress-fill{height:100%;background:linear-gradient(90deg,#FFB800,#FFD95A);border-radius:999px;transition:width .6s cubic-bezier(.34,1.56,.64,1);box-shadow:0 0 10px rgba(255,184,0,.4)}
+.prog-labels{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.38);font-weight:700;text-transform:uppercase}
+.ironchat-q{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 14px;margin-top:14px;display:flex;align-items:center;gap:10px}
+.q-icon{font-size:24px;flex-shrink:0}
+.q-text{font-size:12px;color:rgba(255,255,255,.78);font-style:italic;line-height:1.4}
+.sec-title{font-family:'Fredoka One',cursive;font-size:21px;color:var(--text);margin-bottom:11px;display:flex;align-items:center;gap:7px}
+.beh-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}
+.beh-card{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;padding:14px 10px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;cursor:pointer;transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;box-shadow:0 2px 8px rgba(0,0,0,.06);-webkit-tap-highlight-color:transparent;position:relative}
+.beh-card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.beh-card:active{transform:scale(.96)}
+.beh-card.done{opacity:.45;pointer-events:none}
+.beh-card.done::after{content:'✓';position:absolute;top:8px;right:10px;font-size:16px;color:var(--green);font-weight:900}
+.beh-card .ic{font-size:30px}
+.beh-card .lbl{font-size:11px;font-weight:800;color:var(--text);line-height:1.3}
+.beh-card .badge{background:var(--gold);color:#fff;font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px}
+.beh-card.sp{border-color:var(--gold);background:linear-gradient(135deg,#FFFBF0,#FFF3DC)}
+.beh-card.sp .badge{background:#E09800}
+.rew-item{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;padding:14px;display:flex;align-items:center;gap:10px;margin-bottom:8px;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:transform .2s,box-shadow .2s;-webkit-tap-highlight-color:transparent}
+.rew-item.ul{border-color:var(--green);background:linear-gradient(135deg,#F0FFF7,#E0FFEE);cursor:pointer}
+.rew-item.ul:hover{transform:translateX(4px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.rew-item.nx{border-color:var(--gold);background:linear-gradient(135deg,#FFFBF0,#FFF3DC)}
+.rew-item.lk{opacity:.5}
+.rew-ic{font-size:28px;flex-shrink:0}
+.rew-info{flex:1}
+.rew-title{font-weight:800;font-size:13px;color:var(--text)}
+.rew-desc{font-size:11px;color:var(--muted);margin-top:1px}
+.rew-cost{font-family:'Fredoka One',cursive;font-size:17px;color:#E09800;flex-shrink:0}
+.rew-st{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.rew-st.ok{background:var(--green)}.rew-st.tg{background:var(--gold)}.rew-st.lk2{background:rgba(0,0,0,.07)}
+.rew-del{width:26px;height:26px;border-radius:50%;background:rgba(232,52,74,.1);display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;flex-shrink:0;color:var(--red);border:none;transition:background .18s}
+.rew-del:hover{background:rgba(232,52,74,.2)}
+.wk-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;margin-bottom:22px}
+.day{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:7px 3px;text-align:center}
+.day .dn{font-size:8px;font-weight:800;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.day .ds{font-family:'Fredoka One',cursive;font-size:18px;color:var(--gold);line-height:1}
+.day .de{font-size:8px;color:var(--faint)}
+.day.td{border-color:var(--red);background:linear-gradient(135deg,#FFF5F7,#FFE8EC)}
+.day.td .dn{color:var(--red)}
+/* History */
+.hist-item{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:13px;display:flex;align-items:center;gap:10px;margin-bottom:8px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.hist-item.type-earn{border-left:4px solid var(--gold)}
+.hist-item.type-use{border-left:4px solid var(--red)}
+.hist-ic{font-size:24px;flex-shrink:0}
+.hist-info{flex:1}
+.hist-title{font-weight:800;font-size:13px;color:var(--text)}
+.hist-date{font-size:10px;color:var(--faint);margin-top:2px}
+.hist-pts{font-family:'Fredoka One',cursive;font-size:16px;flex-shrink:0}
+.hist-pts.earn{color:var(--gold)}.hist-pts.use{color:var(--red)}
+.hist-empty{text-align:center;padding:40px 20px;color:var(--faint);font-size:14px;font-weight:700}
+.hist-empty .ic{font-size:40px;margin-bottom:8px}
+/* Add reward form */
+.add-rew-form{background:#fff;border:2px dashed var(--gold);border-radius:18px;padding:16px;margin-bottom:22px}
+.add-rew-form .form-title{font-family:'Fredoka One',cursive;font-size:16px;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.form-row{display:flex;gap:8px;margin-bottom:10px}
+.form-row input,.form-row select{flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:12px;font:inherit;font-size:13px;font-weight:700;color:var(--text);background:var(--bg)}
+.form-row input:focus,.form-row select:focus{outline:none;border-color:var(--gold)}
+.form-row-3{display:grid;grid-template-columns:1fr 2fr 1fr;gap:8px;margin-bottom:12px}
+.btn-add-rew{background:linear-gradient(135deg,#FFB800,#FFD95A);color:#1A1208;border-radius:12px;padding:10px;font-weight:900;font-size:13px;width:100%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+/* Bottom nav */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1.5px solid var(--border);display:flex;justify-content:space-around;padding:8px;padding-bottom:calc(8px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 24px rgba(0,0,0,.08);z-index:200}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 14px;border-radius:12px;color:var(--faint);font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;transition:color .18s,background .18s;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.nav-item .ni{font-size:20px;line-height:1}
+.nav-item.act{color:var(--red);background:rgba(232,52,74,.08)}
+.view{display:none}
+.view.act{display:block}
+/* Modals */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.58);backdrop-filter:blur(4px);z-index:500;display:flex;align-items:flex-end;padding:14px;opacity:0;pointer-events:none;transition:opacity .25s}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{background:#fff;border-radius:24px 24px 18px 18px;padding:22px;width:100%;max-width:480px;margin:0 auto;transform:translateY(60px);transition:transform .35s cubic-bezier(.34,1.56,.64,1);box-shadow:0 16px 48px rgba(0,0,0,.14)}
+.overlay.open .modal{transform:translateY(0)}
+.m-em{font-size:52px;text-align:center;display:block;margin-bottom:10px}
+.m-title{font-family:'Fredoka One',cursive;font-size:22px;text-align:center;margin-bottom:7px}
+.m-desc{font-size:13px;color:var(--muted);text-align:center;margin-bottom:18px;line-height:1.6}
+.m-actions{display:flex;gap:10px}
+.btn{flex:1;padding:11px 14px;border-radius:999px;font-weight:800;font-size:14px;text-align:center;cursor:pointer;transition:transform .18s;border:none}
+.btn:active{transform:scale(.97)}
+.btn-p{background:linear-gradient(135deg,#E8344A,#FF6B35);color:#fff;box-shadow:0 4px 14px rgba(232,52,74,.35)}
+.btn-s{background:#FFF3DC;color:var(--muted)}
+/* Confetti / FX */
+.confbox{position:fixed;inset:0;pointer-events:none;z-index:1000;overflow:hidden}
+.cp{position:absolute;animation:cf linear forwards}
+@keyframes cf{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+.sburst{position:fixed;pointer-events:none;z-index:800;font-size:46px;animation:sb .7s cubic-bezier(.34,1.56,.64,1) forwards}
+@keyframes sb{0%{transform:scale(0) rotate(-30deg);opacity:1}60%{transform:scale(1.4) rotate(10deg);opacity:1}100%{transform:scale(1) rotate(0) translateY(-80px);opacity:0}}
+/* Rules */
+.rl-list{display:flex;flex-direction:column;gap:11px;margin-bottom:22px}
+.rl-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:14px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.rl-num{width:26px;height:26px;background:var(--red);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:14px;flex-shrink:0}
+.rl-em{font-size:28px;flex-shrink:0}
+.rl-title{font-weight:800;font-size:13px;color:var(--text)}
+.rl-q{font-size:11px;color:var(--muted);font-style:italic;margin-top:2px}
+.crisis-card{background:linear-gradient(135deg,#F0F7FF,#E0EEFF);border:1.5px solid rgba(59,127,224,.2);border-radius:18px;padding:18px;margin-bottom:14px}
+.csteps{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.cstep{display:flex;align-items:flex-start;gap:10px;padding:10px;background:#fff;border-radius:12px}
+.csnum{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:14px;color:#fff;flex-shrink:0}
+.csnum.g{background:#2ECC71}.csnum.o{background:#F97316}.csnum.b{background:#3B7FE0}.csnum.p{background:#8B5CF6}.csnum.gl{background:#FFB800}
+.cst-title{font-weight:800;font-size:12px;color:var(--text)}
+.cst-desc{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5}
+/* Settings */
+.s-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin-bottom:14px}
+.s-lbl{font-size:10px;font-weight:800;color:var(--faint);text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px}
+.s-input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:12px;font:inherit;font-size:14px;font-weight:700;color:var(--text);background:var(--bg);transition:border-color .18s}
+.s-input:focus{outline:none;border-color:var(--red)}
+.s-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(0,0,0,.06)}
+.s-row:last-child{border-bottom:none}
+.s-rl{font-weight:700;font-size:13px}.s-rd{font-size:11px;color:var(--muted);margin-top:2px}
+.tg{width:44px;height:26px;background:rgba(0,0,0,.1);border-radius:999px;position:relative;cursor:pointer;transition:background .25s;flex-shrink:0}
+.tg.on{background:#2ECC71}
+.tg::after{content:'';position:absolute;top:2px;left:2px;width:22px;height:22px;background:#fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+.tg.on::after{transform:translateX(18px)}
+.btn-save{background:linear-gradient(135deg,#E8344A,#FF6B35);color:#fff;border-radius:12px;padding:12px;font-weight:800;font-size:14px;width:100%;text-align:center;box-shadow:0 4px 14px rgba(232,52,74,.35);margin-bottom:10px;display:block;border:none;cursor:pointer}
+.btn-danger{background:rgba(232,52,74,.08);color:var(--red);border:1.5px solid rgba(232,52,74,.2);border-radius:12px;padding:11px;font-weight:800;font-size:13px;width:100%;display:block;cursor:pointer}
+/* Toast */
+.toast{position:fixed;top:14px;left:50%;transform:translateX(-50%) translateY(-80px);background:#1A1208;color:#fff;padding:11px 18px;border-radius:999px;font-size:13px;font-weight:700;z-index:600;transition:transform .4s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:0 16px 48px rgba(0,0,0,.14)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+/* Filter tabs */
+.filter-tabs{display:flex;gap:8px;margin-bottom:14px}
+.ftab{padding:6px 14px;border-radius:999px;font-size:12px;font-weight:800;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);transition:all .18s}
+.ftab.act{background:var(--red);color:#fff;border-color:var(--red)}
+@media(max-width:360px){.beh-grid{grid-template-columns:1fr}.day .ds{font-size:15px}.nav-item{padding:7px 8px}}
+.beh-manage-item{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:8px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.beh-manage-item.custom-b{border-color:rgba(255,184,0,.4);background:linear-gradient(135deg,#FFFBF0,#FFF8E8)}
+
+
+/* ===== MINI JEU ===== */
+#view-game{display:none;flex-direction:column;align-items:center}
+#view-game.act{display:flex}
+.game-locked{text-align:center;padding:48px 24px;color:var(--muted)}
+.game-locked .lock-ic{font-size:64px;margin-bottom:16px}
+.game-locked .lock-title{font-family:'Fredoka One',cursive;font-size:22px;color:var(--text);margin-bottom:8px}
+.game-locked .lock-desc{font-size:14px;line-height:1.6;max-width:28ch;margin:0 auto}
+.game-locked .lock-stars{font-family:'Fredoka One',cursive;font-size:48px;color:var(--gold);margin:16px 0;text-shadow:0 0 20px rgba(255,184,0,.4)}
+.game-wrap{width:100%;max-width:480px;position:relative}
+#gameCanvas{width:100%;display:block;border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,.18);touch-action:none}
+.game-hud{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;padding:10px 4px;margin-top:8px}
+.hud-score{font-family:'Fredoka One',cursive;font-size:22px;color:var(--text)}
+.hud-best{font-size:12px;font-weight:800;color:var(--muted);text-align:right}
+.game-btn{background:linear-gradient(135deg,#E8344A,#FF6B35);color:#fff;border-radius:999px;padding:11px 28px;font-weight:800;font-size:15px;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(232,52,74,.35);margin-top:12px;display:block}
+.game-btn.secondary{background:linear-gradient(135deg,#FFB800,#FFD95A);color:#1A1208;box-shadow:0 4px 14px rgba(255,184,0,.35)}
+.game-tap-hint{font-size:12px;color:var(--faint);font-weight:700;text-align:center;margin-top:8px}
+
+/* ===== SPLASH LANDING ===== */
+#splashScreen{position:fixed;inset:0;z-index:9999;background:#0A0A1A;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+.splash-img{width:100%;max-width:480px;object-fit:cover;flex:1;min-height:0}
+.splash-bottom{width:100%;max-width:480px;padding:20px 24px 32px;background:linear-gradient(to bottom,rgba(10,10,26,0) 0%,#0A0A1A 30%);margin-top:-60px;position:relative;z-index:2;text-align:center}
+.splash-btn{background:linear-gradient(135deg,#FFB800,#FF6B35);color:#fff;border:none;border-radius:999px;padding:16px 48px;font-family:'Fredoka One',cursive;font-size:22px;cursor:pointer;box-shadow:0 0 32px rgba(255,184,0,0.6),0 8px 24px rgba(0,0,0,0.4);animation:pulse-btn 2s ease-in-out infinite;width:100%}
+@keyframes pulse-btn{0%,100%{box-shadow:0 0 32px rgba(255,184,0,0.6),0 8px 24px rgba(0,0,0,0.4);transform:scale(1)}50%{box-shadow:0 0 48px rgba(255,184,0,0.9),0 8px 32px rgba(0,0,0,0.5);transform:scale(1.03)}}
+.splash-subtitle{font-size:13px;color:rgba(255,255,255,0.5);font-weight:700;margin-top:10px;text-transform:uppercase;letter-spacing:.1em}
+
+</style>
+</head>
+<body>
+
+<div id="splashScreen" onclick="dismissSplash()" style="cursor:pointer">
+  <img src="landing.jpg" class="splash-img" alt="Bixente & Iron Chat" draggable="false">
+  <div class="splash-bottom">
+    <div class="splash-btn">⭐ Découvrir mes Récompenses</div>
+    <div class="splash-subtitle">Bixente Rewards &amp; Iron Chat</div>
+  </div>
+</div>
+
+<header class="topbar">
+  <div class="logo">
+    <div class="logo-icon">🦁</div>
+    <h1>Iron Chat<span>& Bixente</span></h1>
+  </div>
+  <div style="display:flex">
+    <button class="topbar-btn" onclick="showView('reglements')">📋</button>
+    <button class="topbar-btn" onclick="showView('settings')">⚙️</button>
+  </div>
+</header>
+
+<div class="confbox" id="confbox"></div>
+<div class="toast" id="toast"></div>
+
+<main class="main">
+
+  <!-- HOME -->
+  <div class="view act" id="view-home">
+    <div class="hero">
+      <div class="hero-date" id="heroDate"></div>
+      <div class="hero-title">Les étoiles de <span class="name" id="heroName">Bixente</span> !</div>
+      <div class="stars-row">
+        <div id="starsRow" style="display:flex;gap:6px"></div>
+        <div class="total-badge">
+          <div class="num" id="totalNum">0</div>
+          <div class="lbl">⭐ total</div>
+        </div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="pFill" style="width:0%"></div></div>
+      <div class="prog-labels"><span id="pStart">0⭐</span><span id="pNext">Objectif : 3⭐</span><span id="pEnd">3⭐</span></div>
+      <div class="ironchat-q">
+        <span class="q-icon">🦁</span>
+        <span class="q-text" id="quote">"Iron Chat est fier de toi !"</span>
+      </div>
+    </div>
+
+    <div class="sec-title">⚡ Gagner des étoiles</div>
+    <div class="beh-grid" id="behGrid"></div>
+
+    <div class="sec-title">🏆 Récompenses</div>
+    <div id="rewList" style="margin-bottom:22px"></div>
+
+    <div class="sec-title">📅 Cette semaine</div>
+    <div class="wk-grid" id="wkGrid"></div>
+  </div>
+
+  <!-- REWARDS MANAGEMENT -->
+  <div class="view" id="view-rewards">
+    <div class="sec-title" style="margin-top:8px">🎁 Gérer les récompenses</div>
+
+    <div class="add-rew-form">
+      <div class="form-title">✨ Créer une récompense</div>
+      <div class="form-row-3">
+        <input type="text" id="newRewEmoji" placeholder="🎯" maxlength="2" style="text-align:center;font-size:22px">
+        <input type="text" id="newRewTitle" placeholder="Nom de la récompense" maxlength="30">
+        <input type="number" id="newRewCost" placeholder="⭐" min="1" max="999" style="text-align:center">
+      </div>
+      <div class="form-row">
+        <input type="text" id="newRewDesc" placeholder="Description (optionnelle)" maxlength="50">
+      </div>
+      <button class="btn-add-rew" onclick="addCustomRew()">➕ Ajouter cette récompense</button>
+    </div>
+
+    <div class="sec-title">📋 Toutes les récompenses</div>
+    <div id="allRewList"></div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="view" id="view-history">
+    <div class="sec-title" style="margin-top:8px">📖 Historique</div>
+    <div class="filter-tabs">
+      <div class="ftab act" id="ftAll" onclick="setFilt('all')">Tout</div>
+      <div class="ftab" id="ftEarn" onclick="setFilt('earn')">⭐ Gains</div>
+      <div class="ftab" id="ftUse" onclick="setFilt('use')">🎁 Récompenses</div>
+    </div>
+    <div id="histList"></div>
+  </div>
+
+  <!-- RULES -->
+  <div class="view" id="view-reglements">
+    <div class="sec-title" style="margin-top:8px">🦁 Les 5 Règles d'Iron Chat</div>
+    <div class="rl-list" id="rlList"></div>
+    <div class="sec-title">🆘 Protocole Anti-Crise</div>
+    <div class="crisis-card">
+      <div style="font-family:'Fredoka One',cursive;font-size:15px;color:#3B7FE0;margin-bottom:3px">Si Bixente est en colère…</div>
+      <div style="font-size:11px;color:#6B5B3E">Iron Chat guide en 5 étapes :</div>
+      <div class="csteps">
+        <div class="cstep"><div class="csnum g">1</div><div><div class="cst-title">⏱️ Je préviens 5 min avant</div><div class="cst-desc">"Bixente, dans 5 minutes on change d'activité."</div></div></div>
+        <div class="cstep"><div class="csnum o">2</div><div><div class="cst-title">🫂 Je reste calme & à sa hauteur</div><div class="cst-desc">Je respire, je baisse la voix, je m'accroupis.</div></div></div>
+        <div class="cstep"><div class="csnum b">3</div><div><div class="cst-title">💬 Je nomme l'émotion</div><div class="cst-desc">"Tu es en colère parce que… c'est normal."</div></div></div>
+        <div class="cstep"><div class="csnum p">4</div><div><div class="cst-title">🛋️ Coin Calme Iron Chat</div><div class="cst-desc">Souffle ensemble : inspire 4s → bloque 4s → expire 6s.</div></div></div>
+        <div class="cstep"><div class="csnum gl">5</div><div><div class="cst-title">⭐ Le débriefing</div><div class="cst-desc">"Tu t'es calmé — Iron Chat est fier !" → +1 étoile bonus.</div></div></div>
+      </div>
+    </div>
+    <div class="hero" style="margin-bottom:22px">
+      <div class="hero-title" style="font-size:17px">🌟 La philosophie Iron Chat</div>
+      <p style="color:rgba(255,255,255,.72);font-size:12px;line-height:1.7;margin-top:8px">Quand Bixente respecte les règles, <strong style="color:#FFD95A">tout le monde est content et personne n'est triste</strong>.<br><br>Iron Chat ne punit pas — il récompense et encourage. 💪</p>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="view" id="view-settings">
+    <div class="sec-title" style="margin-top:8px">⚙️ Paramètres</div>
+    <div class="s-card">
+      <div class="s-lbl">Nom de l'enfant</div>
+      <input type="text" class="s-input" id="sName" placeholder="Bixente" maxlength="20">
+    </div>
+    <div class="s-card">
+      <div class="s-lbl">Âge</div>
+      <input type="number" class="s-input" id="sAge" placeholder="5" min="3" max="18">
+    </div>
+    <div class="s-card">
+      <div class="s-lbl">Options</div>
+      <div class="s-row">
+        <div><div class="s-rl">Mode parent 🔒</div><div class="s-rd">Confirmer avant d'ajouter + bypass limite journalière</div></div>
+        <div class="tg" id="tgParent" onclick="tog('parent')"></div>
+      </div>
+      <div class="s-row">
+        <div><div class="s-rl">Étoiles max / jour</div><div class="s-rd" id="maxDesc">Maximum 5 étoiles/jour</div></div>
+        <div style="display:flex;align-items:center;gap:7px">
+          <button onclick="chgMax(-1)" style="width:28px;height:28px;background:#FFF3DC;border-radius:50%;font-size:18px;font-weight:800;color:#6B5B3E;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none">−</button>
+          <span id="maxVal" style="font-family:'Fredoka One',cursive;font-size:21px;color:#E8344A;min-width:22px;text-align:center">5</span>
+          <button onclick="chgMax(1)" style="width:28px;height:28px;background:#FFF3DC;border-radius:50%;font-size:18px;font-weight:800;color:#6B5B3E;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none">+</button>
+        </div>
+      </div>
+    </div>
+    <button class="btn-save" onclick="saveSets()">💾 Sauvegarder</button>
+
+    <div class="sec-title" style="margin-top:8px">⚡ Gérer les comportements</div>
+
+    <div class="add-rew-form" style="margin-bottom:14px">
+      <div class="form-title">➕ Nouveau comportement</div>
+      <div class="form-row-3">
+        <input type="text" id="newBehEmoji" placeholder="🎯" maxlength="2" style="text-align:center;font-size:22px">
+        <input type="text" id="newBehLabel" placeholder="Nom du comportement" maxlength="30">
+        <select id="newBehSp" style="font-size:13px;font-weight:700;padding:10px 8px;border:1.5px solid var(--border);border-radius:12px;background:var(--bg);color:var(--text)">
+          <option value="0">Normal</option>
+          <option value="1">⭐ Spécial</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <input type="text" id="newBehQuote" placeholder="Citation Iron Chat (ex: Mission réussie !)" maxlength="50">
+      </div>
+      <button class="btn-add-rew" onclick="addCustomBeh()">➕ Ajouter ce comportement</button>
+    </div>
+
+    <div id="behManageList"></div>
+
+    <button class="btn-danger" style="margin-top:8px" onclick="doReset()">🗑️ Remettre à zéro</button>
+  </div>
+
+
+  <!-- MINI JEU -->
+  <div class="view" id="view-game">
+    <div id="gameLocked" class="game-locked">
+      <div class="lock-ic">🔒</div>
+      <div class="lock-title">Mini Jeu verrouillé</div>
+      <div class="lock-stars" id="lockStarsDisplay">0 / 10 ⭐</div>
+      <div class="lock-desc">Gagne <strong>10 étoiles</strong> pour débloquer le mini jeu Iron Chat !</div>
+    </div>
+    <div id="gameUnlocked" style="display:none;width:100%;max-width:480px">
+      <div class="game-hud">
+        <div>
+          <div class="hud-score">Score : <span id="gameScore">0</span></div>
+          <div style="font-size:11px;font-weight:700;color:var(--faint);margin-top:2px">🏆 Record : <span id="gameBest">0</span></div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'Fredoka One',cursive;font-size:14px;color:var(--red)" id="gameLives">❤️ ❤️ ❤️</div>
+          <div style="font-size:11px;font-weight:700;color:var(--faint);margin-top:2px" id="gameSpeed">Vitesse ×1</div>
+        </div>
+      </div>
+      <div class="game-wrap">
+        <canvas id="gameCanvas" width="480" height="300"></canvas>
+      </div>
+      <div class="game-tap-hint" id="gameTapHint">Tape l'écran ou appuie sur ESPACE pour sauter</div>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:12px">
+        <button class="game-btn" id="gameStartBtn" onclick="gameAction()">▶ Démarrer</button>
+        <button class="game-btn secondary" onclick="showView('home')" style="padding:11px 18px">← Retour</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<nav class="bottom-nav">
+  <div class="nav-item act" id="nav-home" onclick="showView('home')"><span class="ni">⭐</span><span>Étoiles</span></div>
+  <div class="nav-item" id="nav-rewards" onclick="showView('rewards')"><span class="ni">🎁</span><span>Rewards</span></div>
+  <div class="nav-item" id="nav-history" onclick="showView('history')"><span class="ni">📖</span><span>Historique</span></div>
+  <div class="nav-item" id="nav-game" onclick="showView('game')"><span class="ni">🎮</span><span>Jeu</span></div>
+  <div class="nav-item" id="nav-reglements" onclick="showView('reglements')"><span class="ni">📋</span><span>Règles</span></div>
+</nav>
+
+<!-- Behavior confirm modal -->
+<div class="overlay" id="behModal">
+  <div class="modal">
+    <span class="m-em" id="mEm">⭐</span>
+    <div class="m-title" id="mTitle">Bravo !</div>
+    <div class="m-desc" id="mDesc"></div>
+    <div class="m-actions">
+      <button class="btn btn-s" onclick="closeM('behModal')">Annuler</button>
+      <button class="btn btn-p" id="mOk">Gagner l'étoile !</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reward use modal -->
+<div class="overlay" id="rewModal">
+  <div class="modal">
+    <span class="m-em" id="rEm">🏆</span>
+    <div class="m-title" id="rTitle">Récompense !</div>
+    <div class="m-desc" id="rDesc"></div>
+    <div class="m-actions">
+      <button class="btn btn-s" onclick="closeM('rewModal')">Plus tard</button>
+      <button class="btn btn-p" onclick="useRew()">🎉 Utiliser !</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete reward confirm -->
+<div class="overlay" id="delBehModal">
+  <div class="modal">
+    <span class="m-em">🗑️</span>
+    <div class="m-title">Supprimer ?</div>
+    <div class="m-desc" id="delBehDesc">Ce comportement sera supprimé.</div>
+    <div class="m-actions">
+      <button class="btn btn-s" onclick="closeM('delBehModal')">Annuler</button>
+      <button class="btn btn-p" onclick="confirmDelBeh()">Supprimer</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="delRewModal">
+  <div class="modal">
+    <span class="m-em">🗑️</span>
+    <div class="m-title">Supprimer ?</div>
+    <div class="m-desc" id="delRewDesc">Cette récompense sera supprimée.</div>
+    <div class="m-actions">
+      <button class="btn btn-s" onclick="closeM('delRewModal')">Annuler</button>
+      <button class="btn btn-p" onclick="confirmDelRew()">Supprimer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DEFAULT_BEH=[
+  {id:"b1",e:"☀️",l:"Routine du matin",q:"Mission matin accomplie !"},
+  {id:"b2",e:"🌙",l:"Routine du soir",q:"Mission soir réussie !"},
+  {id:"b3",e:"🧸",l:"Rangement jouets",q:"La base est rangée !"},
+  {id:"b4",e:"🤗",l:"Doux avec les autres",q:"Un héros qui protège !",sp:true},
+  {id:"b5",e:"🙏",l:"Merci / S'il te plaît",q:"Mot de passe validé !"},
+  {id:"b6",e:"👂",l:"Bien écouté",q:"Bonne écoute, héros !"},
+  {id:"b7",e:"🍽️",l:"Bien mangé à table",q:"Mission repas réussie !"},
+  {id:"b8",e:"✅",l:"Dit la vérité",q:"La vérité = super-pouvoir !",sp:true},
+  {id:"b9",e:"🌟",l:"Bonus Iron Chat",q:"Surprise Iron Chat !",sp:true},
+  {id:"b10",e:"🚗",l:"Calme en voiture",q:"Cockpit serein !"},
+];
+const DEFAULT_REW=[
+  {id:'r1',e:"🎮",t:"Salle de jeux",d:"On va jouer ensemble !",c:3,custom:false},
+  {id:'r2',e:"🍕",t:"Repas préféré",d:"Tu choisis ce qu'on mange",c:4,custom:false},
+  {id:'r3',e:"📺",t:"1 épisode TV",d:"20 minutes de série",c:5,custom:false},
+  {id:'r4',e:"🛝",t:"Super aire de jeux",d:"La grande aire de jeux !",c:10,custom:false},
+  {id:'r5',e:"🎬",t:"Soirée film",d:"2 épisodes ou un petit film",c:20,custom:false},
+  {id:'r6',e:"🎁",t:"Petit cadeau",d:"Un cadeau surprise !",c:50,custom:false},
+];
+const RLS=[
+  {e:"🍽️",t:"À table : assiette, verre, fourchette — c'est tout !",q:'"Iron Chat range son armure avant de manger."'},
+  {e:"🚗",t:"En voiture : doudou ou jouet solide seulement",q:'"En mission, seul l\'essentiel monte dans le cockpit."'},
+  {e:"🤗",t:"On ne fait pas mal aux autres",q:'"Iron Chat est fort — les forts protègent."'},
+  {e:"📦",t:"On range quand papa et maman demandent",q:'"Un héros range sa base sur ordre du chef de mission."'},
+  {e:"🌟",t:"Comme ça, tout le monde est content !",q:'"Une équipe heureuse = une mission réussie !"'},
+];
+const QT=['"Un héros se lève prêt pour sa mission !"','"Iron Chat est fier de toi, Bixente !"','"Chaque étoile te rapproche de la victoire !"','"Les vrais héros sont doux et courageux."','"Ta mission continue — tu peux le faire !"','"Iron Chat veille sur toi depuis New York 2087 !"'];
+const DYS=["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
+
+// State
+let S={
+  n:"Bixente",a:5,
+  td:0,tot:0,mx:5,
+  wk:[0,0,0,0,0,0,0],
+  opts:{parent:false},
+  ld:new Date().toDateString(),
+  rewards:[...DEFAULT_REW],
+  behaviors:null,
+  doneBeh:[],
+  hist:[],
+  rewIdSeq:100,
+  behIdSeq:100,
+  gameBest:0
+};
+let pB=null,pR=null,pDelId=null,histFilt='all';
+
+// Persistence via URL hash
+function sv(){
+  try{localStorage.setItem("ironchat_v1", JSON.stringify(S));}catch(e){}
+}
+function ld(){
+  try{
+    const raw=localStorage.getItem("ironchat_v1");
+    if(raw){
+      const d=JSON.parse(raw);
+      // Merge carefully
+      if(d.n!==undefined)S.n=d.n;
+      if(d.a!==undefined)S.a=d.a;
+      if(d.td!==undefined)S.td=d.td;
+      if(d.tot!==undefined)S.tot=d.tot;
+      if(d.mx!==undefined)S.mx=d.mx;
+      if(d.wk)S.wk=d.wk;
+      if(d.opts)S.opts=d.opts;
+      if(d.ld)S.ld=d.ld;
+      if(d.rewards&&d.rewards.length)S.rewards=d.rewards;
+      if(d.behaviors&&d.behaviors.length)S.behaviors=d.behaviors;
+      if(d.doneBeh)S.doneBeh=d.doneBeh;
+      if(d.behIdSeq)S.behIdSeq=d.behIdSeq;
+      if(d.gameBest)S.gameBest=d.gameBest;
+      if(d.hist)S.hist=d.hist;
+      if(d.rewIdSeq)S.rewIdSeq=d.rewIdSeq;
+    }
+  }catch(e){}
+}
+
+function init(){
+  ld();
+  const td=new Date().toDateString();
+  if(S.ld!==td){
+    const di=(new Date(S.ld||td).getDay()+6)%7;
+    if(S.wk)S.wk[di]=S.td||0;
+    S.td=0;S.ld=td;
+    S.doneBeh=[];
+    sv();
+  }
+  if(!S.behaviors||!S.behaviors.length)S.behaviors=[...DEFAULT_BEH];
+  renderAll();
+}
+
+function renderAll(){rHero();rBeh();rRew();rWk();rAllRew();rHist();rRls();rSets();checkGameUnlock();}
+
+/* ---- HERO ---- */
+function rHero(){
+  const DN=["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"];
+  const MN=["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+  const n=new Date();
+  document.getElementById("heroDate").textContent=DN[n.getDay()]+" "+n.getDate()+" "+MN[n.getMonth()]+" "+n.getFullYear();
+  document.getElementById("heroName").textContent=S.n||"Bixente";
+  document.getElementById("totalNum").textContent=S.tot;
+
+  // Stars
+  const row=document.getElementById("starsRow");
+  const ex=Array.from(row.querySelectorAll(".star"));
+  while(ex.length<S.mx){const s=document.createElement("span");s.className="star";s.textContent="⭐";const i=ex.length;s.onclick=(e)=>tapS(i,e);row.appendChild(s);ex.push(s);}
+  while(ex.length>S.mx){ex.pop().remove();}
+  row.querySelectorAll(".star").forEach((el,i)=>el.classList.toggle("on",i<S.td));
+  // Parent mode: show +/- bonus buttons
+  const existingPBtn=document.getElementById('parentAddBtn');
+  if(existingPBtn)existingPBtn.remove();
+  if(S.opts&&S.opts.parent){
+    const pb=document.createElement('div');
+    pb.id='parentAddBtn';
+    pb.style.cssText='display:flex;flex-direction:column;gap:4px;margin-left:6px';
+    pb.innerHTML=`<button onclick="parentAddStar(event)" style="width:28px;height:28px;background:rgba(255,184,0,0.25);border-radius:50%;font-size:16px;font-weight:900;color:#FFD95A;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer" title="Ajouter une étoile (mode parent)">+</button><button onclick="parentRemoveStar(event)" style="width:28px;height:28px;background:rgba(255,255,255,0.1);border-radius:50%;font-size:16px;font-weight:900;color:rgba(255,255,255,0.5);display:flex;align-items:center;justify-content:center;border:none;cursor:pointer" title="Retirer une étoile">−</button>`;
+    row.parentNode.insertBefore(pb, row.nextSibling);
+  }
+
+  // Progress to next reward
+  const sRews=[...S.rewards].sort((a,b)=>a.c-b.c);
+  const nx=sRews.find(r=>r.c>S.tot),pv=[...sRews].reverse().find(r=>r.c<=S.tot);
+  if(nx){
+    const pc=pv?pv.c:0,pct=Math.min(100,((S.tot-pc)/(nx.c-pc))*100);
+    document.getElementById("pFill").style.width=pct+"%";
+    document.getElementById("pNext").textContent=nx.e+" "+nx.t+" ("+nx.c+"⭐)";
+    document.getElementById("pStart").textContent=pc+"⭐";document.getElementById("pEnd").textContent=nx.c+"⭐";
+  }else{
+    document.getElementById("pFill").style.width="100%";
+    document.getElementById("pNext").textContent="🏆 Champion Iron Chat !";
+  }
+  document.getElementById("quote").textContent=QT[Math.floor(Math.random()*QT.length)];
+}
+
+/* ---- BEHAVIORS (1 étoile chacun, once per day) ---- */
+function rBeh(){
+  const behs=S.behaviors||DEFAULT_BEH;
+  document.getElementById("behGrid").innerHTML=behs.map((b)=>{
+    const done=S.doneBeh.includes(b.id);
+    return`<div class="beh-card${b.sp?" sp":""}${done?" done":""}" onclick="${done?"":"openB('"+b.id+"')"}">
+      <span class="ic">${b.e}</span><span class="lbl">${b.l}</span>
+      <span class="badge">+1⭐</span>
+    </div>`;
+  }).join("");
+}
+
+/* ---- REWARDS (home list) ---- */
+function rRew(){
+  const sRews=[...S.rewards].sort((a,b)=>a.c-b.c);
+  document.getElementById("rewList").innerHTML=sRews.map((r,i)=>{
+    const ul=S.tot>=r.c,nx=!ul&&(i===0||S.tot>=sRews[i-1].c);
+    const cls=ul?"ul":nx?"nx":"lk",si=ul?"✅":nx?"🎯":"🔒",sc=ul?"ok":nx?"tg":"lk2";
+    return`<div class="rew-item ${cls}" onclick="${ul?"openR('"+r.id+"')":""}">
+      <span class="rew-ic">${r.e}</span>
+      <div class="rew-info"><div class="rew-title">${r.t}</div><div class="rew-desc">${r.d}</div></div>
+      <div class="rew-cost">⭐${r.c}</div>
+      <div class="rew-st ${sc}">${si}</div>
+    </div>`;
+  }).join("");
+}
+
+/* ---- WEEK ---- */
+function rWk(){
+  const ti=(new Date().getDay()+6)%7;
+  document.getElementById("wkGrid").innerHTML=DYS.map((d,i)=>{
+    const st=i===ti?S.td:(S.wk[i]||0);
+    return`<div class="day${i===ti?" td":""}"><div class="dn">${d}</div><div class="ds">${st}</div><div class="de">⭐</div></div>`;
+  }).join("");
+}
+
+/* ---- ALL REWARDS (manage view) ---- */
+function rAllRew(){
+  const sRews=[...S.rewards].sort((a,b)=>a.c-b.c);
+  document.getElementById("allRewList").innerHTML=sRews.map(r=>{
+    const ul=S.tot>=r.c;
+    const badge=ul?'<span style="font-size:10px;background:#2ECC71;color:#fff;padding:2px 7px;border-radius:999px;font-weight:800;margin-left:6px">Dispo ✅</span>':'';
+    return`<div class="rew-item${ul?" ul":" lk"}">
+      <span class="rew-ic">${r.e}</span>
+      <div class="rew-info">
+        <div class="rew-title">${r.t}${badge}</div>
+        <div class="rew-desc">${r.d||''}</div>
+      </div>
+      <div class="rew-cost">⭐${r.c}</div>
+      ${r.custom?`<button class="rew-del" onclick="promptDelRew('${r.id}')" title="Supprimer">🗑️</button>`:'<div style="width:26px"></div>'}
+    </div>`;
+  }).join("");
+}
+
+/* ---- HISTORY ---- */
+function rHist(){
+  let items=S.hist?[...S.hist].reverse():[];
+  if(histFilt==='earn')items=items.filter(h=>h.type==='earn');
+  if(histFilt==='use')items=items.filter(h=>h.type==='use');
+  if(!items.length){
+    document.getElementById("histList").innerHTML='<div class="hist-empty"><div class="ic">📭</div><div>Aucun historique pour l\'instant.</div><div style="font-size:12px;margin-top:6px;color:#B8A898">Les étoiles gagnées et récompenses utilisées apparaîtront ici.</div></div>';
+    return;
+  }
+  document.getElementById("histList").innerHTML=items.map(h=>`
+    <div class="hist-item type-${h.type}">
+      <span class="hist-ic">${h.em}</span>
+      <div class="hist-info">
+        <div class="hist-title">${h.title}</div>
+        <div class="hist-date">${h.date}</div>
+      </div>
+      <div class="hist-pts ${h.type}">${h.type==='earn'?'+':'-'}${h.pts}⭐</div>
+    </div>`).join("");
+}
+
+/* ---- RULES ---- */
+function rRls(){
+  document.getElementById("rlList").innerHTML=RLS.map((r,i)=>`
+    <div class="rl-card">
+      <div class="rl-num">${i+1}</div>
+      <span class="rl-em">${r.e}</span>
+      <div><div class="rl-title">${r.t}</div><div class="rl-q">${r.q}</div></div>
+    </div>`).join("");
+}
+
+/* ---- SETTINGS UI ---- */
+function rSets(){
+  document.getElementById("sName").value=S.n||"Bixente";
+  document.getElementById("sAge").value=S.a||5;
+  document.getElementById("maxVal").textContent=S.mx||5;
+  document.getElementById("maxDesc").textContent="Maximum "+(S.mx||5)+" étoiles/jour";
+  document.getElementById("tgParent").classList.toggle("on",S.opts&&S.opts.parent);
+}
+
+/* ---- ACTIONS ---- */
+function tapS(i,e){
+  const nc=i+1===S.td?i:i+1,diff=nc-S.td;
+  const parentMode=S.opts&&S.opts.parent;
+  if(!parentMode&&nc>S.mx)return;
+  S.tot=Math.max(0,S.tot+diff);S.td=nc;
+  if(diff>0){burst(e.clientX,e.clientY);addHist('earn','⭐','Étoile ajoutée manuellement',1);ckUnlock();}
+  sv();renderAll();
+}
+
+function openB(id){
+  if(S.doneBeh.includes(id)){showT("✅ Déjà fait aujourd'hui !");return;}
+  const b=(S.behaviors||DEFAULT_BEH).find(x=>x.id===id);
+  if(!b)return;
+  pB=id;
+  document.getElementById("mEm").textContent=b.e;
+  document.getElementById("mTitle").textContent=b.l;
+  document.getElementById("mDesc").textContent='"'+b.q+'" — +1 étoile pour '+S.n+' !';
+  document.getElementById("mOk").textContent="+1 ⭐ pour "+S.n+" !";
+  document.getElementById("mOk").onclick=confB;
+  document.getElementById("behModal").classList.add("open");
+}
+
+function confB(){
+  if(pB===null)return;
+  const b=(S.behaviors||DEFAULT_BEH).find(x=>x.id===pB);
+  if(!b)return;
+  const parentMode=S.opts&&S.opts.parent;
+  if(!parentMode&&S.td>=S.mx){showT("⭐ Max "+S.mx+" étoiles/jour atteint !");closeM("behModal");return;}
+  S.td+=1;S.tot+=1;
+  S.doneBeh.push(pB);
+  addHist('earn',b.e,b.l,1);
+  closeM("behModal");sv();renderAll();
+  confetti();showT("🌟 +1 étoile ! Bravo "+S.n+" !");
+  ckUnlock();
+}
+
+function parentAddStar(e){
+  S.td+=1;S.tot+=1;
+  burst(e.clientX,e.clientY);
+  addHist('earn','🔓','Étoile ajoutée (mode parent)',1);
+  sv();renderAll();ckUnlock();
+}
+function parentRemoveStar(e){
+  if(S.td<=0&&S.tot<=0)return;
+  if(S.td>0)S.td-=1;
+  S.tot=Math.max(0,S.tot-1);
+  addHist('use','🔓','Étoile retirée (mode parent)',1);
+  sv();renderAll();
+}
+function ckUnlock(){
+  const r=S.rewards.find(rw=>rw.c===S.tot);
+  if(r)setTimeout(()=>openR(r.id,true),900);
+}
+
+function openR(id,auto=false){
+  const r=S.rewards.find(rw=>rw.id===id);
+  if(!r)return;
+  if(S.tot<r.c&&!auto)return;
+  pR=r;
+  document.getElementById("rEm").textContent=r.e;
+  document.getElementById("rTitle").textContent=auto?"🎉 Récompense débloquée !":r.t;
+  document.getElementById("rDesc").textContent=r.d+" — Coût : "+r.c+" ⭐";
+  document.getElementById("rewModal").classList.add("open");
+  if(auto)confetti();
+}
+
+function useRew(){
+  if(!pR)return;
+  S.tot-=pR.c;
+  addHist('use',pR.e,pR.t,pR.c);
+  closeM("rewModal");sv();renderAll();
+  showT("🎉 Profite bien, "+S.n+" !");confetti();
+}
+
+/* ---- BEHAVIOR MANAGEMENT ---- */
+function rBehManage(){
+  const behs=S.behaviors||DEFAULT_BEH;
+  const el=document.getElementById("behManageList");
+  if(!el)return;
+  el.innerHTML=behs.map(b=>`
+    <div class="beh-manage-item${b.custom?" custom-b":""}">
+      <span style="font-size:26px;flex-shrink:0">${b.e}</span>
+      <div style="flex:1">
+        <div style="font-weight:800;font-size:13px">${b.l}</div>
+        <div style="font-size:11px;color:var(--muted);font-style:italic;margin-top:1px">${b.q||''}</div>
+      </div>
+      ${b.sp?'<span style="font-size:10px;background:#FFB800;color:#fff;padding:2px 7px;border-radius:999px;font-weight:800;flex-shrink:0">Spécial</span>':''}
+      ${b.custom
+        ?`<button class="rew-del" onclick="promptDelBeh('${b.id}')" title="Supprimer">🗑️</button>`
+        :'<div style="width:26px;font-size:11px;color:var(--faint);text-align:center">🔒</div>'
+      }
+    </div>`).join("");
+}
+
+function addCustomBeh(){
+  const em=document.getElementById("newBehEmoji").value.trim()||"🎯";
+  const label=document.getElementById("newBehLabel").value.trim();
+  const quote=document.getElementById("newBehQuote").value.trim();
+  const sp=document.getElementById("newBehSp").value==="1";
+  if(!label){showT("⚠️ Donne un nom au comportement !");return;}
+  S.behIdSeq=(S.behIdSeq||100)+1;
+  const id="bh"+S.behIdSeq;
+  S.behaviors.push({id,e:em,l:label,q:quote||"Bien joué !",sp,custom:true});
+  document.getElementById("newBehEmoji").value="";
+  document.getElementById("newBehLabel").value="";
+  document.getElementById("newBehQuote").value="";
+  document.getElementById("newBehSp").value="0";
+  sv();rBeh();rBehManage();
+  showT("✅ Comportement ajouté !");
+}
+
+let pDelBehId=null;
+function promptDelBeh(id){
+  pDelBehId=id;
+  const b=S.behaviors.find(x=>x.id===id);
+  document.getElementById("delBehDesc").textContent="Supprimer le comportement \""+b.l+"\" ?";
+  document.getElementById("delBehModal").classList.add("open");
+}
+
+function confirmDelBeh(){
+  S.behaviors=S.behaviors.filter(b=>b.id!==pDelBehId);
+  S.doneBeh=S.doneBeh.filter(id=>id!==pDelBehId);
+  closeM("delBehModal");sv();rBeh();rBehManage();
+  showT("🗑️ Comportement supprimé");
+}
+
+/* ---- CUSTOM REWARDS ---- */
+function addCustomRew(){
+  const em=document.getElementById("newRewEmoji").value.trim()||"🎯";
+  const title=document.getElementById("newRewTitle").value.trim();
+  const cost=parseInt(document.getElementById("newRewCost").value);
+  const desc=document.getElementById("newRewDesc").value.trim();
+  if(!title){showT("⚠️ Donne un nom à la récompense !");return;}
+  if(!cost||cost<1){showT("⚠️ Indique le nombre d'étoiles !");return;}
+  S.rewIdSeq=(S.rewIdSeq||100)+1;
+  S.rewards.push({id:'c'+S.rewIdSeq,e:em,t:title,d:desc||title,c:cost,custom:true});
+  document.getElementById("newRewEmoji").value="";
+  document.getElementById("newRewTitle").value="";
+  document.getElementById("newRewCost").value="";
+  document.getElementById("newRewDesc").value="";
+  sv();rAllRew();rRew();rHero();
+  showT("✅ Récompense ajoutée !");confetti();
+}
+
+function promptDelRew(id){
+  pDelId=id;
+  const r=S.rewards.find(x=>x.id===id);
+  document.getElementById("delRewDesc").textContent="Supprimer \""+r.t+"\" ?";
+  document.getElementById("delRewModal").classList.add("open");
+}
+
+function confirmDelRew(){
+  S.rewards=S.rewards.filter(r=>r.id!==pDelId);
+  closeM("delRewModal");sv();rAllRew();rRew();rHero();
+  showT("🗑️ Récompense supprimée");
+}
+
+/* ---- HISTORY HELPERS ---- */
+function addHist(type,em,title,pts){
+  if(!S.hist)S.hist=[];
+  const now=new Date();
+  const months=["jan","fév","mar","avr","mai","jun","jul","aoû","sep","oct","nov","déc"];
+  const date=now.getDate()+" "+months[now.getMonth()]+" à "+now.getHours()+"h"+String(now.getMinutes()).padStart(2,"0");
+  S.hist.push({type,em,title,pts,date});
+  if(S.hist.length>200)S.hist=S.hist.slice(-200);
+}
+
+function setFilt(f){
+  histFilt=f;
+  ["all","earn","use"].forEach(x=>document.getElementById("ft"+x.charAt(0).toUpperCase()+x.slice(1)).classList.toggle("act",x===f));
+  rHist();
+}
+
+/* ---- MODALS / NAV ---- */
+function closeM(id){document.getElementById(id).classList.remove("open");pB=null;pR=null;}
+
+function showView(n){
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("act"));
+  document.querySelectorAll(".nav-item").forEach(x=>x.classList.remove("act"));
+  document.getElementById("view-"+n).classList.add("act");
+  const ni=document.getElementById("nav-"+n);if(ni)ni.classList.add("act");
+  if(n==='history')rHist();
+  if(n==='rewards')rAllRew();
+  if(n==='settings')rBehManage();
+  if(n==='game')checkGameUnlock();
+}
+
+function saveSets(){
+  S.n=document.getElementById("sName").value.trim()||"Bixente";
+  S.a=parseInt(document.getElementById("sAge").value)||5;
+  sv();renderAll();showT("✅ Sauvegardé !");setTimeout(()=>showView("home"),600);
+}
+
+function tog(k){
+  S.opts[k]=!S.opts[k];
+  document.getElementById("tg"+k.charAt(0).toUpperCase()+k.slice(1)).classList.toggle("on",S.opts[k]);
+}
+
+function chgMax(d){
+  S.mx=Math.max(1,Math.min(10,(S.mx||5)+d));
+  document.getElementById("maxVal").textContent=S.mx;
+  document.getElementById("maxDesc").textContent="Maximum "+S.mx+" étoiles/jour";
+}
+
+function doReset(){
+  if(confirm("Remettre toutes les étoiles à zéro ?")){
+    S.td=0;S.tot=0;S.wk=[0,0,0,0,0,0,0];S.doneBeh=[];S.hist=[];
+    sv();renderAll();showT("🔄 Remis à zéro !");showView("home");
+  }
+}
+
+/* ---- FX ---- */
+function confetti(){
+  const c=document.getElementById("confbox"),cols=["#FFB800","#E8344A","#3B7FE0","#2ECC71","#8B5CF6","#F97316"];
+  for(let i=0;i<55;i++){
+    const p=document.createElement("div");p.className="cp";
+    p.style.cssText="left:"+Math.random()*100+"%;top:-10px;background:"+cols[Math.floor(Math.random()*cols.length)]+";width:"+(7+Math.random()*7)+"px;height:"+(7+Math.random()*7)+"px;border-radius:"+(Math.random()>.5?"50%":"3px")+";animation-duration:"+(1.4+Math.random()*1.4)+"s;animation-delay:"+(Math.random()*0.4)+"s";
+    c.appendChild(p);setTimeout(()=>p.remove(),3000);
+  }
+}
+
+function burst(x,y){
+  const e=document.createElement("div");e.className="sburst";e.textContent="⭐";
+  e.style.left=(x-24)+"px";e.style.top=(y-24)+"px";
+  document.body.appendChild(e);setTimeout(()=>e.remove(),800);
+}
+
+let toastT=null;
+function showT(msg){
+  const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");
+  clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove("show"),2800);
+}
+
+["behModal","rewModal","delRewModal","delBehModal"].forEach(id=>{
+  document.getElementById(id).addEventListener("click",function(e){if(e.target===this)closeM(id);});
+});
+
+function dismissSplash(){
+  const s=document.getElementById('splashScreen');
+  if(!s||s._closing)return;
+  s._closing=true;
+  s.style.pointerEvents='none';
+  s.style.transition='opacity .4s';
+  s.style.opacity='0';
+  setTimeout(()=>{ if(s.parentNode)s.parentNode.removeChild(s); },450);
+}
+// Also dismiss on any keypress
+document.addEventListener('keydown', function kd(){ dismissSplash(); document.removeEventListener('keydown',kd); });
+
+init();
+
+
+/* ===== MINI JEU IRON CHAT ===== */
+const G={
+  canvas:null,ctx:null,
+  state:'idle', // idle | running | dead | over
+  score:0,best:0,lives:3,frame:0,
+  speed:1.8,speedMult:1,
+  cat:{x:60,y:0,vy:0,w:28,h:28,jumping:false,grounded:true,frame:0,frameT:0},
+  obstacles:[],
+  clouds:[],
+  ground:260,
+  nextObs:80,
+  particles:[],
+  invincible:0,
+};
+
+// Pixel art cat (running frames) — 14x14 grid drawn via fillRect
+const CAT_FRAMES=[
+  // frame 0 — run left leg forward
+  [
+    "  OOOOOO  ",
+    " O OOOO O ",
+    " OOOOOOOO ",
+    " O OOOO O ",
+    "  OOOOOO  ",
+    "   OOOO   ",
+    "  OOOOOO  ",
+    " OOOOOOOO ",
+    "OOOO  OOOO",
+    " OO    OO ",
+    " O      O ",
+    " O   O  O ",
+    "     OO   ",
+    "      O   ",
+  ],
+  // frame 1 — run right leg forward  
+  [
+    "  OOOOOO  ",
+    " O OOOO O ",
+    " OOOOOOOO ",
+    " O OOOO O ",
+    "  OOOOOO  ",
+    "   OOOO   ",
+    "  OOOOOO  ",
+    " OOOOOOOO ",
+    "OOOO  OOOO",
+    " OO    OO ",
+    " O      O ",
+    "  O   O O ",
+    "   OO     ",
+    "   O      ",
+  ],
+];
+
+function drawPixelCat(ctx, x, y, frame, scale=2.5, color='#FF6B35', eyeColor='#1A1208'){
+  const px=CAT_FRAMES[frame%2];
+  const cw=10*scale, ch=14*scale;
+  // Shadow
+  ctx.fillStyle='rgba(0,0,0,0.15)';
+  ctx.beginPath();ctx.ellipse(x+cw/2,y+ch+2,cw/2,4,0,0,Math.PI*2);ctx.fill();
+  // Body pixels
+  px.forEach((row,ry)=>{
+    [...row].forEach((c,rx)=>{
+      if(c==='O'){
+        // Color variation for shading
+        const shade = ry < 5 ? '#FF8C55' : ry < 9 ? color : '#E05020';
+        ctx.fillStyle = shade;
+        ctx.fillRect(x+rx*scale, y+ry*scale, scale-0.5, scale-0.5);
+      }
+    });
+  });
+  // Eye
+  ctx.fillStyle=eyeColor;
+  ctx.fillRect(x+7*scale, y+2*scale, scale, scale);
+  // Invincible flash
+  if(G.invincible>0 && Math.floor(G.invincible/4)%2===0){
+    ctx.fillStyle='rgba(255,255,255,0.6)';
+    ctx.fillRect(x,y,cw,ch);
+  }
+}
+
+function drawObstacle(ctx, obs){
+  if(obs.type==='rock'){
+    // Pixel rock
+    ctx.fillStyle='#8B7355';
+    ctx.beginPath();ctx.roundRect(obs.x, obs.y, obs.w, obs.h, 4);ctx.fill();
+    ctx.fillStyle='#A08060';
+    ctx.fillRect(obs.x+4, obs.y+3, obs.w-12, 5);
+    ctx.fillStyle='#6B5535';
+    ctx.fillRect(obs.x+2, obs.y+obs.h-6, obs.w-4, 4);
+  } else if(obs.type==='cactus'){
+    ctx.fillStyle='#2ECC71';
+    ctx.fillRect(obs.x+obs.w/2-4, obs.y, 8, obs.h);
+    ctx.fillRect(obs.x, obs.y+obs.h/3, obs.w/2-2, 8);
+    ctx.fillRect(obs.x+obs.w/2+2, obs.y+obs.h*0.45, obs.w/2-2, 8);
+    ctx.fillStyle='#27AE60';
+    ctx.fillRect(obs.x+obs.w/2-3, obs.y+2, 6, obs.h-4);
+  } else if(obs.type==='bird'){
+    // Drone - bounceable platform
+    const blink=Math.sin(G.frame*0.2)>0;
+    ctx.fillStyle='#2A2A4A';
+    ctx.beginPath();ctx.roundRect(obs.x,obs.y+3,obs.w,8,3);ctx.fill();
+    ctx.strokeStyle=blink?'#00FFFF':'#0080FF';ctx.lineWidth=1.5;
+    ctx.shadowColor=blink?'#00FFFF':'#0080FF';ctx.shadowBlur=6;
+    ctx.beginPath();ctx.roundRect(obs.x,obs.y+3,obs.w,8,3);ctx.stroke();
+    ctx.shadowBlur=0;
+    // Rotors
+    const rot=G.frame*0.25;
+    [[obs.x+4,obs.y],[obs.x+obs.w-4,obs.y],[obs.x+4,obs.y+14],[obs.x+obs.w-4,obs.y+14]].forEach(([cx,cy])=>{
+      ctx.strokeStyle='rgba(0,255,255,0.6)';ctx.lineWidth=2;
+      ctx.beginPath();ctx.ellipse(cx,cy,7,3,rot,0,Math.PI*2);ctx.stroke();
+    });
+    // Bounce indicator arrow
+    ctx.fillStyle='rgba(255,184,0,0.8)';ctx.font='bold 10px sans-serif';ctx.textAlign='center';
+    ctx.fillText('↑',obs.x+obs.w/2,obs.y-2);ctx.textAlign='left';
+  }
+}
+
+function initGame(){
+  G.canvas=document.getElementById('gameCanvas');
+  G.ctx=G.canvas.getContext('2d');
+  // Retina
+  const dpr=window.devicePixelRatio||1;
+  G.canvas.width=480*dpr;G.canvas.height=300*dpr;
+  G.canvas.style.width='100%';G.canvas.style.height='auto';
+  G.ctx.scale(dpr,dpr);
+  G.ground=250;
+  G.cat.y=G.ground-G.cat.h*2.5;
+  G.clouds=[
+    {x:80,y:40,w:70,speed:0.4},
+    {x:250,y:25,w:90,speed:0.3},
+    {x:400,y:55,w:60,speed:0.5},
+  ];
+  drawIdle();
+}
+
+function drawBg(ctx){
+  // Cyberpunk sky
+  const grad=ctx.createLinearGradient(0,0,0,G.ground);
+  grad.addColorStop(0,'#0A0A2E');grad.addColorStop(0.5,'#1A0A3E');grad.addColorStop(1,'#2E0A1A');
+  ctx.fillStyle=grad;ctx.fillRect(0,0,480,300);
+  // Stars
+  if(!G._stars){G._stars=[];for(let i=0;i<60;i++)G._stars.push({x:Math.random()*480,y:Math.random()*160,r:Math.random()*1.5,blink:Math.random()*Math.PI*2});}
+  G._stars.forEach(s=>{
+    s.blink+=0.04;
+    const a=0.4+0.4*Math.sin(s.blink);
+    ctx.fillStyle=`rgba(255,255,255,${a})`;
+    ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();
+  });
+  // Moon / planet
+  ctx.fillStyle='#C8A0FF';
+  ctx.beginPath();ctx.arc(60,38,18,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#A070DD';
+  ctx.beginPath();ctx.arc(68,30,12,0,Math.PI*2);ctx.fill();
+  // Buildings silhouette scrolling (3 layers)
+  if(!G._bldg){
+    G._bldg=[
+      {x:0,spd:0.3,color:'#1A0A3E',h:[80,110,60,140,90,70,120,50,100,80,130,60]},
+      {x:0,spd:0.6,color:'#0E0A28',h:[60,90,50,110,70,50,100,40,80,60,110,50]},
+    ];
+  }
+  G._bldg.forEach(layer=>{
+    layer.x-=layer.spd;
+    const bw=50;
+    ctx.fillStyle=layer.color;
+    const totalW=layer.h.length*bw;
+    const startX=((layer.x%totalW)+totalW)%totalW;
+    for(let i=-1;i<12;i++){
+      const idx=((Math.floor((startX/bw)+i))%layer.h.length+layer.h.length)%layer.h.length;
+      const bx=i*bw-(startX%bw);
+      const bh=layer.h[idx];
+      ctx.fillRect(bx,G.ground-bh,bw-2,bh);
+      // Neon windows
+      for(let wy=G.ground-bh+8;wy<G.ground-6;wy+=14){
+        for(let wx=bx+4;wx<bx+bw-8;wx+=10){
+          if(Math.random()<0.004){
+            const nc=['#FF00FF','#00FFFF','#FFB800','#FF6B35','#8B5CF6'];
+            ctx.fillStyle=nc[Math.floor(Math.random()*nc.length)];
+          } else ctx.fillStyle='rgba(255,255,255,0.15)';
+          ctx.fillRect(wx,wy,5,7);
+        }
+      }
+    }
+    // Neon glow line on top of buildings
+    ctx.strokeStyle=layer===G._bldg[0]?'rgba(180,0,255,0.4)':'rgba(0,200,255,0.3)';
+    ctx.lineWidth=2;ctx.beginPath();
+    for(let i=-1;i<12;i++){
+      const idx=((Math.floor((startX/bw)+i))%layer.h.length+layer.h.length)%layer.h.length;
+      const bx=i*bw-(startX%bw);const bh=layer.h[idx];
+      if(i===-1)ctx.moveTo(bx,G.ground-bh);else ctx.lineTo(bx,G.ground-bh);
+      ctx.lineTo(bx+bw-2,G.ground-bh);
+    }ctx.stroke();
+  });
+  // Neon ground
+  const ggrad=ctx.createLinearGradient(0,G.ground,0,300);
+  ggrad.addColorStop(0,'#1A0A3E');ggrad.addColorStop(1,'#0A0520');
+  ctx.fillStyle=ggrad;ctx.fillRect(0,G.ground,480,300-G.ground);
+  // Neon ground line
+  ctx.strokeStyle='#FF00FF';ctx.lineWidth=2;ctx.shadowColor='#FF00FF';ctx.shadowBlur=8;
+  ctx.beginPath();ctx.moveTo(0,G.ground);ctx.lineTo(480,G.ground);ctx.stroke();
+  ctx.shadowBlur=0;
+  // Grid on ground
+  ctx.strokeStyle='rgba(255,0,255,0.12)';ctx.lineWidth=1;
+  const goff=(G.frame*G.speed*G.speedMult)%40;
+  for(let x=-40;x<520;x+=40){ctx.beginPath();ctx.moveTo(x-goff,G.ground);ctx.lineTo(x-goff+20,300);ctx.stroke();}
+  for(let y=G.ground;y<300;y+=20){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(480,y);ctx.stroke();}
+}
+
+function drawIdle(){
+  const ctx=G.ctx;
+  drawBg(ctx);
+  drawPixelCat(ctx, G.cat.x, G.ground-G.cat.h*2.5, 0);
+  // Cyberpunk title
+  ctx.fillStyle='rgba(0,0,30,0.75)';
+  ctx.beginPath();ctx.roundRect(80,90,320,85,14);ctx.fill();
+  ctx.strokeStyle='#FF00FF';ctx.lineWidth=1.5;ctx.shadowColor='#FF00FF';ctx.shadowBlur=10;
+  ctx.beginPath();ctx.roundRect(80,90,320,85,14);ctx.stroke();ctx.shadowBlur=0;
+  ctx.fillStyle='#FFD95A';ctx.font='bold 24px "Fredoka One",cursive';ctx.textAlign='center';
+  ctx.shadowColor='#FFB800';ctx.shadowBlur=12;
+  ctx.fillText('🦁 Iron Chat Run',240,126);ctx.shadowBlur=0;
+  ctx.fillStyle='#00FFFF';ctx.font='bold 12px Nunito,sans-serif';
+  ctx.fillText('New York 2087 — Tap pour démarrer !',240,152);
+  ctx.fillStyle='rgba(255,0,255,0.7)';ctx.font='bold 11px Nunito,sans-serif';
+  ctx.fillText('🐦 Rebondis sur les drones !',240,170);
+  ctx.textAlign='left';
+}
+
+function gameLoop(){
+  if(G.state!=='running')return;
+  const ctx=G.ctx;
+  G.frame++;
+
+  // Move clouds
+  G.clouds.forEach(c=>{c.x-=c.speed;if(c.x<-c.w-20)c.x=500;});
+
+  // Cat animation
+  G.cat.frameT++;if(G.cat.frameT>8){G.cat.frame++;G.cat.frameT=0;}
+
+  // Gravity
+  if(!G.cat.grounded){
+    G.cat.vy+=0.38;
+    G.cat.y+=G.cat.vy;
+    if(G.cat.y>=G.ground-G.cat.h*2.5){
+      G.cat.y=G.ground-G.cat.h*2.5;
+      G.cat.vy=0;G.cat.grounded=true;G.cat.jumping=false;
+    }
+  }
+
+  // Speed increase
+  G.speedMult=1+Math.floor(G.score/30)*0.12;
+  if(G.speedMult>2.2)G.speedMult=2.2;
+  const spd=G.speed*G.speedMult;
+
+  // Spawn obstacles
+  G.nextObs--;
+  if(G.nextObs<=0){
+    const types=['rock','cactus','bird'];
+    let t=types[Math.floor(Math.random()*types.length)];
+    // Birds only after score 15
+    if(t==='bird'&&G.score<15)t='rock';
+    const isbird=(t==='bird');
+    const h=isbird?14:(20+Math.random()*20);
+    const w=isbird?36:(16+Math.random()*12);
+    const y=isbird?(G.ground-60-Math.random()*30):(G.ground-h);
+    G.obstacles.push({type:t,x:490,y,w,h});
+    G.nextObs=Math.floor(90+Math.random()*90)/(G.speedMult*0.4+0.6);
+  }
+
+  // Move obstacles
+  G.obstacles.forEach(o=>o.x-=spd);
+  G.obstacles=G.obstacles.filter(o=>o.x>-60);
+
+  // Collision
+  if(G.invincible>0){G.invincible--;}
+  else{
+    const catR={x:G.cat.x+6,y:G.cat.y+4,w:G.cat.w*2.5-12,h:G.cat.h*2.5-8};
+    for(const o of G.obstacles){
+      if(catR.x<o.x+o.w&&catR.x+catR.w>o.x&&catR.y<o.y+o.h&&catR.y+catR.h>o.y){
+        // Bird: bounce if hitting from above (cat bottom near bird top)
+        if(o.type==='bird'){
+          const catBottom=catR.y+catR.h;
+          const birdTop=o.y;
+          if(catBottom<=birdTop+12&&G.cat.vy>0){
+            // Bounce!
+            G.cat.vy=-10;G.cat.grounded=false;
+            G.score+=3;
+            spawnParticles(G.cat.x+14,G.cat.y+14,'#3B7FE0');
+            spawnParticles(o.x+o.w/2,o.y,'#FFB800');
+            showT("🐦 Rebond ! +3 ⭐");
+            break;
+          }
+        }
+        G.lives--;
+        G.invincible=90;
+        spawnParticles(G.cat.x+14,G.cat.y+14,'#E8344A');
+        updateLivesUI();
+        if(G.lives<=0){gameOver();return;}
+        break;
+      }
+    }
+  }
+
+  // Score
+  if(G.frame%6===0){
+    G.score++;
+    document.getElementById('gameScore').textContent=G.score;
+    document.getElementById('gameSpeed').textContent='Vitesse ×'+G.speedMult.toFixed(1);
+  }
+
+  // Particles
+  G.particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.2;p.life--;p.alpha=p.life/p.maxLife;});
+  G.particles=G.particles.filter(p=>p.life>0);
+
+  // Draw
+  drawBg(ctx);
+  G.obstacles.forEach(o=>drawObstacle(ctx,o));
+  drawPixelCat(ctx, G.cat.x, G.cat.y, G.cat.frame);
+  G.particles.forEach(p=>{
+    ctx.globalAlpha=p.alpha;ctx.fillStyle=p.color;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=1;
+  });
+  // Score overlay
+  ctx.fillStyle='rgba(0,0,0,0.35)';
+  ctx.beginPath();ctx.roundRect(8,8,90,26,8);ctx.fill();
+  ctx.fillStyle='#FFD95A';ctx.font='bold 14px "Fredoka One",cursive';ctx.textAlign='left';
+  ctx.fillText('⭐ '+G.score, 16, 26);ctx.textAlign='left';
+
+  requestAnimationFrame(gameLoop);
+}
+
+function gameOver(){
+  G.state='over';
+  if(G.score>G.best){
+    G.best=G.score;
+    if(!S.gameBest||G.score>S.gameBest){S.gameBest=G.score;sv();}
+  }
+  const ctx=G.ctx;
+  drawBg(ctx);
+  G.obstacles.forEach(o=>drawObstacle(ctx,o));
+  drawPixelCat(ctx,G.cat.x,G.cat.y,0);
+  ctx.fillStyle='rgba(0,0,0,0.6)';
+  ctx.beginPath();ctx.roundRect(80,80,320,130,16);ctx.fill();
+  ctx.fillStyle='#FF6B35';ctx.font='bold 26px "Fredoka One",cursive';ctx.textAlign='center';
+  ctx.fillText('Game Over !',240,115);
+  ctx.fillStyle='#FFD95A';ctx.font='bold 18px "Fredoka One",cursive';
+  ctx.fillText('Score : '+G.score,240,148);
+  ctx.fillStyle='rgba(255,255,255,0.7)';ctx.font='bold 13px Nunito,sans-serif';
+  ctx.fillText(G.score>G.best?'🏆 Nouveau record !':'Record : '+G.best,240,175);
+  ctx.textAlign='left';
+  document.getElementById('gameStartBtn').textContent='🔄 Rejouer';
+  document.getElementById('gameBest').textContent=G.best;
+}
+
+function spawnParticles(x,y,color){
+  for(let i=0;i<8;i++){
+    const angle=Math.random()*Math.PI*2;
+    const spd=2+Math.random()*3;
+    G.particles.push({x,y,vx:Math.cos(angle)*spd,vy:Math.sin(angle)*spd-2,r:3+Math.random()*3,life:30,maxLife:30,alpha:1,color});
+  }
+}
+
+function updateLivesUI(){
+  const h=['❤️','❤️','❤️','❤️','❤️'];
+  const lost=3-G.lives;
+  for(let i=0;i<lost;i++)h[2-i]='🖤';
+  document.getElementById('gameLives').textContent=h.join(' ');
+}
+
+function jump(){
+  if(G.state==='idle'||G.state==='over'){startGame();return;}
+  if(G.state==='running'&&G.cat.grounded){
+    G.cat.vy=-9;G.cat.grounded=false;G.cat.jumping=true;
+    spawnParticles(G.cat.x+14,G.cat.y+28,'#FFB800');
+  }
+}
+
+function gameAction(){
+  if(G.state==='idle'||G.state==='over'){startGame();}
+  else if(G.state==='running'){jump();}
+}
+
+function startGame(){
+  G.state='running';
+  G.score=0;G.lives=3;G.frame=0;G.speedMult=1;
+  G.obstacles=[];G.particles=[];G.nextObs=80;
+  G.cat.y=G.ground-G.cat.h*2.5;G.cat.vy=0;G.cat.grounded=true;G.cat.frame=0;
+  G.invincible=0;
+  document.getElementById('gameScore').textContent='0';
+  document.getElementById('gameStartBtn').textContent='⬆ Sauter';
+  document.getElementById('gameTapHint').textContent='Tape l\'écran ou ESPACE pour sauter';
+  updateLivesUI();
+  gameLoop();
+}
+
+function checkGameUnlock(){
+  const locked=document.getElementById('gameLocked');
+  const unlocked=document.getElementById('gameUnlocked');
+  if(!locked||!unlocked)return;
+  const disp=document.getElementById('lockStarsDisplay');
+  if(disp)disp.textContent=S.tot+' / 10 ⭐';
+  if(S.tot>=10){
+    locked.style.display='none';unlocked.style.display='block';
+    if(!G.canvas)initGame();
+    G.best=S.gameBest||0;
+    document.getElementById('gameBest').textContent=G.best;
+  } else {
+    locked.style.display='block';unlocked.style.display='none';
+  }
+}
+
+// Input listeners for game
+document.addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();jump();}});
+
+
+// Game tap
+document.addEventListener('DOMContentLoaded',()=>{
+  const cv=document.getElementById('gameCanvas');
+  if(cv){cv.addEventListener('touchstart',e=>{e.preventDefault();jump();},{passive:false});cv.addEventListener('mousedown',()=>jump());}
+});
+
+</script>
+
+  <!-- Service Worker: unregister all to avoid cache issues -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        regs.forEach(r => r.unregister());
+      });
+    }
+  </script>
+
+
+<script>
+
+/* ============================================================
+   EKHIO — CONSENT MANAGER v1.0
+   Gère : cookies fonctionnels, acceptation CGU/RGPD
+   Stockage : localStorage uniquement, aucune donnée externe
+   ============================================================ */
+(function(){
+  const KEYS = {
+    consent: 'ekhio_consent_v1',   // {accepted: bool, date: iso, version: '1.0'}
+    cgu: 'ekhio_cgu_v1',           // {accepted: bool, date: iso}
+  };
+  const CGU_VERSION = '1.0';
+
+  // ---- helpers ----
+  function getConsent(){ try{return JSON.parse(localStorage.getItem(KEYS.consent));}catch(e){return null;} }
+  function getCGU(){ try{return JSON.parse(localStorage.getItem(KEYS.cgu));}catch(e){return null;} }
+  function saveConsent(){ localStorage.setItem(KEYS.consent, JSON.stringify({accepted:true,date:new Date().toISOString(),version:CGU_VERSION})); }
+  function saveCGU(){ localStorage.setItem(KEYS.cgu, JSON.stringify({accepted:true,date:new Date().toISOString(),version:CGU_VERSION})); }
+  function revokeAll(){ localStorage.removeItem(KEYS.consent); localStorage.removeItem(KEYS.cgu); location.reload(); }
+  window.ekhioRevokeConsent = revokeAll;
+
+  // ---- Check if consent needed ----
+  const consent = getConsent();
+  const cgu = getCGU();
+  const needConsent = !consent || !consent.accepted;
+  const needCGU = !cgu || !cgu.accepted;
+
+  // Expose status globally
+  window.ekhioConsent = { hasConsent: !needConsent, hasCGU: !needCGU, getConsent, getCGU };
+
+  if(!needConsent && !needCGU) return; // All good, nothing to show
+
+  // ---- Build overlay ----
+  const overlay = document.createElement('div');
+  overlay.id = 'ekhio-consent-overlay';
+  overlay.innerHTML = `
+    <div id="ekhio-consent-modal">
+      <div class="ecm-logo">☀️ <span>Ekhio</span></div>
+      <div class="ecm-robot">🤖</div>
+      <h2 class="ecm-title" id="ecm-title">Bienvenue sur Ekhio</h2>
+      <p class="ecm-sub" id="ecm-sub">Avant de commencer, quelques informations importantes.</p>
+
+      <div class="ecm-steps">
+        <!-- STEP 1: Cookies -->
+        <div class="ecm-step" id="ecm-step-1">
+          <div class="ecm-step-icon">🍪</div>
+          <h3 id="ecm-s1-title">Cookies & stockage local</h3>
+          <p id="ecm-s1-body">Ekhio utilise uniquement le <strong>localStorage de votre navigateur</strong> pour mémoriser la progression de votre enfant (étoiles, comportements, préférences). <strong>Aucune donnée n'est envoyée sur un serveur.</strong> Pas de tracking, pas de pub, pas de compte.</p>
+          <div class="ecm-cookie-list">
+            <div class="ecm-cookie-item">
+              <span class="ecm-cookie-dot required"></span>
+              <div>
+                <strong id="ecm-ck1">Fonctionnels (obligatoires)</strong>
+                <p id="ecm-ck1d">Progression enfant, étoiles, paramètres, historique — stockés localement</p>
+              </div>
+            </div>
+            <div class="ecm-cookie-item">
+              <span class="ecm-cookie-dot blocked"></span>
+              <div>
+                <strong id="ecm-ck2">Analytiques, pub, tracking</strong>
+                <p id="ecm-ck2d">Non utilisés — jamais</p>
+              </div>
+            </div>
+          </div>
+          <button class="ecm-btn-p" id="ecm-accept-cookies">Accepter et continuer →</button>
+          <p class="ecm-note" id="ecm-note1">En acceptant, vous autorisez le stockage local nécessaire au fonctionnement de l'app. Vous pouvez révoquer à tout moment dans les paramètres.</p>
+        </div>
+
+        <!-- STEP 2: CGU + RGPD -->
+        <div class="ecm-step" id="ecm-step-2" style="display:none">
+          <div class="ecm-step-icon">📄</div>
+          <h3 id="ecm-s2-title">Conditions d'utilisation & Données personnelles</h3>
+          <div class="ecm-doc-box" id="ecm-doc-scroll">
+            <h4 id="ecm-doc-h1">🔒 Données personnelles</h4>
+            <p id="ecm-doc-p1">Ekhio ne collecte, ne transmet et ne stocke aucune donnée personnelle sur des serveurs. Tout reste sur votre appareil.</p>
+            <h4 id="ecm-doc-h2">📄 Conditions d'utilisation (résumé)</h4>
+            <p id="ecm-doc-p2">Ekhio est un outil familial ludique et éducatif uniquement. Il ne constitue pas un avis médical ou psychologique. Usage commercial interdit. L'utilisation est sous votre entière responsabilité.</p>
+            <h4 id="ecm-doc-h3">⚠️ Avertissement</h4>
+            <p id="ecm-doc-p3">En cas de difficultés comportementales ou de santé mentale chez votre enfant, consultez un professionnel de santé qualifié.</p>
+            <p style="margin-top:12px;font-size:11px;color:#999" id="ecm-doc-full">Documents complets : <a href="licence.html" target="_blank" style="color:#FFB800">licence.html</a></p>
+          </div>
+          <label class="ecm-checkbox">
+            <input type="checkbox" id="ecm-cgu-check">
+            <span id="ecm-cgu-label">J'ai lu et j'accepte les <a href="licence.html" target="_blank">CGU, CGV et la politique de confidentialité</a> d'Ekhio.</span>
+          </label>
+          <button class="ecm-btn-p" id="ecm-accept-cgu" disabled>Accéder à l'app →</button>
+          <p class="ecm-note" id="ecm-note2">Version CGU 1.0 — 1er avril 2026 — Artean Digital / Association Herrichain</p>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // ---- Styles ----
+  const style = document.createElement('style');
+  style.textContent = `
+    #ekhio-consent-overlay{position:fixed;inset:0;z-index:99999;background:rgba(10,5,30,.92);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;font-family:'Nunito',sans-serif}
+    #ekhio-consent-modal{background:#fff;border-radius:24px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;padding:36px 32px;box-shadow:0 24px 80px rgba(0,0,0,.4);text-align:center}
+    .ecm-logo{font-family:'Fredoka One',cursive;font-size:20px;color:#0F0A1E;margin-bottom:4px}
+    .ecm-logo span{color:#FFB800}
+    .ecm-robot{font-size:52px;margin:8px 0;animation:ecm-float 3s ease-in-out infinite}
+    @keyframes ecm-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    .ecm-title{font-family:'Fredoka One',cursive;font-size:24px;color:#0F0A1E;margin-bottom:6px}
+    .ecm-sub{font-size:14px;color:#8B7355;margin-bottom:20px}
+    .ecm-step-icon{font-size:32px;margin-bottom:10px}
+    .ecm-step h3{font-family:'Fredoka One',cursive;font-size:19px;color:#0F0A1E;margin-bottom:12px}
+    .ecm-step p{font-size:13.5px;color:#6B5B3E;line-height:1.7;margin-bottom:16px;text-align:left}
+    .ecm-cookie-list{text-align:left;margin-bottom:18px}
+    .ecm-cookie-item{display:flex;align-items:flex-start;gap:10px;padding:10px;background:#F9F6F0;border-radius:10px;margin-bottom:8px}
+    .ecm-cookie-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px}
+    .ecm-cookie-dot.required{background:#2ECC71}
+    .ecm-cookie-dot.blocked{background:#E8344A}
+    .ecm-cookie-item strong{font-size:13px;color:#1A1208;display:block;margin-bottom:2px}
+    .ecm-cookie-item p{font-size:12px;color:#8B7355;margin:0;line-height:1.5}
+    .ecm-btn-p{background:linear-gradient(135deg,#FFB800,#FF6B35);color:#fff;border:none;border-radius:999px;padding:13px 32px;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;cursor:pointer;width:100%;margin:8px 0;transition:.2s;box-shadow:0 6px 20px rgba(255,184,0,.35)}
+    .ecm-btn-p:hover:not(:disabled){transform:translateY(-2px)}
+    .ecm-btn-p:disabled{opacity:.4;cursor:not-allowed;transform:none}
+    .ecm-note{font-size:11px;color:#B8A898;line-height:1.6;margin-top:6px}
+    .ecm-doc-box{background:#F9F6F0;border-radius:14px;padding:18px;text-align:left;max-height:200px;overflow-y:auto;margin-bottom:16px;border:1.5px solid #EDE5D5}
+    .ecm-doc-box h4{font-size:13px;font-weight:800;color:#0F0A1E;margin:12px 0 5px}
+    .ecm-doc-box h4:first-child{margin-top:0}
+    .ecm-doc-box p{font-size:12px;color:#6B5B3E;line-height:1.6;margin:0}
+    .ecm-checkbox{display:flex;align-items:flex-start;gap:10px;text-align:left;cursor:pointer;padding:12px;background:#FFF8E1;border-radius:10px;border:1.5px solid #FFD95A;margin-bottom:12px}
+    .ecm-checkbox input{width:18px;height:18px;flex-shrink:0;margin-top:2px;accent-color:#FFB800;cursor:pointer}
+    .ecm-checkbox span{font-size:13px;color:#664d03;line-height:1.6}
+    .ecm-checkbox a{color:#FFB800}
+    @media(max-width:480px){#ekhio-consent-modal{padding:24px 18px;border-radius:18px}}
+  `;
+
+  document.head.appendChild(style);
+  document.body.appendChild(overlay);
+
+  // Block app interaction until consent
+  document.body.style.overflow = 'hidden';
+
+  // ---- Step logic ----
+  let step = needConsent ? 1 : 2;
+
+  function showStep(n){
+    document.getElementById('ecm-step-1').style.display = n===1?'block':'none';
+    document.getElementById('ecm-step-2').style.display = n===2?'block':'none';
+  }
+  showStep(step);
+
+  // Step 1: accept cookies
+  document.getElementById('ecm-accept-cookies').addEventListener('click', function(){
+    saveConsent();
+    if(!needCGU){ finalize(); return; }
+    step = 2;
+    showStep(2);
+  });
+
+  // Step 2: checkbox enables button
+  document.getElementById('ecm-cgu-check').addEventListener('change', function(){
+    document.getElementById('ecm-accept-cgu').disabled = !this.checked;
+  });
+
+  // Step 2: accept CGU
+  document.getElementById('ecm-accept-cgu').addEventListener('click', function(){
+    if(!document.getElementById('ecm-cgu-check').checked) return;
+    saveCGU();
+    finalize();
+  });
+
+  function finalize(){
+    overlay.style.transition = 'opacity .4s';
+    overlay.style.opacity = '0';
+    setTimeout(()=>{ overlay.remove(); document.body.style.overflow=''; }, 420);
+    window.ekhioConsent.hasConsent = true;
+    window.ekhioConsent.hasCGU = true;
+  }
+
+  // ---- i18n for consent (hook into main lang system if available) ----
+  const CONSENT_T = {
+    fr:{
+      title:'Bienvenue sur Ekhio', sub:'Avant de commencer, quelques informations importantes.',
+      s1title:'Cookies & stockage local',
+      s1body:'Ekhio utilise uniquement le <strong>localStorage de votre navigateur</strong> pour mémoriser la progression de votre enfant. <strong>Aucune donnée n\'est envoyée sur un serveur.</strong>',
+      ck1:'Fonctionnels (obligatoires)', ck1d:'Progression enfant, étoiles, paramètres — stockés localement',
+      ck2:'Analytiques, pub, tracking', ck2d:'Non utilisés — jamais',
+      btn1:'Accepter et continuer →', note1:'Vous pouvez révoquer ce consentement à tout moment dans les paramètres.',
+      s2title:'Conditions d\'utilisation & Données personnelles',
+      dh1:'🔒 Données personnelles', dp1:'Ekhio ne collecte aucune donnée. Tout reste sur votre appareil.',
+      dh2:'📄 Conditions d\'utilisation', dp2:'Outil familial ludique uniquement. Pas d\'avis médical. Usage commercial interdit.',
+      dh3:'⚠️ Avertissement', dp3:'En cas de difficultés chez votre enfant, consultez un professionnel de santé.',
+      dfull:'Documents complets :', cgulabel:'J\'ai lu et j\'accepte les <a href="licence.html" target="_blank">CGU, CGV et la politique de confidentialité</a> d\'Ekhio.',
+      btn2:'Accéder à l\'app →', note2:'Version CGU 1.0 — 1er avril 2026 — Artean Digital / Association Herrichain'
+    },
+    en:{
+      title:'Welcome to Ekhio', sub:'Before we start, a few important points.',
+      s1title:'Cookies & local storage',
+      s1body:'Ekhio only uses your <strong>browser\'s localStorage</strong> to remember your child\'s progress. <strong>No data is sent to any server.</strong>',
+      ck1:'Functional (required)', ck1d:'Child progress, stars, settings — stored locally',
+      ck2:'Analytics, ads, tracking', ck2d:'Not used — ever',
+      btn1:'Accept and continue →', note1:'You can revoke this consent at any time in settings.',
+      s2title:'Terms of use & Personal data',
+      dh1:'🔒 Personal data', dp1:'Ekhio collects no data. Everything stays on your device.',
+      dh2:'📄 Terms of use', dp2:'Family fun tool only. Not medical advice. Commercial use prohibited.',
+      dh3:'⚠️ Disclaimer', dp3:'If your child has difficulties, consult a qualified health professional.',
+      dfull:'Full documents:', cgulabel:'I have read and accept the <a href="licence.html" target="_blank">Terms of use and Privacy policy</a> of Ekhio.',
+      btn2:'Enter the app →', note2:'ToU version 1.0 — April 1, 2026 — Artean Digital / Herrichain Association'
+    },
+    es:{
+      title:'Bienvenido a Ekhio', sub:'Antes de empezar, algunos puntos importantes.',
+      s1title:'Cookies y almacenamiento local',
+      s1body:'Ekhio solo usa el <strong>localStorage de tu navegador</strong> para recordar el progreso de tu hijo. <strong>Ningún dato se envía a un servidor.</strong>',
+      ck1:'Funcionales (obligatorios)', ck1d:'Progreso del niño, estrellas, ajustes — almacenados localmente',
+      ck2:'Analítica, publicidad, seguimiento', ck2d:'No utilizados — nunca',
+      btn1:'Aceptar y continuar →', note1:'Puedes revocar este consentimiento en cualquier momento en los ajustes.',
+      s2title:'Condiciones de uso & Datos personales',
+      dh1:'🔒 Datos personales', dp1:'Ekhio no recopila datos. Todo permanece en tu dispositivo.',
+      dh2:'📄 Condiciones de uso', dp2:'Herramienta familiar lúdica únicamente. No es consejo médico. Uso comercial prohibido.',
+      dh3:'⚠️ Advertencia', dp3:'Si tu hijo tiene dificultades, consulta a un profesional de salud.',
+      dfull:'Documentos completos:', cgulabel:'He leído y acepto las <a href="licence.html" target="_blank">Condiciones de uso y la Política de privacidad</a> de Ekhio.',
+      btn2:'Entrar a la app →', note2:'Versión CU 1.0 — 1 de abril de 2026 — Artean Digital / Asociación Herrichain'
+    }
+  };
+
+  window.ekhioSetConsentLang = function(l){
+    const t = CONSENT_T[l] || CONSENT_T.fr;
+    const s = function(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;};
+    s('ecm-title',t.title); s('ecm-sub',t.sub);
+    s('ecm-s1-title',t.s1title); s('ecm-s1-body',t.s1body);
+    s('ecm-ck1',t.ck1); s('ecm-ck1d',t.ck1d); s('ecm-ck2',t.ck2); s('ecm-ck2d',t.ck2d);
+    s('ecm-accept-cookies',t.btn1); s('ecm-note1',t.note1);
+    s('ecm-s2-title',t.s2title);
+    s('ecm-doc-h1',t.dh1); s('ecm-doc-p1',t.dp1);
+    s('ecm-doc-h2',t.dh2); s('ecm-doc-p2',t.dp2);
+    s('ecm-doc-h3',t.dh3); s('ecm-doc-p3',t.dp3);
+    s('ecm-doc-full',t.dfull+' <a href="licence.html" target="_blank" style="color:#FFB800">licence.html</a>');
+    s('ecm-cgu-label',t.cgulabel); s('ecm-accept-cgu',t.btn2); s('ecm-note2',t.note2);
+  };
+  window.ekhioSetConsentLang('fr');
+
+})();
+
+</script>
+</body>
+</html>
