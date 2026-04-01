@@ -9,9 +9,9 @@ const MOUTH_PATHS = {
   happy:   "M4,3 Q19,13 34,3",
   excited:   "M2,2 Q8,13 19,8 Q30,13 36,2",
   curious:   "M6,8 Q14,5 22,7 Q28,9 32,6",
-  proud:   "M8,8 Q14,3 19,4 Q24,3 30,8",
+  proud:   "M4,3 Q19,11 34,3",
   sleeping:   "M10,8 Q19,9 28,8",
-  sad:   "M4,3 Q19,11 34,3",
+  sad:   "M4,11 Q19,2 34,11",
   surprised:   "M13,4 Q19,13 25,4",
   thinking:   "M8,7 Q14,6 20,8 Q26,7 30,9",
 };
