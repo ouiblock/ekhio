@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ekhio — Le compagnon de croissance de vos enfants</title>
+  <meta name="description" content="Ekhio est une application familiale gratuite et open source pour accompagner la croissance de vos enfants de 3 à 18 ans. Fondée sur les neurosciences et la pédopsychiatrie.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sun: #FFB800;
+      --sun-dark: #E8A000;
+      --red: #E8344A;
+      --dark: #0F0A1E;
+      --dark2: #1A1030;
+      --text: #1A1208;
+      --muted: #6B5B3E;
+      --faint: #B8A898;
+      --bg: #FFF9F0;
+      --white: #FFFFFF;
+      --green: #2ECC71;
+      --purple: #8B5CF6;
+      --cyan: #00D4FF;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+    /* ===== NAV ===== */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,249,240,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,.06);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+    .nav-logo{font-family:'Fredoka One',cursive;font-size:22px;color:var(--dark);display:flex;align-items:center;gap:8px}
+    .nav-logo span{color:var(--sun)}
+    .nav-links{display:flex;gap:24px;list-style:none}
+    .nav-links a{text-decoration:none;color:var(--muted);font-weight:700;font-size:14px;transition:.2s}
+    .nav-links a:hover{color:var(--dark)}
+    .nav-cta{background:var(--sun);color:var(--dark);border-radius:999px;padding:9px 22px;font-weight:800;font-size:14px;text-decoration:none;transition:.2s}
+    .nav-cta:hover{background:var(--sun-dark)}
+    @media(max-width:640px){.nav-links{display:none}}
+
+    /* ===== HERO ===== */
+    .hero{min-height:100vh;background:linear-gradient(160deg,#0F0A1E 0%,#1A0A3E 50%,#2E0A1A 100%);display:flex;align-items:center;justify-content:center;padding:100px 24px 60px;position:relative;overflow:hidden}
+    .hero-stars{position:absolute;inset:0;pointer-events:none}
+    .hero-inner{max-width:900px;width:100%;text-align:center;position:relative;z-index:2}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,184,0,.15);border:1px solid rgba(255,184,0,.3);border-radius:999px;padding:7px 18px;font-size:13px;font-weight:800;color:var(--sun);margin-bottom:28px}
+    .hero h1{font-family:'Fredoka One',cursive;font-size:clamp(42px,8vw,80px);color:#fff;line-height:1.05;margin-bottom:24px}
+    .hero h1 span{color:var(--sun)}
+    .hero-sub{font-size:clamp(16px,2.5vw,20px);color:rgba(255,255,255,.7);max-width:60ch;margin:0 auto 40px;line-height:1.7;font-weight:600}
+    .hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:60px}
+    .btn-primary{background:linear-gradient(135deg,var(--sun),#FF6B35);color:#fff;border-radius:999px;padding:15px 36px;font-weight:800;font-size:16px;text-decoration:none;box-shadow:0 8px 32px rgba(255,184,0,.4);transition:.2s}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,184,0,.5)}
+    .btn-secondary{background:rgba(255,255,255,.1);color:#fff;border:1.5px solid rgba(255,255,255,.25);border-radius:999px;padding:15px 36px;font-weight:800;font-size:16px;text-decoration:none;transition:.2s}
+    .btn-secondary:hover{background:rgba(255,255,255,.18)}
+    .hero-robot{font-size:120px;margin-bottom:-20px;filter:drop-shadow(0 0 40px rgba(255,184,0,.4));animation:float 4s ease-in-out infinite}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+    .hero-pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+    .pill{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:7px 16px;font-size:12px;font-weight:700;color:rgba(255,255,255,.6)}
+
+    /* ===== DISCLAIMER HERO ===== */
+    .disclaimer-hero{background:rgba(255,184,0,.12);border:1.5px solid rgba(255,184,0,.3);border-radius:16px;padding:16px 24px;max-width:700px;margin:40px auto 0;text-align:left}
+    .disclaimer-hero p{font-size:12px;color:rgba(255,255,255,.55);line-height:1.7;font-weight:600}
+    .disclaimer-hero strong{color:var(--sun)}
+
+    /* ===== SECTIONS ===== */
+    section{padding:80px 24px}
+    .container{max-width:1000px;margin:0 auto}
+    .section-badge{display:inline-block;background:linear-gradient(135deg,var(--sun),#FF6B35);color:#fff;border-radius:999px;padding:5px 16px;font-size:12px;font-weight:800;margin-bottom:16px;text-transform:uppercase;letter-spacing:.08em}
+    .section-title{font-family:'Fredoka One',cursive;font-size:clamp(28px,5vw,44px);color:var(--dark);margin-bottom:16px;line-height:1.15}
+    .section-sub{font-size:17px;color:var(--muted);max-width:58ch;line-height:1.7;font-weight:600;margin-bottom:48px}
+
+    /* ===== VALEUR ===== */
+    .value-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+    .value-card{background:#fff;border-radius:20px;padding:28px;box-shadow:0 4px 24px rgba(0,0,0,.07);border:1.5px solid rgba(0,0,0,.06)}
+    .value-card .ic{font-size:36px;margin-bottom:14px}
+    .value-card h3{font-family:'Fredoka One',cursive;font-size:20px;color:var(--dark);margin-bottom:8px}
+    .value-card p{font-size:14px;color:var(--muted);line-height:1.7}
+
+    /* ===== SCIENCE ===== */
+    .science{background:linear-gradient(160deg,#0F0A1E,#1A1030)}
+    .science .section-title{color:#fff}
+    .science .section-sub{color:rgba(255,255,255,.6)}
+    .science-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+    .science-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:24px}
+    .science-card h3{font-family:'Fredoka One',cursive;font-size:18px;color:var(--sun);margin-bottom:10px}
+    .science-card p{font-size:13px;color:rgba(255,255,255,.65);line-height:1.7}
+    .science-card .tag{display:inline-block;background:rgba(255,184,0,.15);color:var(--sun);border-radius:999px;padding:3px 10px;font-size:11px;font-weight:800;margin-bottom:12px}
+
+    /* ===== AGES ===== */
+    .ages-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
+    .age-card{background:#fff;border-radius:18px;padding:22px;box-shadow:0 4px 20px rgba(0,0,0,.06);border-top:4px solid var(--accent, var(--sun));text-align:center}
+    .age-card .emoji{font-size:32px;margin-bottom:10px}
+    .age-card h3{font-family:'Fredoka One',cursive;font-size:16px;color:var(--dark);margin-bottom:6px}
+    .age-card p{font-size:12px;color:var(--muted);line-height:1.6}
+
+    /* ===== OPEN SOURCE ===== */
+    .opensource{background:#F0F7FF;border-radius:24px;padding:48px;text-align:center;max-width:800px;margin:0 auto}
+    .opensource h2{font-family:'Fredoka One',cursive;font-size:32px;color:var(--dark);margin-bottom:16px}
+    .opensource p{font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:24px}
+    .license-badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+    .license-badge{background:#fff;border:1.5px solid #ddd;border-radius:999px;padding:7px 18px;font-size:12px;font-weight:800;color:var(--dark)}
+
+    /* ===== DISCLAIMER SECTION ===== */
+    .disclaimer-section{background:#FFF3CD;border:2px solid #FFD95A;border-radius:20px;padding:36px;max-width:800px;margin:0 auto}
+    .disclaimer-section h2{font-family:'Fredoka One',cursive;font-size:22px;color:#856404;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+    .disclaimer-section p{font-size:14px;color:#664d03;line-height:1.8;margin-bottom:12px}
+
+    /* ===== LEGAL TABS ===== */
+    .legal-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px}
+    .legal-tab{background:#fff;border:2px solid #eee;border-radius:12px;padding:10px 20px;font-weight:800;font-size:14px;cursor:pointer;transition:.2s;color:var(--muted)}
+    .legal-tab.active{background:var(--dark);color:#fff;border-color:var(--dark)}
+    .legal-content{display:none;background:#fff;border-radius:20px;padding:36px;box-shadow:0 4px 24px rgba(0,0,0,.07)}
+    .legal-content.active{display:block}
+    .legal-content h3{font-family:'Fredoka One',cursive;font-size:20px;color:var(--dark);margin:24px 0 10px}
+    .legal-content h3:first-child{margin-top:0}
+    .legal-content p,.legal-content li{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:8px}
+    .legal-content ul{padding-left:20px;margin-bottom:12px}
+    .legal-content strong{color:var(--dark)}
+
+    /* ===== FOOTER ===== */
+    footer{background:var(--dark);color:rgba(255,255,255,.5);padding:48px 24px 32px;text-align:center}
+    footer .footer-logo{font-family:'Fredoka One',cursive;font-size:28px;color:#fff;margin-bottom:8px}
+    footer .footer-logo span{color:var(--sun)}
+    footer p{font-size:13px;line-height:1.8;margin-bottom:6px}
+    footer a{color:rgba(255,255,255,.4);text-decoration:none}
+    footer a:hover{color:var(--sun)}
+    .footer-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin:20px 0;font-size:13px}
+    .footer-sep{width:60px;height:2px;background:rgba(255,255,255,.1);margin:24px auto}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">☀️ <span>Ekhio</span></div>
+  <ul class="nav-links">
+    <li><a href="#valeur">L'app</a></li>
+    <li><a href="#science">Science</a></li>
+    <li><a href="#ages">Tranches d'âge</a></li>
+    <li><a href="#opensource">Open Source</a></li>
+    <li><a href="#legal">Légal</a></li>
+  </ul>
+  <a href="#download" class="nav-cta">Télécharger gratuitement</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <canvas class="hero-stars" id="starsCanvas"></canvas>
+  <div class="hero-inner">
+    <div class="hero-badge">🌟 100% Gratuit · Open Source · Sans données personnelles</div>
+    <div class="hero-robot">🤖</div>
+    <h1>Grandir,<br><span>un jour à la fois.</span></h1>
+    <p class="hero-sub">Ekhio accompagne vos enfants de 3 à 18 ans avec un système de récompenses fondé sur les neurosciences, la psychologie du développement et la pédopsychiatrie.</p>
+    <div class="hero-btns">
+      <a href="#download" class="btn-primary">⬇ Télécharger Ekhio gratuitement</a>
+      <a href="#science" class="btn-secondary">En savoir plus →</a>
+    </div>
+    <div class="hero-pills">
+      <span class="pill">🧠 Neurosciences</span>
+      <span class="pill">👶 3 à 18 ans</span>
+      <span class="pill">🔒 Aucune donnée collectée</span>
+      <span class="pill">🌍 Open Source</span>
+      <span class="pill">🇫🇷 Fait au Pays Basque</span>
+    </div>
+    <div class="disclaimer-hero">
+      <p><strong>⚠️ Important :</strong> Ekhio est un outil d'accompagnement familial à titre informatif et ludique uniquement. Cette application <strong>ne constitue en aucun cas un avis médical, psychologique ou thérapeutique</strong>. Elle ne remplace pas l'accompagnement d'un professionnel de santé. En cas de difficultés comportementales, émotionnelles ou développementales, consultez un médecin, pédopsychiatre ou psychologue qualifié.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROPOSITION DE VALEUR -->
+<section id="valeur">
+  <div class="container">
+    <div class="section-badge">Pourquoi Ekhio ?</div>
+    <h2 class="section-title">Le compagnon de croissance<br>qui grandit avec votre enfant</h2>
+    <p class="section-sub">Les parents ne manquent pas d'amour — ils manquent d'outils adaptés à l'âge de leur enfant pour transformer les défis quotidiens en moments de connexion.</p>
+    <div class="value-grid">
+      <div class="value-card">
+        <div class="ic">🎯</div>
+        <h3>Adapté à chaque âge</h3>
+        <p>Les comportements, les récompenses et le vocabulaire évoluent automatiquement selon l'âge de votre enfant. Un enfant de 4 ans n'a pas les mêmes besoins qu'un ado de 15 ans.</p>
+      </div>
+      <div class="value-card">
+        <div class="ic">🧠</div>
+        <h3>Fondé sur la science</h3>
+        <p>Chaque règle et chaque reward est calibré sur les stades de développement cognitif (Piaget), la Self-Determination Theory (Deci & Ryan) et les dernières recherches en pédopsychiatrie.</p>
+      </div>
+      <div class="value-card">
+        <div class="ic">❤️</div>
+        <h3>Centré sur le lien</h3>
+        <p>Ekhio ne surveille pas — il connecte. L'objectif est de créer des rituels quotidiens de reconnaissance entre parents et enfants, pas un système de contrôle.</p>
+      </div>
+      <div class="value-card">
+        <div class="ic">🔒</div>
+        <h3>Zéro donnée collectée</h3>
+        <p>L'application fonctionne entièrement en local sur votre appareil. Aucun compte, aucun login, aucune donnée envoyée sur un serveur. Vos données restent chez vous, point.</p>
+      </div>
+      <div class="value-card">
+        <div class="ic">💸</div>
+        <h3>100% Gratuit</h3>
+        <p>Ekhio est et restera gratuit pour les familles. Développée bénévolement et distribuée par l'association Herrichain, une association loi 1901 basée à Bidart, Pays Basque.</p>
+      </div>
+      <div class="value-card">
+        <div class="ic">🌍</div>
+        <h3>Open Source</h3>
+        <p>Le code est ouvert, auditable, et contributif. N'importe quel parent, développeur ou pédagogue peut l'améliorer. Usage commercial interdit sans accord écrit.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCIENCE -->
+<section id="science" class="science">
+  <div class="container">
+    <div class="section-badge" style="background:rgba(255,184,0,.2);color:var(--sun)">Fondements scientifiques</div>
+    <h2 class="section-title">Pourquoi la science<br>change tout</h2>
+    <p class="section-sub">La plupart des apps de reward sont des tableaux de gommettes digitalisés. Ekhio est construit sur trois décennies de recherche en sciences du développement.</p>
+    <div class="science-grid">
+      <div class="science-card">
+        <div class="tag">Neurosciences</div>
+        <h3>Le cerveau qui grandit</h3>
+        <p>Le système limbique (récompense, plaisir) se développe avant le cortex préfrontal (contrôle, raisonnement). Ekhio respecte ce décalage neurologique — les règles s'adaptent à la maturité cérébrale réelle de l'enfant, pas à l'âge civil.</p>
+      </div>
+      <div class="science-card">
+        <div class="tag">Psychologie</div>
+        <h3>Self-Determination Theory</h3>
+        <p>Deci & Ryan (1985-2024) : la motivation durable naît de trois besoins fondamentaux — Autonomie, Compétence, Appartenance. Ekhio nourrit les trois à chaque interaction parent-enfant.</p>
+      </div>
+      <div class="science-card">
+        <div class="tag">Pédopsychiatrie</div>
+        <h3>Récompense vs Punition</h3>
+        <p>Le retrait de récompense sous 7 ans impacte l'estime de soi. Ekhio applique le renforcement positif ciblé sur l'effort (pas le résultat) et prévient l'effet de sur-justification documenté par Lepper (1973).</p>
+      </div>
+      <div class="science-card">
+        <div class="tag">Pédagogie</div>
+        <h3>Horizon temporel</h3>
+        <p>Un enfant de 4 ans ne peut pas se projeter à 1 semaine. Un ado de 16 ans s'ennuie des récompenses immédiates. Ekhio module l'horizon des rewards selon les stades de Piaget.</p>
+      </div>
+      <div class="science-card">
+        <div class="tag">Gestion émotions</div>
+        <h3>Régulation émotionnelle</h3>
+        <p>Les comportements récompensés incluent systématiquement des compétences émotionnelles (exprimer, nommer, gérer). L'intelligence émotionnelle est aussi importante que les routines.</p>
+      </div>
+      <div class="science-card">
+        <div class="tag">Adolescence</div>
+        <h3>Co-construction des règles</h3>
+        <p>Dès 11 ans, Ekhio intègre la co-construction des règles entre parents et enfants. La participation génère l'adhésion — un principe validé en psychologie sociale et pédopsychiatrie.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRANCHES D'ÂGE -->
+<section id="ages">
+  <div class="container">
+    <div class="section-badge">Évolutif</div>
+    <h2 class="section-title">Une app qui grandit<br>avec votre enfant</h2>
+    <p class="section-sub">5 phases de développement, 5 interfaces adaptées, des comportements et récompenses calibrés sur chaque stade cognitif et émotionnel.</p>
+    <div class="ages-grid">
+      <div class="age-card" style="--accent:#FFB800">
+        <div class="emoji">🐣</div>
+        <h3>3 – 6 ans</h3>
+        <p>Pensée magique · Routines corps · Émotions basiques · Partage · Rewards immédiats et visuels</p>
+      </div>
+      <div class="age-card" style="--accent:#2ECC71">
+        <div class="emoji">🌱</div>
+        <h3>7 – 10 ans</h3>
+        <p>Logique concrète · Responsabilités · Effort scolaire · Badges · Objectifs à la semaine</p>
+      </div>
+      <div class="age-card" style="--accent:#00D4FF">
+        <div class="emoji">🚀</div>
+        <h3>11 – 13 ans</h3>
+        <p>Identité naissante · Autonomie · Régulation émotionnelle · Co-construction des règles</p>
+      </div>
+      <div class="age-card" style="--accent:#8B5CF6">
+        <div class="emoji">⚡</div>
+        <h3>14 – 16 ans</h3>
+        <p>Paire central · Fiabilité · Gestion du temps · Monnaie virtuelle · Objectifs trimestriels</p>
+      </div>
+      <div class="age-card" style="--accent:#E8344A">
+        <div class="emoji">🎓</div>
+        <h3>17 – 18 ans</h3>
+        <p>Adulte en construction · Responsabilisation · Autonomie financière · Projets de vie</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OPEN SOURCE -->
+<section id="opensource">
+  <div class="container">
+    <div class="opensource">
+      <div style="font-size:48px;margin-bottom:16px">🌍</div>
+      <h2>Open Source · Non Commercial</h2>
+      <p>Ekhio est développée par <strong>Artean Digital</strong> (<a href="https://arteandigital.fr" target="_blank">arteandigital.fr</a>) et distribuée gratuitement par l'association loi 1901 <strong>Herrichain</strong> (RNA : W641015204), basée à Bidart 64210, Pays Basque, France.</p>
+      <p>Le code source est librement accessible, modifiable et redistribuable pour un usage personnel et non-commercial. Toute exploitation commerciale est strictement interdite sans accord écrit préalable d'Artean Digital.</p>
+      <div class="license-badges">
+        <span class="license-badge">📄 MIT + Commons Clause</span>
+        <span class="license-badge">🚫 Usage commercial interdit</span>
+        <span class="license-badge">✅ Fork personnel autorisé</span>
+        <span class="license-badge">💡 Contributions bienvenues</span>
+      </div>
+      <div style="margin-top:24px">
+        <a href="https://github.com/ouiblock/kidzreward" target="_blank" class="btn-primary" style="display:inline-block">⭐ Voir le code sur GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DISCLAIMER -->
+<section id="disclaimer">
+  <div class="container">
+    <div class="disclaimer-section">
+      <h2>⚠️ Avertissement important</h2>
+      <p><strong>Ekhio est un outil d'accompagnement familial à visée ludique et éducative uniquement.</strong> Cette application ne constitue en aucun cas un dispositif médical, un avis thérapeutique, psychologique ou psychiatrique, ni un outil de diagnostic.</p>
+      <p>Les contenus relatifs aux neurosciences, à la psychologie du développement et à la pédopsychiatrie présents dans cette application sont fournis à titre informatif et de vulgarisation uniquement. Ils ne remplacent pas l'avis d'un professionnel de santé qualifié.</p>
+      <p><strong>En cas de difficultés comportementales, émotionnelles, développementales ou de santé mentale chez votre enfant, consultez impérativement un médecin, pédopsychiatre, psychologue ou tout autre professionnel de santé compétent.</strong></p>
+      <p>L'association Herrichain et Artean Digital déclinent toute responsabilité quant à l'usage qui pourrait être fait de cette application, des contenus qu'elle propose, et des décisions parentales qui pourraient en découler. L'utilisation de cette application est faite sous l'entière responsabilité des parents ou tuteurs légaux.</p>
+      <p>Cette application est <strong>gratuite, sans publicité, sans monétisation directe ou indirecte</strong>, sans collecte de données personnelles, et sans affiliation commerciale.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LEGAL -->
+<section id="legal" style="background:#F5F5F5">
+  <div class="container">
+    <div class="section-badge">Documents légaux</div>
+    <h2 class="section-title">Mentions légales,<br>CGU & Confidentialité</h2>
+    <div class="legal-tabs">
+      <button class="legal-tab active" onclick="showTab('mentions')">📋 Mentions légales</button>
+      <button class="legal-tab" onclick="showTab('cgu')">📄 CGU</button>
+      <button class="legal-tab" onclick="showTab('cgv')">💳 CGV</button>
+      <button class="legal-tab" onclick="showTab('confidentialite')">🔒 Données personnelles</button>
+    </div>
+
+    <!-- MENTIONS LÉGALES -->
+    <div id="tab-mentions" class="legal-content active">
+      <h3>Éditeur de l'application</h3>
+      <p><strong>Artean Digital</strong><br>
+      Développeur et éditeur de l'application Ekhio<br>
+      Site web : <a href="https://arteandigital.fr">arteandigital.fr</a><br>
+      Contact : contact@arteandigital.fr</p>
+
+      <h3>Distributeur de l'application</h3>
+      <p><strong>Association Herrichain</strong><br>
+      Association loi 1901 à but non lucratif<br>
+      RNA : W641015204<br>
+      Siège social : Bidart, 64210, Pyrénées-Atlantiques, France<br>
+      L'association Herrichain assure la distribution gratuite de l'application Ekhio à destination des familles.</p>
+
+      <h3>Hébergement</h3>
+      <p>L'application Ekhio est une Progressive Web App (PWA) hébergée sur la plateforme Netlify, Inc., 512 2nd Street, Suite 200, San Francisco, CA 94107, USA.</p>
+
+      <h3>Propriété intellectuelle</h3>
+      <p>L'ensemble des éléments constituant l'application Ekhio (code, design, contenus, mascotte, nom, logo) sont la propriété exclusive d'Artean Digital, sauf mention contraire. Le code source est distribué sous licence MIT avec Commons Clause — tout usage commercial est interdit sans accord écrit préalable d'Artean Digital.</p>
+
+      <h3>Responsabilité</h3>
+      <p>Artean Digital et l'association Herrichain s'efforcent d'assurer l'exactitude des informations diffusées dans l'application, mais ne sauraient être tenus responsables des erreurs ou omissions, ni de l'usage fait par les utilisateurs des fonctionnalités proposées. L'utilisation de l'application est faite sous la seule et entière responsabilité de l'utilisateur.</p>
+    </div>
+
+    <!-- CGU -->
+    <div id="tab-cgu" class="legal-content">
+      <h3>Article 1 — Objet</h3>
+      <p>Les présentes Conditions Générales d'Utilisation (CGU) ont pour objet de définir les modalités d'utilisation de l'application Ekhio, développée par Artean Digital et distribuée gratuitement par l'association loi 1901 Herrichain (RNA : W641015204).</p>
+
+      <h3>Article 2 — Accès et gratuité</h3>
+      <p>L'application Ekhio est accessible gratuitement, sans inscription, sans création de compte et sans abonnement. Aucun paiement ne sera jamais demandé à l'utilisateur pour accéder aux fonctionnalités de base de l'application.</p>
+
+      <h3>Article 3 — Nature de l'application</h3>
+      <p>Ekhio est un outil d'accompagnement familial à visée ludique et éducative. <strong>Elle ne constitue en aucun cas un dispositif médical, un logiciel de santé, un outil de diagnostic ou de thérapie.</strong> Les contenus de l'application sont fournis à titre informatif uniquement et ne remplacent en aucun cas l'avis d'un professionnel de santé.</p>
+
+      <h3>Article 4 — Utilisation autorisée</h3>
+      <ul>
+        <li>Usage personnel et familial non-commercial</li>
+        <li>Installation sur les appareils personnels de la famille</li>
+        <li>Modification du code source pour usage personnel (conformément à la licence MIT + Commons Clause)</li>
+        <li>Contribution au projet open source via GitHub</li>
+      </ul>
+
+      <h3>Article 5 — Utilisation interdite</h3>
+      <ul>
+        <li>Toute exploitation commerciale directe ou indirecte de l'application ou de son code</li>
+        <li>Revente, mise à disposition payante ou intégration dans un service commercial</li>
+        <li>Suppression ou modification des mentions légales et de la licence</li>
+        <li>Usage à des fins de surveillance, de contrôle abusif ou de maltraitance</li>
+      </ul>
+
+      <h3>Article 6 — Responsabilité</h3>
+      <p>Artean Digital et l'association Herrichain déclinent toute responsabilité concernant : les décisions parentales prises sur la base des contenus de l'application ; les conséquences de l'utilisation ou de la non-utilisation de l'application ; les éventuels dysfonctionnements techniques. L'utilisateur reconnaît utiliser l'application sous sa seule et entière responsabilité.</p>
+
+      <h3>Article 7 — Modifications</h3>
+      <p>Artean Digital se réserve le droit de modifier les présentes CGU à tout moment. Les modifications prennent effet dès leur publication dans l'application ou sur le site web associé.</p>
+
+      <h3>Article 8 — Droit applicable</h3>
+      <p>Les présentes CGU sont soumises au droit français. En cas de litige, les tribunaux compétents de Bayonne (64) seront seuls compétents.</p>
+    </div>
+
+    <!-- CGV -->
+    <div id="tab-cgv" class="legal-content">
+      <h3>Article 1 — Application gratuite</h3>
+      <p><strong>L'application Ekhio est entièrement gratuite.</strong> Aucune transaction commerciale n'est réalisée dans le cadre de l'utilisation de l'application. Il n'existe pas de version payante, d'abonnement, d'achat intégré (in-app purchase), ni de monétisation d'aucune sorte.</p>
+
+      <h3>Article 2 — Absence de vente</h3>
+      <p>Dans la mesure où aucune vente de produit ou de service n'est réalisée par Artean Digital ou l'association Herrichain dans le cadre de l'application Ekhio, les présentes CGV ont pour unique objet de préciser cette absence de transaction commerciale et de protéger les droits des utilisateurs en conséquence.</p>
+
+      <h3>Article 3 — Dons et soutien</h3>
+      <p>L'association Herrichain peut être soutenue par des dons bénévoles de particuliers ou d'entreprises. Ces dons sont entièrement volontaires et ne donnent accès à aucune fonctionnalité supplémentaire de l'application. Tout don à l'association est soumis aux règles fiscales applicables aux associations loi 1901.</p>
+
+      <h3>Article 4 — Licence commerciale</h3>
+      <p>Toute utilisation commerciale du code source d'Ekhio nécessite l'obtention d'une licence commerciale auprès d'Artean Digital. Pour toute demande : contact@arteandigital.fr</p>
+    </div>
+
+    <!-- DONNÉES PERSONNELLES -->
+    <div id="tab-confidentialite" class="legal-content">
+      <h3>Principe fondamental : zéro collecte</h3>
+      <p><strong>L'application Ekhio ne collecte, ne traite, ne stocke et ne transmet aucune donnée personnelle sur des serveurs distants.</strong> Il n'existe aucune base de données utilisateurs, aucun compte, aucun identifiant, aucun login, aucun mot de passe.</p>
+
+      <h3>Stockage local uniquement</h3>
+      <p>Les données de l'application (prénom de l'enfant, score d'étoiles, comportements, historique) sont stockées <strong>exclusivement sur votre appareil</strong> via le mécanisme localStorage du navigateur. Ces données ne quittent jamais votre appareil et sont inaccessibles à Artean Digital, à Herrichain ou à tout tiers.</p>
+
+      <h3>Cookies fonctionnels</h3>
+      <p>L'application utilise le localStorage du navigateur — techniquement assimilable à un cookie fonctionnel par la réglementation ePrivacy — <strong>uniquement pour mémoriser vos préférences et la progression de l'enfant</strong> entre les sessions. Aucun cookie tiers, aucun cookie publicitaire, aucun cookie de tracking n'est utilisé.</p>
+      <p>Conformément aux recommandations de la CNIL, ces cookies étant strictement nécessaires au fonctionnement de l'application, ils ne nécessitent pas de consentement explicite. Vous pouvez effacer ces données à tout moment en utilisant la fonction "Remettre à zéro" dans les paramètres de l'application, ou en effaçant les données de navigation de votre navigateur.</p>
+
+      <h3>Données relatives aux enfants</h3>
+      <p>Dans le respect de la loi n°2024-120 du 19 février 2024 et du RGPD, aucune donnée relative à des mineurs n'est collectée, transmise ou traitée par nos soins. Le prénom saisi dans l'application reste sur votre appareil et n'est jamais communiqué à un tiers.</p>
+
+      <h3>Hébergement et logs</h3>
+      <p>L'application est hébergée sur Netlify. Netlify peut collecter des données techniques anonymes (logs de connexion, adresse IP) dans le cadre normal du service d'hébergement. Ces données sont soumises à la politique de confidentialité de Netlify et sont hors du contrôle d'Artean Digital. Pour plus d'informations : <a href="https://www.netlify.com/privacy/" target="_blank">netlify.com/privacy</a></p>
+
+      <h3>Vos droits</h3>
+      <p>Conformément au RGPD, vous disposez de droits sur vos données personnelles. Dans la mesure où aucune donnée personnelle n'est collectée par Artean Digital ou Herrichain, ces droits s'exercent directement sur votre appareil via les fonctionnalités de l'application (réinitialisation) ou les paramètres de votre navigateur.</p>
+
+      <h3>Contact</h3>
+      <p>Pour toute question relative à la protection des données : contact@arteandigital.fr</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">☀️ <span>Ekhio</span></div>
+  <p>Grandir, un jour à la fois.</p>
+  <div class="footer-sep"></div>
+  <p>Développée par <a href="https://arteandigital.fr" target="_blank">Artean Digital</a> · Distribuée par l'association <strong style="color:rgba(255,255,255,.7)">Herrichain</strong> (RNA : W641015204)<br>
+  Bidart, 64210 Pays Basque · France</p>
+  <div class="footer-links">
+    <a href="#mentions" onclick="showTab('mentions');document.getElementById('legal').scrollIntoView()">Mentions légales</a>
+    <a href="#cgu" onclick="showTab('cgu');document.getElementById('legal').scrollIntoView()">CGU</a>
+    <a href="#cgv" onclick="showTab('cgv');document.getElementById('legal').scrollIntoView()">CGV</a>
+    <a href="#confidentialite" onclick="showTab('confidentialite');document.getElementById('legal').scrollIntoView()">Données personnelles</a>
+    <a href="https://github.com/ouiblock/kidzreward" target="_blank">GitHub</a>
+  </div>
+  <div class="footer-sep"></div>
+  <p style="font-size:12px">© 2026 Artean Digital — Licence MIT + Commons Clause — Usage commercial interdit</p>
+  <p style="font-size:11px;margin-top:8px;color:rgba(255,255,255,.3)">⚠️ Application à visée ludique uniquement — Ne constitue pas un avis médical ou psychologique</p>
+</footer>
+
+<script>
+// Stars canvas
+const canvas=document.getElementById('starsCanvas');
+if(canvas){
+  const ctx=canvas.getContext('2d');
+  let stars=[];
+  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  for(let i=0;i<120;i++)stars.push({x:Math.random()*9999,y:Math.random()*9999,r:Math.random()*1.5,b:Math.random()*Math.PI*2,s:0.02+Math.random()*0.03});
+  function drawStars(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    stars.forEach(s=>{
+      s.b+=s.s;
+      const a=0.3+0.5*Math.sin(s.b);
+      ctx.fillStyle=`rgba(255,255,255,${a})`;
+      ctx.beginPath();ctx.arc(s.x%canvas.width,s.y%canvas.height,s.r,0,Math.PI*2);ctx.fill();
+    });
+    requestAnimationFrame(drawStars);
+  }
+  drawStars();
+}
+
+// Legal tabs
+function showTab(id){
+  document.querySelectorAll('.legal-tab').forEach((t,i)=>{
+    const ids=['mentions','cgu','cgv','confidentialite'];
+    t.classList.toggle('active',ids[i]===id);
+  });
+  document.querySelectorAll('.legal-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+}
+</script>
+</body>
+</html>
