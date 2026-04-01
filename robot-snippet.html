@@ -1,31 +1,40 @@
-
 <div class="robot-scene">
   <div class="robot-float" id="robot-float">
     <div class="walle-wrap neutral" id="robot" onclick="tapRobot()">
+
+      <!-- TIGES + YEUX -->
       <div class="walle-neck" id="robot-neck">
         <div class="walle-stem"></div>
         <div class="walle-eyes">
-          <div class="walle-eye-unit">
-            <div class="walle-eye-hood"></div>
+          <div class="walle-eye-unit" id="eye-unit-l">
+            <div class="walle-eye-hood" id="hood-l"></div>
             <div class="walle-eye">
               <div class="walle-eyelid" id="eyelid-l"></div>
               <div class="walle-iris" id="iris-l"></div>
+              <div class="walle-pupil" id="pupil-l"></div>
+              <div class="walle-eye-shine"></div>
             </div>
           </div>
-          <div class="walle-eye-unit">
-            <div class="walle-eye-hood"></div>
+          <div class="walle-eye-unit" id="eye-unit-r">
+            <div class="walle-eye-hood" id="hood-r"></div>
             <div class="walle-eye">
               <div class="walle-eyelid" id="eyelid-r"></div>
               <div class="walle-iris" id="iris-r"></div>
+              <div class="walle-pupil" id="pupil-r"></div>
+              <div class="walle-eye-shine"></div>
             </div>
           </div>
         </div>
         <div class="walle-stem"></div>
       </div>
+
+      <!-- BRAS -->
       <div class="walle-arms">
         <div class="walle-arm left" id="arm-l"></div>
         <div class="walle-arm right" id="arm-r"></div>
       </div>
+
+      <!-- CORPS -->
       <div class="walle-body">
         <div class="walle-solar">
           <div class="walle-solar-cell"></div><div class="walle-solar-cell"></div>
@@ -33,17 +42,36 @@
           <div class="walle-solar-cell"></div><div class="walle-solar-cell"></div>
           <div class="walle-solar-cell"></div><div class="walle-solar-cell"></div>
         </div>
+        <!-- ÉCRAN LCD BOUCHE -->
+        <div class="walle-screen">
+          <div class="walle-screen-inner">
+            <div class="walle-mouth" id="robot-mouth">
+              <svg viewBox="0 0 38 14" xmlns="http://www.w3.org/2000/svg">
+                <path class="mouth-path" id="mouth-path" d="M4,7 Q19,7 34,7"/>
+              </svg>
+            </div>
+          </div>
+        </div>
         <div class="walle-charge">
           <div class="walle-charge-bar"></div>
           <div class="walle-charge-bar"></div>
           <div class="walle-charge-bar"></div>
         </div>
       </div>
+
+      <!-- CHENILLES -->
       <div class="walle-tracks">
-        <div class="walle-track"></div>
-        <div class="walle-track"></div>
+        <div class="walle-track">
+          <div class="walle-track-wheel front"></div>
+          <div class="walle-track-wheel back"></div>
+        </div>
+        <div class="walle-track">
+          <div class="walle-track-wheel front"></div>
+          <div class="walle-track-wheel back"></div>
+        </div>
       </div>
-    </div>
-  </div>
+
+    </div><!-- /walle-wrap -->
+  </div><!-- /robot-float -->
   <div class="robot-shadow" id="robot-shadow"></div>
 </div>

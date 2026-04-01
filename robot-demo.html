@@ -3,44 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ekhio Robot — Wall-E Style</title>
+  <title>Ekhio Robot — Expressions</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Fredoka+One&display=swap" rel="stylesheet">
   <style>
-    :root { --accent: #FFB800; }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { background:linear-gradient(135deg,#0F0A1E,#1A0A3E); min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:32px; padding:32px; font-family:'Nunito',sans-serif; }
-    h1 { font-family:'Fredoka One',cursive; color:#FFB800; font-size:28px; }
-    .moods { display:flex; flex-wrap:wrap; gap:32px; justify-content:center; }
-    .mood-card { display:flex; flex-direction:column; align-items:center; gap:12px; }
-    .mood-label { font-size:12px; font-weight:800; color:rgba(255,255,255,.4); letter-spacing:1px; text-transform:uppercase; }
+    :root { --accent:#FFB800; }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:linear-gradient(135deg,#0F0A1E,#1A0A3E);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:32px 16px;gap:32px;font-family:'Nunito',sans-serif;}
+    h1{font-family:'Fredoka One',cursive;color:#FFB800;font-size:26px;text-align:center;}
+    .subtitle{font-size:13px;color:rgba(255,255,255,.4);font-weight:700;text-align:center;margin-top:-20px;}
+    .moods{display:flex;flex-wrap:wrap;gap:28px;justify-content:center;}
+    .mood-card{display:flex;flex-direction:column;align-items:center;gap:10px;}
+    .mood-label{font-size:11px;font-weight:900;color:rgba(255,255,255,.35);letter-spacing:1.5px;text-transform:uppercase;}
+    .mood-desc{font-size:10px;color:rgba(255,255,255,.2);font-weight:700;}
+    .tap-hint{font-size:11px;color:rgba(255,255,255,.2);margin-top:8px;}
     
 /* ============================================================
-   EKHIO ROBOT — Wall-E style, CSS pur
-   Corps compact + chenilles + yeux binoculaires sur tiges
-   + bras articulés + antenne + tous les états émotionnels
+   EKHIO ROBOT — Compact binocular style
+   Corps + chenilles + yeux sur tiges + bouche LCD expressifs
    ============================================================ */
+
+:root {
+  --robot-accent: #FFB800;
+  --robot-eye: #00D4FF;
+}
 
 .robot-scene {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  height: 180px;
+  height: 190px;
   position: relative;
 }
 
 /* ---- FLOAT ---- */
 .robot-float {
-  animation: walle-float 3.8s ease-in-out infinite;
+  animation: r-float 3.8s ease-in-out infinite;
   transform-origin: center bottom;
 }
-@keyframes walle-float {
+@keyframes r-float {
   0%,100% { transform: translateY(0) rotate(0deg); }
-  30%      { transform: translateY(-8px) rotate(-1.5deg); }
-  70%      { transform: translateY(-5px) rotate(1deg); }
+  30%      { transform: translateY(-9px) rotate(-1.2deg); }
+  70%      { transform: translateY(-5px) rotate(.8deg); }
 }
 
-/* ---- WRAP ---- */
 .walle-wrap {
   position: relative;
   width: 120px;
@@ -52,340 +58,409 @@
 .walle-tracks {
   display: flex;
   justify-content: center;
-  gap: 4px;
-  margin-top: 4px;
+  gap: 5px;
+  margin-top: 3px;
 }
 .walle-track {
-  width: 44px;
-  height: 14px;
-  background: linear-gradient(180deg, #3A3A3A 0%, #222 50%, #3A3A3A 100%);
+  width: 46px; height: 15px;
+  background: linear-gradient(180deg, #3A3A3A 0%, #1E1E1E 50%, #3A3A3A 100%);
   border-radius: 7px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 3px 8px rgba(0,0,0,.5);
+  position: relative; overflow: hidden;
+  box-shadow: 0 3px 8px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06);
 }
-.walle-track::after {
-  content: '';
-  position: absolute;
-  top: 3px; left: 0;
-  width: 200%; height: 8px;
+.walle-track::before {
+  content:'';
+  position:absolute; top:3px; left:0; right:0; bottom:3px;
   background: repeating-linear-gradient(
     90deg,
-    rgba(255,255,255,.1) 0px,
-    rgba(255,255,255,.1) 4px,
-    transparent 4px,
-    transparent 8px
+    rgba(255,255,255,.08) 0px 4px,
+    transparent 4px 8px
   );
-  animation: track-roll 1.2s linear infinite;
+  animation: track-roll 1s linear infinite;
 }
-@keyframes track-roll { from{left:0} to{left:-50%} }
+.walle-track::after {
+  content:'';
+  position:absolute; top:0; left:0; right:0; bottom:0;
+  border-radius:7px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,.4);
+}
+@keyframes track-roll { from{background-position:0 0} to{background-position:-16px 0} }
+
+/* Roue avant/arrière */
+.walle-track-wheel {
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:12px; height:12px; border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #555, #222);
+  box-shadow: 0 1px 3px rgba(0,0,0,.5);
+}
+.walle-track-wheel.front { right:1px; }
+.walle-track-wheel.back  { left:1px; }
 
 /* ---- CORPS ---- */
 .walle-body {
-  width: 80px;
-  height: 68px;
-  background: linear-gradient(160deg, #3A2E10 0%, #2A2008 60%, #1E1605 100%);
-  border-radius: 14px 14px 10px 10px;
+  width: 84px; height: 70px;
+  background: linear-gradient(160deg, #3A2E10 0%, #251E08 55%, #1A1505 100%);
+  border-radius: 15px 15px 10px 10px;
   margin: 0 auto;
   position: relative;
   box-shadow:
-    0 6px 24px rgba(0,0,0,.5),
-    inset 0 1px 0 rgba(255,255,255,.08),
-    inset 0 -2px 0 rgba(0,0,0,.3);
-  border: 1.5px solid rgba(255,184,0,.15);
+    0 6px 28px rgba(0,0,0,.55),
+    inset 0 1px 0 rgba(255,255,255,.07),
+    inset 0 -2px 0 rgba(0,0,0,.3),
+    inset 2px 0 0 rgba(255,255,255,.03),
+    inset -2px 0 0 rgba(255,255,255,.03);
+  border: 1.5px solid rgba(255,184,0,.12);
 }
 
-/* Plaque solaire sur le corps */
+/* Panneau solaire */
 .walle-solar {
-  position: absolute;
-  top: 10px; left: 50%; transform: translateX(-50%);
-  width: 48px; height: 22px;
-  background: linear-gradient(135deg, #1a3a5c 0%, #0d2240 50%, #1a3a5c 100%);
-  border-radius: 4px;
-  border: 1px solid rgba(0,100,200,.3);
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: repeat(4,1fr);
-  gap: 1px;
-  padding: 2px;
+  position:absolute; top:9px; left:50%; transform:translateX(-50%);
+  width:50px; height:24px;
+  background:linear-gradient(135deg,#1a3a5c,#0d2240,#1a3a5c);
+  border-radius:5px;
+  border:1px solid rgba(0,100,200,.25);
+  display:grid; grid-template-columns:repeat(4,1fr); gap:1.5px; padding:2px;
 }
 .walle-solar-cell {
-  background: rgba(0,150,255,.2);
-  border-radius: 1px;
+  border-radius:1px;
+  background: rgba(0,140,255,.18);
+  box-shadow: inset 0 0 2px rgba(0,100,200,.2);
 }
-.walle-solar-cell:nth-child(odd) { background: rgba(0,100,200,.3); }
+.walle-solar-cell:nth-child(odd) { background:rgba(0,80,180,.28); }
 
-/* Poignée/détail latéral */
-.walle-body::before {
-  content: 'E';
-  position: absolute;
-  bottom: 8px; left: 50%; transform: translateX(-50%);
-  font-family: 'Fredoka One', cursive;
-  font-size: 16px;
-  color: rgba(255,184,0,.4);
-  letter-spacing: 1px;
+/* Écran LCD bouche — key feature */
+.walle-screen {
+  position:absolute;
+  bottom:10px; left:50%; transform:translateX(-50%);
+  width:52px; height:20px;
+  background:#050D05;
+  border-radius:5px;
+  border:1.5px solid rgba(0,255,80,.15);
+  box-shadow:
+    0 0 8px rgba(0,255,80,.08),
+    inset 0 0 4px rgba(0,0,0,.8);
+  overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+}
+.walle-screen-inner {
+  position:relative;
+  width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center;
 }
 
-/* Indicateur charge */
+/* Bouche SVG inline via clip-path */
+.walle-mouth {
+  width:38px; height:14px;
+  position:relative;
+  transition: all .45s cubic-bezier(.34,1.2,.64,1);
+}
+.walle-mouth svg {
+  width:100%; height:100%;
+  overflow:visible;
+}
+.mouth-path {
+  fill: none;
+  stroke: #00FF50;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 3px rgba(0,255,80,.8));
+  transition: d .45s cubic-bezier(.34,1.2,.64,1);
+}
+/* Scan line */
+.walle-screen::after {
+  content:'';
+  position:absolute; top:0; left:0; right:0;
+  height:40%;
+  background:linear-gradient(180deg, rgba(0,255,80,.04) 0%, transparent 100%);
+  pointer-events:none;
+  animation: scan .08s steps(1) infinite;
+}
+@keyframes scan {
+  0%{top:0} 50%{top:60%} 100%{top:0}
+}
+
+/* Indicateur de charge */
 .walle-charge {
-  position: absolute;
-  bottom: 7px; right: 8px;
-  display: flex; gap: 2px; align-items: flex-end;
+  position:absolute; bottom:8px; right:8px;
+  display:flex; gap:2px; align-items:flex-end;
 }
 .walle-charge-bar {
-  width: 3px; border-radius: 1px;
-  background: var(--accent, #FFB800);
-  opacity: .5;
+  width:3px; border-radius:1px;
+  background:var(--robot-accent); opacity:.5;
+  transition: opacity .3s;
 }
-.walle-charge-bar:nth-child(1) { height: 4px; }
-.walle-charge-bar:nth-child(2) { height: 6px; }
-.walle-charge-bar:nth-child(3) { height: 8px; opacity:.8; }
+.walle-charge-bar:nth-child(1){height:4px;}
+.walle-charge-bar:nth-child(2){height:6px;}
+.walle-charge-bar:nth-child(3){height:8px; opacity:.8;}
 
 /* ---- BRAS ---- */
 .walle-arms {
-  position: absolute;
-  top: 18px;
-  left: -14px;
-  right: -14px;
-  display: flex;
-  justify-content: space-between;
-  pointer-events: none;
+  position:absolute; top:14px; left:-16px; right:-16px;
+  display:flex; justify-content:space-between; pointer-events:none;
 }
 .walle-arm {
-  width: 11px; height: 30px;
-  background: linear-gradient(180deg, #3A2E10, #2A2008);
-  border-radius: 4px 4px 6px 6px;
-  border: 1px solid rgba(255,184,0,.12);
-  position: relative;
-  transform-origin: top center;
-  transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+  width:12px; height:32px;
+  background:linear-gradient(180deg,#3A2E10,#1E1505);
+  border-radius:5px 5px 7px 7px;
+  border:1.5px solid rgba(255,184,0,.1);
+  position:relative;
+  transform-origin:top center;
+  transition:transform .5s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:2px 2px 6px rgba(0,0,0,.3);
 }
-.walle-arm.left { transform: rotate(-15deg); }
-.walle-arm.right { transform: rotate(15deg); }
+.walle-arm.left  { transform: rotate(-18deg); }
+.walle-arm.right { transform: rotate(18deg); }
 /* Pince */
 .walle-arm::after {
-  content: '';
-  position: absolute;
-  bottom: -5px; left: 50%; transform: translateX(-50%);
-  width: 9px; height: 6px;
-  background: #3A2E10;
-  border-radius: 0 0 4px 4px;
-  border: 1px solid rgba(255,184,0,.15);
+  content:'';
+  position:absolute; bottom:-6px; left:50%; transform:translateX(-50%);
+  width:10px; height:7px;
+  background:linear-gradient(180deg,#3A2E10,#1A1205);
+  border-radius:0 0 5px 5px;
+  border:1px solid rgba(255,184,0,.12);
+}
+/* Articulation milieu bras */
+.walle-arm::before {
+  content:'';
+  position:absolute; top:11px; left:50%; transform:translateX(-50%);
+  width:6px; height:4px;
+  background:#1A1505;
+  border-radius:2px;
+  border:1px solid rgba(255,184,0,.08);
 }
 
-/* ---- TIGES YEUX ---- */
+/* ---- TIGES OCULAIRES ---- */
 .walle-neck {
-  display: flex;
-  justify-content: center;
-  gap: 18px;
-  position: relative;
-  z-index: 2;
-  transform-origin: bottom center;
-  transition: transform .5s cubic-bezier(.34,1.56,.64,1);
+  display:flex; justify-content:center; gap:20px;
+  position:relative; z-index:2;
+  transform-origin:bottom center;
+  transition:transform .5s cubic-bezier(.34,1.56,.64,1);
 }
 .walle-stem {
-  width: 5px; height: 22px;
-  background: linear-gradient(180deg, #4A3A18 0%, #2A2008 100%);
-  border-radius: 2px;
-  position: relative;
-  transition: height .4s ease, transform .4s ease;
+  width:6px; height:24px;
+  background:linear-gradient(180deg,#4A3A18,#2A2008);
+  border-radius:3px;
+  position:relative;
+  transition:height .4s ease, transform .4s ease;
+  box-shadow:1px 1px 4px rgba(0,0,0,.4);
 }
-/* Articulation */
 .walle-stem::before {
-  content: '';
-  position: absolute;
-  top: 8px; left: 50%; transform: translateX(-50%);
-  width: 8px; height: 5px;
-  background: #3A2E10;
-  border-radius: 2px;
-  border: 1px solid rgba(255,184,0,.15);
+  content:'';
+  position:absolute; top:9px; left:50%; transform:translateX(-50%);
+  width:9px; height:5px;
+  background:#2A1E08;
+  border-radius:2px;
+  border:1px solid rgba(255,184,0,.12);
 }
 
-/* ---- YEUX (binoculaires) ---- */
+/* ---- YEUX ---- */
 .walle-eyes {
-  display: flex;
-  gap: 14px;
-  position: absolute;
-  bottom: calc(100% - 2px);
-  left: 50%; transform: translateX(-50%);
+  display:flex; gap:16px;
+  position:absolute;
+  bottom:calc(100% - 2px);
+  left:50%; transform:translateX(-50%);
 }
 .walle-eye-unit {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+  display:flex; flex-direction:column; align-items:center;
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+}
+.walle-eye-hood {
+  width:34px; height:11px;
+  background:linear-gradient(180deg,#4A3818,#2A2008);
+  border-radius:7px 7px 0 0;
+  position:relative; z-index:1;
+  box-shadow:0 -2px 6px rgba(0,0,0,.4);
+  transition:transform .35s ease;
 }
 .walle-eye {
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #1A1208, #0A0A0A);
-  border: 2.5px solid #5A4A20;
-  position: relative;
-  overflow: hidden;
-  box-shadow:
-    0 3px 10px rgba(0,0,0,.6),
-    inset 0 -2px 4px rgba(0,0,0,.5);
-  transition: all .4s cubic-bezier(.34,1.56,.64,1);
+  width:30px; height:30px; border-radius:50%;
+  background:linear-gradient(135deg,#1A1208,#0A0800);
+  border:2.5px solid #5A4828;
+  position:relative; overflow:hidden;
+  box-shadow:0 4px 12px rgba(0,0,0,.7), inset 0 -2px 4px rgba(0,0,0,.5);
+  transition:all .4s cubic-bezier(.34,1.56,.64,1);
 }
 /* Iris */
 .walle-iris {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 18px; height: 18px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%,
-    var(--eye-color, #00D4FF) 0%,
-    rgba(0,80,160,.8) 60%,
-    rgba(0,20,60,.9) 100%
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:20px; height:20px; border-radius:50%;
+  background:radial-gradient(circle at 38% 32%,
+    var(--eye-hi, #80EEFF) 0%,
+    var(--eye-mid, #00A8D4) 40%,
+    var(--eye-dark, #004060) 100%
   );
-  box-shadow: 0 0 10px var(--eye-glow, rgba(0,212,255,.5));
-  transition: all .4s ease;
+  box-shadow: 0 0 12px var(--eye-glow, rgba(0,212,255,.55));
+  transition:all .4s ease;
 }
 /* Pupille */
-.walle-iris::after {
-  content: '';
-  position: absolute;
-  top: 25%; left: 25%;
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: rgba(0,0,0,.8);
-  transition: all .4s ease;
+.walle-pupil {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:8px; height:8px; border-radius:50%;
+  background:rgba(0,0,0,.85);
+  transition:all .4s ease;
+  z-index:2;
 }
-/* Reflet */
-.walle-eye::before {
-  content: '';
-  position: absolute;
-  top: 5px; left: 7px;
-  width: 7px; height: 5px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.6);
-  z-index: 2;
-  transition: all .3s ease;
+/* Mini-reflet */
+.walle-eye-shine {
+  position:absolute; top:5px; left:7px;
+  width:7px; height:5px; border-radius:50%;
+  background:rgba(255,255,255,.65); z-index:3;
 }
 /* Paupière */
 .walle-eyelid {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 0;
-  background: #2A1E08;
-  border-radius: 50% 50% 0 0 / 60% 60% 0 0;
-  transition: height .3s ease;
-  z-index: 3;
-}
-/* Capot oculaire */
-.walle-eye-hood {
-  width: 32px; height: 10px;
-  background: linear-gradient(180deg, #4A3818, #2A2008);
-  border-radius: 6px 6px 0 0;
-  margin-bottom: -2px;
-  position: relative;
-  z-index: 1;
-  box-shadow: 0 -2px 6px rgba(0,0,0,.4);
-  transition: transform .3s ease;
+  position:absolute; top:0; left:0; right:0;
+  height:0;
+  background:linear-gradient(180deg,#2A1E08,#1A1208);
+  border-radius:50% 50% 0 0 / 60% 60% 0 0;
+  transition:height .35s ease; z-index:4;
 }
 
 /* ---- MOODS ---- */
 
-/* happy — yeux grands + sourire bras levés */
-.walle-wrap.happy .walle-iris {
-  --eye-color: #FFB800;
-  --eye-glow: rgba(255,184,0,.6);
-  width: 20px; height: 20px;
-}
-.walle-wrap.happy .walle-arm.left  { transform: rotate(-40deg) translateY(-4px); }
-.walle-wrap.happy .walle-arm.right { transform: rotate(40deg) translateY(-4px); }
-.walle-wrap.happy .walle-neck      { transform: scale(1.05) translateY(-2px); }
+/* neutral */
+.walle-wrap.neutral { --eye-hi:#80EEFF; --eye-mid:#00A8D4; --eye-dark:#004060; --eye-glow:rgba(0,212,255,.5); }
 
-/* excited — yeux étoile + sautille */
-.walle-wrap.excited .walle-iris {
-  --eye-color: #2ECC71;
-  --eye-glow: rgba(46,204,113,.7);
-  border-radius: 20%;
-  width: 20px; height: 20px;
+/* happy — or, bras levés, capots relevés */
+.walle-wrap.happy {
+  --eye-hi:#FFE066; --eye-mid:#FFB800; --eye-dark:#804000; --eye-glow:rgba(255,184,0,.7);
 }
-.walle-wrap.excited .walle-arm.left  { transform: rotate(-55deg) translateY(-6px); }
-.walle-wrap.excited .walle-arm.right { transform: rotate(55deg) translateY(-6px); }
+.walle-wrap.happy .walle-arm.left  { transform:rotate(-50deg) translateY(-5px); }
+.walle-wrap.happy .walle-arm.right { transform:rotate(50deg) translateY(-5px); }
+.walle-wrap.happy .walle-neck      { transform:scale(1.06) translateY(-3px); }
+.walle-wrap.happy .walle-eye       { border-color:#8A6820; }
+.walle-wrap.happy .walle-iris      { width:22px; height:22px; }
 
-/* curious — yeux de tailles différentes + tête penchée */
-.walle-wrap.curious .walle-neck { transform: rotate(-8deg); }
-.walle-wrap.curious .walle-eye-unit:first-child .walle-iris {
-  width: 20px; height: 20px;
+/* excited — vert, bras grands ouverts, tiges allongées */
+.walle-wrap.excited {
+  --eye-hi:#90FF90; --eye-mid:#2ECC71; --eye-dark:#005020; --eye-glow:rgba(46,204,113,.75);
 }
-.walle-wrap.curious .walle-eye-unit:last-child .walle-iris {
-  width: 14px; height: 14px;
-}
+.walle-wrap.excited .walle-arm.left  { transform:rotate(-65deg) translateY(-7px); }
+.walle-wrap.excited .walle-arm.right { transform:rotate(65deg) translateY(-7px); }
+.walle-wrap.excited .walle-stem      { height:30px; }
+.walle-wrap.excited .walle-iris      { width:22px; height:22px; border-radius:30%; }
+.walle-wrap.excited .walle-pupil     { width:6px; height:6px; }
 
-/* sleeping — paupières mi-closes + bras tombants */
-.walle-wrap.sleeping .walle-eyelid   { height: 60%; }
-.walle-wrap.sleeping .walle-iris     { --eye-color: #444; --eye-glow: transparent; }
-.walle-wrap.sleeping .walle-arm.left  { transform: rotate(-5deg) translateY(8px); }
-.walle-wrap.sleeping .walle-arm.right { transform: rotate(5deg) translateY(8px); }
-.walle-wrap.sleeping .walle-neck      { transform: translateY(3px); }
+/* curious — tête penchée, pupilles asymétriques */
+.walle-wrap.curious .walle-neck { transform:rotate(-10deg); }
+.walle-wrap.curious .walle-eye-unit:first-child .walle-iris  { width:22px; height:22px; }
+.walle-wrap.curious .walle-eye-unit:last-child  .walle-iris  { width:14px; height:14px; }
+.walle-wrap.curious .walle-eye-unit:last-child  .walle-pupil { width:5px; height:5px; }
+.walle-wrap.curious .walle-eye-unit:first-child .walle-eye-hood { transform:rotate(-12deg); }
+.walle-wrap.curious .walle-eye-unit:last-child  .walle-eye-hood { transform:rotate(6deg); }
 
-/* proud — chest glow + bras croisés */
-.walle-wrap.proud .walle-body {
-  box-shadow: 0 0 20px rgba(255,184,0,.3), 0 6px 24px rgba(0,0,0,.5);
+/* proud — violet, capots froncés vers l'intérieur */
+.walle-wrap.proud {
+  --eye-hi:#D0A0FF; --eye-mid:#8B5CF6; --eye-dark:#2D006A; --eye-glow:rgba(139,92,246,.7);
 }
-.walle-wrap.proud .walle-iris {
-  --eye-color: #8B5CF6;
-  --eye-glow: rgba(139,92,246,.6);
-}
-.walle-wrap.proud .walle-arm.left  { transform: rotate(20deg); }
-.walle-wrap.proud .walle-arm.right { transform: rotate(-20deg); }
+.walle-wrap.proud .walle-body  { box-shadow:0 0 22px rgba(139,92,246,.25), 0 6px 28px rgba(0,0,0,.55); }
+.walle-wrap.proud .walle-arm.left  { transform:rotate(22deg); }
+.walle-wrap.proud .walle-arm.right { transform:rotate(-22deg); }
+.walle-wrap.proud .walle-eye-unit:first-child .walle-eye-hood { transform:rotate(-10deg); }
+.walle-wrap.proud .walle-eye-unit:last-child  .walle-eye-hood { transform:rotate(10deg); }
+.walle-wrap.proud .walle-iris { width:22px; height:22px; }
 
-/* sad — yeux baissés + capots froncés */
-.walle-wrap.sad .walle-eye-hood { transform: rotate(8deg); }
-.walle-wrap.sad .walle-eye-unit:last-child .walle-eye-hood { transform: rotate(-8deg); }
-.walle-wrap.sad .walle-iris     { --eye-color: #6B9FBF; --eye-glow: rgba(100,150,200,.3); }
-.walle-wrap.sad .walle-stem     { height: 16px; }
-.walle-wrap.sad .walle-arm.left  { transform: rotate(-5deg) translateY(6px); }
-.walle-wrap.sad .walle-arm.right { transform: rotate(5deg) translateY(6px); }
+/* sleeping — paupières tombées, bras pendants, tiges courtes */
+.walle-wrap.sleeping .walle-eyelid  { height:75%; }
+.walle-wrap.sleeping .walle-iris    { --eye-hi:#666; --eye-mid:#333; --eye-dark:#111; --eye-glow:transparent; width:14px; height:14px; }
+.walle-wrap.sleeping .walle-arm.left  { transform:rotate(-6deg) translateY(10px); }
+.walle-wrap.sleeping .walle-arm.right { transform:rotate(6deg) translateY(10px); }
+.walle-wrap.sleeping .walle-stem    { height:14px; }
+.walle-wrap.sleeping .walle-neck    { transform:translateY(5px); }
+.walle-wrap.sleeping .walle-charge-bar { opacity:.2; }
+
+/* sad — bleu pâle, capots froncés externe, bras bas, tiges courtes */
+.walle-wrap.sad {
+  --eye-hi:#A0C8E0; --eye-mid:#4A80A0; --eye-dark:#0A2030; --eye-glow:rgba(80,140,180,.3);
+}
+.walle-wrap.sad .walle-eye-unit:first-child .walle-eye-hood { transform:rotate(14deg) translateX(3px); }
+.walle-wrap.sad .walle-eye-unit:last-child  .walle-eye-hood { transform:rotate(-14deg) translateX(-3px); }
+.walle-wrap.sad .walle-stem    { height:17px; }
+.walle-wrap.sad .walle-neck    { transform:translateY(3px); }
+.walle-wrap.sad .walle-arm.left  { transform:rotate(-5deg) translateY(8px); }
+.walle-wrap.sad .walle-arm.right { transform:rotate(5deg) translateY(8px); }
+.walle-wrap.sad .walle-eyelid  { height:20%; }
+
+/* ---- MOUTH EXPRESSIONS ---- */
+/* Les paths sont mis à jour dynamiquement via JS */
+/* Mais on définit les couleurs d'écran par mood */
+.walle-wrap.happy   .mouth-path { stroke:#FFB800; filter:drop-shadow(0 0 4px rgba(255,184,0,.9)); }
+.walle-wrap.excited .mouth-path { stroke:#2ECC71; filter:drop-shadow(0 0 4px rgba(46,204,113,.9)); }
+.walle-wrap.proud   .mouth-path { stroke:#A070FF; filter:drop-shadow(0 0 4px rgba(160,112,255,.9)); }
+.walle-wrap.sleeping .mouth-path { stroke:#444; filter:none; }
+.walle-wrap.sad     .mouth-path { stroke:#4A90B8; filter:drop-shadow(0 0 2px rgba(74,144,184,.5)); }
+.walle-wrap.curious .mouth-path { stroke:#00D4FF; filter:drop-shadow(0 0 4px rgba(0,212,255,.7)); }
 
 /* ---- ANIMATIONS ---- */
-.walle-wrap.bounce { animation: walle-bounce .45s cubic-bezier(.36,.07,.19,.97); }
-@keyframes walle-bounce {
-  0%,100% { transform: scale(1) rotate(0deg); }
-  25%      { transform: scale(1.12) rotate(-3deg); }
-  75%      { transform: scale(.95) rotate(2deg); }
+.walle-wrap.bounce {
+  animation: r-bounce .45s cubic-bezier(.36,.07,.19,.97) !important;
 }
-.walle-wrap.celebrate { animation: walle-celebrate .7s ease-in-out; }
-@keyframes walle-celebrate {
-  0%,100% { transform: translateY(0) rotate(0deg); }
-  20%      { transform: translateY(-14px) rotate(-5deg); }
-  50%      { transform: translateY(-18px) rotate(5deg); }
-  80%      { transform: translateY(-8px) rotate(-2deg); }
+@keyframes r-bounce {
+  0%,100% { transform:scale(1) rotate(0deg); }
+  25%      { transform:scale(1.13) rotate(-3.5deg); }
+  75%      { transform:scale(.94) rotate(2deg); }
+}
+.walle-wrap.celebrate {
+  animation: r-celebrate .75s ease-in-out !important;
+}
+@keyframes r-celebrate {
+  0%,100% { transform:translateY(0) rotate(0deg); }
+  15%      { transform:translateY(-16px) rotate(-6deg); }
+  40%      { transform:translateY(-22px) rotate(6deg); }
+  65%      { transform:translateY(-12px) rotate(-3deg); }
+  85%      { transform:translateY(-5px) rotate(2deg); }
+}
+.walle-wrap.shake {
+  animation: r-shake .4s ease-in-out !important;
+}
+@keyframes r-shake {
+  0%,100% { transform:translateX(0); }
+  20%      { transform:translateX(-8px); }
+  40%      { transform:translateX(8px); }
+  60%      { transform:translateX(-5px); }
+  80%      { transform:translateX(5px); }
 }
 
-/* Shadow under robot */
+/* Shadow */
 .robot-shadow {
-  width: 70px; height: 8px;
-  background: radial-gradient(ellipse, rgba(0,0,0,.4) 0%, transparent 70%);
-  margin: 2px auto 0;
-  transition: width .3s ease, opacity .3s ease;
+  width:72px; height:9px;
+  background:radial-gradient(ellipse,rgba(0,0,0,.45) 0%,transparent 70%);
+  margin:3px auto 0;
+  transition:width .4s ease, opacity .4s ease;
 }
 
   </style>
 </head>
 <body>
-<h1>☀️ Ekhio — Robot Wall-E Style</h1>
+<h1>☀️ Ekhio — Expressions du robot</h1>
+<p class="subtitle">Tap pour animer · Bouche LCD intégrée · 9 humeurs</p>
 <div class="moods">
 
   <div class="mood-card">
     <div class="robot-scene">
       <div class="robot-float">
-        <div class="walle-wrap neutral" id="robot-neutral" onclick="tap(this)">
+        <div class="walle-wrap neutral" id="r-neutral" onclick="tap('neutral')">
           <div class="walle-neck">
             <div class="walle-stem"></div>
             <div class="walle-eyes">
               <div class="walle-eye-unit">
                 <div class="walle-eye-hood"></div>
-                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+                <div class="walle-eye">
+                  <div class="walle-eyelid"></div>
+                  <div class="walle-iris"></div>
+                  <div class="walle-pupil"></div>
+                  <div class="walle-eye-shine"></div>
+                </div>
               </div>
               <div class="walle-eye-unit">
                 <div class="walle-eye-hood"></div>
-                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+                <div class="walle-eye">
+                  <div class="walle-eyelid"></div>
+                  <div class="walle-iris"></div>
+                  <div class="walle-pupil"></div>
+                  <div class="walle-eye-shine"></div>
+                </div>
               </div>
             </div>
             <div class="walle-stem"></div>
@@ -395,7 +470,18 @@
             <div class="walle-arm right"></div>
           </div>
           <div class="walle-body">
-            <div class="walle-solar"><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div></div>
+            <div class="walle-solar">
+              <div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div>
+            </div>
+            <div class="walle-screen">
+              <div class="walle-screen-inner">
+                <div class="walle-mouth">
+                  <svg viewBox="0 0 38 14" xmlns="http://www.w3.org/2000/svg">
+                    <path class="mouth-path" id="mp-neutral" d="M8,7 Q19,7 30,7"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
             <div class="walle-charge">
               <div class="walle-charge-bar"></div>
               <div class="walle-charge-bar"></div>
@@ -403,30 +489,40 @@
             </div>
           </div>
           <div class="walle-tracks">
-            <div class="walle-track"></div>
-            <div class="walle-track"></div>
+            <div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div>
+            <div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div>
           </div>
         </div>
       </div>
       <div class="robot-shadow"></div>
     </div>
-    <div class="mood-label">neutral</div>
+    <div class="mood-label">😐 Repos</div>
   </div>
 
   <div class="mood-card">
     <div class="robot-scene">
       <div class="robot-float">
-        <div class="walle-wrap happy" id="robot-happy" onclick="tap(this)">
+        <div class="walle-wrap happy" id="r-happy" onclick="tap('happy')">
           <div class="walle-neck">
             <div class="walle-stem"></div>
             <div class="walle-eyes">
               <div class="walle-eye-unit">
                 <div class="walle-eye-hood"></div>
-                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+                <div class="walle-eye">
+                  <div class="walle-eyelid"></div>
+                  <div class="walle-iris"></div>
+                  <div class="walle-pupil"></div>
+                  <div class="walle-eye-shine"></div>
+                </div>
               </div>
               <div class="walle-eye-unit">
                 <div class="walle-eye-hood"></div>
-                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+                <div class="walle-eye">
+                  <div class="walle-eyelid"></div>
+                  <div class="walle-iris"></div>
+                  <div class="walle-pupil"></div>
+                  <div class="walle-eye-shine"></div>
+                </div>
               </div>
             </div>
             <div class="walle-stem"></div>
@@ -436,7 +532,18 @@
             <div class="walle-arm right"></div>
           </div>
           <div class="walle-body">
-            <div class="walle-solar"><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div></div>
+            <div class="walle-solar">
+              <div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div>
+            </div>
+            <div class="walle-screen">
+              <div class="walle-screen-inner">
+                <div class="walle-mouth">
+                  <svg viewBox="0 0 38 14" xmlns="http://www.w3.org/2000/svg">
+                    <path class="mouth-path" id="mp-happy" d="M4,10 Q11,3 19,3 Q27,3 34,10"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
             <div class="walle-charge">
               <div class="walle-charge-bar"></div>
               <div class="walle-charge-bar"></div>
@@ -444,30 +551,40 @@
             </div>
           </div>
           <div class="walle-tracks">
-            <div class="walle-track"></div>
-            <div class="walle-track"></div>
+            <div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div>
+            <div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div>
           </div>
         </div>
       </div>
       <div class="robot-shadow"></div>
     </div>
-    <div class="mood-label">happy</div>
+    <div class="mood-label">😊 Heureux</div>
   </div>
 
   <div class="mood-card">
     <div class="robot-scene">
       <div class="robot-float">
-        <div class="walle-wrap excited" id="robot-excited" onclick="tap(this)">
+        <div class="walle-wrap excited" id="r-excited" onclick="tap('excited')">
           <div class="walle-neck">
             <div class="walle-stem"></div>
             <div class="walle-eyes">
               <div class="walle-eye-unit">
                 <div class="walle-eye-hood"></div>
-                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+                <div class="walle-eye">
+                  <div class="walle-eyelid"></div>
+                  <div class="walle-iris"></div>
+                  <div class="walle-pupil"></div>
+                  <div class="walle-eye-shine"></div>
+                </div>
               </div>
               <div class="walle-eye-unit">
                 <div class="walle-eye-hood"></div>
-                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+                <div class="walle-eye">
+                  <div class="walle-eyelid"></div>
+                  <div class="walle-iris"></div>
+                  <div class="walle-pupil"></div>
+                  <div class="walle-eye-shine"></div>
+                </div>
               </div>
             </div>
             <div class="walle-stem"></div>
@@ -477,7 +594,18 @@
             <div class="walle-arm right"></div>
           </div>
           <div class="walle-body">
-            <div class="walle-solar"><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div></div>
+            <div class="walle-solar">
+              <div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div>
+            </div>
+            <div class="walle-screen">
+              <div class="walle-screen-inner">
+                <div class="walle-mouth">
+                  <svg viewBox="0 0 38 14" xmlns="http://www.w3.org/2000/svg">
+                    <path class="mouth-path" id="mp-excited" d="M3,11 Q10,2 19,2 Q28,2 35,11"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
             <div class="walle-charge">
               <div class="walle-charge-bar"></div>
               <div class="walle-charge-bar"></div>
@@ -485,30 +613,40 @@
             </div>
           </div>
           <div class="walle-tracks">
-            <div class="walle-track"></div>
-            <div class="walle-track"></div>
+            <div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div>
+            <div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div>
           </div>
         </div>
       </div>
       <div class="robot-shadow"></div>
     </div>
-    <div class="mood-label">excited</div>
+    <div class="mood-label">🤩 Enthousiaste</div>
   </div>
 
   <div class="mood-card">
     <div class="robot-scene">
       <div class="robot-float">
-        <div class="walle-wrap curious" id="robot-curious" onclick="tap(this)">
+        <div class="walle-wrap curious" id="r-curious" onclick="tap('curious')">
           <div class="walle-neck">
             <div class="walle-stem"></div>
             <div class="walle-eyes">
               <div class="walle-eye-unit">
                 <div class="walle-eye-hood"></div>
-                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+                <div class="walle-eye">
+                  <div class="walle-eyelid"></div>
+                  <div class="walle-iris"></div>
+                  <div class="walle-pupil"></div>
+                  <div class="walle-eye-shine"></div>
+                </div>
               </div>
               <div class="walle-eye-unit">
                 <div class="walle-eye-hood"></div>
-                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+                <div class="walle-eye">
+                  <div class="walle-eyelid"></div>
+                  <div class="walle-iris"></div>
+                  <div class="walle-pupil"></div>
+                  <div class="walle-eye-shine"></div>
+                </div>
               </div>
             </div>
             <div class="walle-stem"></div>
@@ -518,7 +656,18 @@
             <div class="walle-arm right"></div>
           </div>
           <div class="walle-body">
-            <div class="walle-solar"><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div></div>
+            <div class="walle-solar">
+              <div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div>
+            </div>
+            <div class="walle-screen">
+              <div class="walle-screen-inner">
+                <div class="walle-mouth">
+                  <svg viewBox="0 0 38 14" xmlns="http://www.w3.org/2000/svg">
+                    <path class="mouth-path" id="mp-curious" d="M6,8 Q14,5 22,7 Q28,9 32,6"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
             <div class="walle-charge">
               <div class="walle-charge-bar"></div>
               <div class="walle-charge-bar"></div>
@@ -526,30 +675,40 @@
             </div>
           </div>
           <div class="walle-tracks">
-            <div class="walle-track"></div>
-            <div class="walle-track"></div>
+            <div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div>
+            <div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div>
           </div>
         </div>
       </div>
       <div class="robot-shadow"></div>
     </div>
-    <div class="mood-label">curious</div>
+    <div class="mood-label">🤔 Curieux</div>
   </div>
 
   <div class="mood-card">
     <div class="robot-scene">
       <div class="robot-float">
-        <div class="walle-wrap proud" id="robot-proud" onclick="tap(this)">
+        <div class="walle-wrap proud" id="r-proud" onclick="tap('proud')">
           <div class="walle-neck">
             <div class="walle-stem"></div>
             <div class="walle-eyes">
               <div class="walle-eye-unit">
                 <div class="walle-eye-hood"></div>
-                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+                <div class="walle-eye">
+                  <div class="walle-eyelid"></div>
+                  <div class="walle-iris"></div>
+                  <div class="walle-pupil"></div>
+                  <div class="walle-eye-shine"></div>
+                </div>
               </div>
               <div class="walle-eye-unit">
                 <div class="walle-eye-hood"></div>
-                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+                <div class="walle-eye">
+                  <div class="walle-eyelid"></div>
+                  <div class="walle-iris"></div>
+                  <div class="walle-pupil"></div>
+                  <div class="walle-eye-shine"></div>
+                </div>
               </div>
             </div>
             <div class="walle-stem"></div>
@@ -559,7 +718,18 @@
             <div class="walle-arm right"></div>
           </div>
           <div class="walle-body">
-            <div class="walle-solar"><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div></div>
+            <div class="walle-solar">
+              <div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div>
+            </div>
+            <div class="walle-screen">
+              <div class="walle-screen-inner">
+                <div class="walle-mouth">
+                  <svg viewBox="0 0 38 14" xmlns="http://www.w3.org/2000/svg">
+                    <path class="mouth-path" id="mp-proud" d="M7,5 Q13,2 19,3 Q25,4 31,5"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
             <div class="walle-charge">
               <div class="walle-charge-bar"></div>
               <div class="walle-charge-bar"></div>
@@ -567,30 +737,40 @@
             </div>
           </div>
           <div class="walle-tracks">
-            <div class="walle-track"></div>
-            <div class="walle-track"></div>
+            <div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div>
+            <div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div>
           </div>
         </div>
       </div>
       <div class="robot-shadow"></div>
     </div>
-    <div class="mood-label">proud</div>
+    <div class="mood-label">😎 Fier</div>
   </div>
 
   <div class="mood-card">
     <div class="robot-scene">
       <div class="robot-float">
-        <div class="walle-wrap sleeping" id="robot-sleeping" onclick="tap(this)">
+        <div class="walle-wrap sleeping" id="r-sleeping" onclick="tap('sleeping')">
           <div class="walle-neck">
             <div class="walle-stem"></div>
             <div class="walle-eyes">
               <div class="walle-eye-unit">
                 <div class="walle-eye-hood"></div>
-                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+                <div class="walle-eye">
+                  <div class="walle-eyelid"></div>
+                  <div class="walle-iris"></div>
+                  <div class="walle-pupil"></div>
+                  <div class="walle-eye-shine"></div>
+                </div>
               </div>
               <div class="walle-eye-unit">
                 <div class="walle-eye-hood"></div>
-                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+                <div class="walle-eye">
+                  <div class="walle-eyelid"></div>
+                  <div class="walle-iris"></div>
+                  <div class="walle-pupil"></div>
+                  <div class="walle-eye-shine"></div>
+                </div>
               </div>
             </div>
             <div class="walle-stem"></div>
@@ -600,7 +780,18 @@
             <div class="walle-arm right"></div>
           </div>
           <div class="walle-body">
-            <div class="walle-solar"><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div></div>
+            <div class="walle-solar">
+              <div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div>
+            </div>
+            <div class="walle-screen">
+              <div class="walle-screen-inner">
+                <div class="walle-mouth">
+                  <svg viewBox="0 0 38 14" xmlns="http://www.w3.org/2000/svg">
+                    <path class="mouth-path" id="mp-sleeping" d="M10,8 Q19,9 28,8"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
             <div class="walle-charge">
               <div class="walle-charge-bar"></div>
               <div class="walle-charge-bar"></div>
@@ -608,30 +799,40 @@
             </div>
           </div>
           <div class="walle-tracks">
-            <div class="walle-track"></div>
-            <div class="walle-track"></div>
+            <div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div>
+            <div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div>
           </div>
         </div>
       </div>
       <div class="robot-shadow"></div>
     </div>
-    <div class="mood-label">sleeping</div>
+    <div class="mood-label">😴 Endormi</div>
   </div>
 
   <div class="mood-card">
     <div class="robot-scene">
       <div class="robot-float">
-        <div class="walle-wrap sad" id="robot-sad" onclick="tap(this)">
+        <div class="walle-wrap sad" id="r-sad" onclick="tap('sad')">
           <div class="walle-neck">
             <div class="walle-stem"></div>
             <div class="walle-eyes">
               <div class="walle-eye-unit">
                 <div class="walle-eye-hood"></div>
-                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+                <div class="walle-eye">
+                  <div class="walle-eyelid"></div>
+                  <div class="walle-iris"></div>
+                  <div class="walle-pupil"></div>
+                  <div class="walle-eye-shine"></div>
+                </div>
               </div>
               <div class="walle-eye-unit">
                 <div class="walle-eye-hood"></div>
-                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+                <div class="walle-eye">
+                  <div class="walle-eyelid"></div>
+                  <div class="walle-iris"></div>
+                  <div class="walle-pupil"></div>
+                  <div class="walle-eye-shine"></div>
+                </div>
               </div>
             </div>
             <div class="walle-stem"></div>
@@ -641,7 +842,18 @@
             <div class="walle-arm right"></div>
           </div>
           <div class="walle-body">
-            <div class="walle-solar"><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div></div>
+            <div class="walle-solar">
+              <div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div>
+            </div>
+            <div class="walle-screen">
+              <div class="walle-screen-inner">
+                <div class="walle-mouth">
+                  <svg viewBox="0 0 38 14" xmlns="http://www.w3.org/2000/svg">
+                    <path class="mouth-path" id="mp-sad" d="M5,5 Q12,10 19,11 Q26,10 33,5"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
             <div class="walle-charge">
               <div class="walle-charge-bar"></div>
               <div class="walle-charge-bar"></div>
@@ -649,21 +861,176 @@
             </div>
           </div>
           <div class="walle-tracks">
-            <div class="walle-track"></div>
-            <div class="walle-track"></div>
+            <div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div>
+            <div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div>
           </div>
         </div>
       </div>
       <div class="robot-shadow"></div>
     </div>
-    <div class="mood-label">sad</div>
+    <div class="mood-label">😢 Triste</div>
+  </div>
+
+  <div class="mood-card">
+    <div class="robot-scene">
+      <div class="robot-float">
+        <div class="walle-wrap surprised" id="r-surprised" onclick="tap('surprised')">
+          <div class="walle-neck">
+            <div class="walle-stem"></div>
+            <div class="walle-eyes">
+              <div class="walle-eye-unit">
+                <div class="walle-eye-hood"></div>
+                <div class="walle-eye">
+                  <div class="walle-eyelid"></div>
+                  <div class="walle-iris"></div>
+                  <div class="walle-pupil"></div>
+                  <div class="walle-eye-shine"></div>
+                </div>
+              </div>
+              <div class="walle-eye-unit">
+                <div class="walle-eye-hood"></div>
+                <div class="walle-eye">
+                  <div class="walle-eyelid"></div>
+                  <div class="walle-iris"></div>
+                  <div class="walle-pupil"></div>
+                  <div class="walle-eye-shine"></div>
+                </div>
+              </div>
+            </div>
+            <div class="walle-stem"></div>
+          </div>
+          <div class="walle-arms">
+            <div class="walle-arm left"></div>
+            <div class="walle-arm right"></div>
+          </div>
+          <div class="walle-body">
+            <div class="walle-solar">
+              <div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div>
+            </div>
+            <div class="walle-screen">
+              <div class="walle-screen-inner">
+                <div class="walle-mouth">
+                  <svg viewBox="0 0 38 14" xmlns="http://www.w3.org/2000/svg">
+                    <path class="mouth-path" id="mp-surprised" d="M13,4 Q19,13 25,4"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="walle-charge">
+              <div class="walle-charge-bar"></div>
+              <div class="walle-charge-bar"></div>
+              <div class="walle-charge-bar"></div>
+            </div>
+          </div>
+          <div class="walle-tracks">
+            <div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div>
+            <div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="robot-shadow"></div>
+    </div>
+    <div class="mood-label">😮 Surpris</div>
+  </div>
+
+  <div class="mood-card">
+    <div class="robot-scene">
+      <div class="robot-float">
+        <div class="walle-wrap thinking" id="r-thinking" onclick="tap('thinking')">
+          <div class="walle-neck">
+            <div class="walle-stem"></div>
+            <div class="walle-eyes">
+              <div class="walle-eye-unit">
+                <div class="walle-eye-hood"></div>
+                <div class="walle-eye">
+                  <div class="walle-eyelid"></div>
+                  <div class="walle-iris"></div>
+                  <div class="walle-pupil"></div>
+                  <div class="walle-eye-shine"></div>
+                </div>
+              </div>
+              <div class="walle-eye-unit">
+                <div class="walle-eye-hood"></div>
+                <div class="walle-eye">
+                  <div class="walle-eyelid"></div>
+                  <div class="walle-iris"></div>
+                  <div class="walle-pupil"></div>
+                  <div class="walle-eye-shine"></div>
+                </div>
+              </div>
+            </div>
+            <div class="walle-stem"></div>
+          </div>
+          <div class="walle-arms">
+            <div class="walle-arm left"></div>
+            <div class="walle-arm right"></div>
+          </div>
+          <div class="walle-body">
+            <div class="walle-solar">
+              <div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div>
+            </div>
+            <div class="walle-screen">
+              <div class="walle-screen-inner">
+                <div class="walle-mouth">
+                  <svg viewBox="0 0 38 14" xmlns="http://www.w3.org/2000/svg">
+                    <path class="mouth-path" id="mp-thinking" d="M8,7 Q14,6 20,8 Q26,7 30,9"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="walle-charge">
+              <div class="walle-charge-bar"></div>
+              <div class="walle-charge-bar"></div>
+              <div class="walle-charge-bar"></div>
+            </div>
+          </div>
+          <div class="walle-tracks">
+            <div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div>
+            <div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="robot-shadow"></div>
+    </div>
+    <div class="mood-label">💭 Pensif</div>
   </div>
 
 </div>
+<p class="tap-hint">👆 Tape sur un robot pour l'animer</p>
 <script>
-function tap(el){
-  el.classList.add('bounce');
-  setTimeout(()=>el.classList.remove('bounce'),450);
+const MOUTHS = {
+  neutral:   "M8,7 Q19,7 30,7",
+  happy:     "M4,10 Q11,3 19,3 Q27,3 34,10",
+  excited:   "M3,11 Q10,2 19,2 Q28,2 35,11",
+  curious:   "M6,8 Q14,5 22,7 Q28,9 32,6",
+  proud:     "M7,5 Q13,2 19,3 Q25,4 31,5",
+  sleeping:  "M10,8 Q19,9 28,8",
+  sad:       "M5,5 Q12,10 19,11 Q26,10 33,5",
+  surprised: "M13,4 Q19,13 25,4",
+  thinking:  "M8,7 Q14,6 20,8 Q26,7 30,9"
+};
+// Init all mouths
+Object.keys(MOUTHS).forEach(m => {
+  const el = document.getElementById('mp-' + m);
+  if(el) el.setAttribute('d', MOUTHS[m]);
+});
+// Blink all
+setInterval(()=>{
+  document.querySelectorAll('.walle-eyelid').forEach(el=>{
+    el.style.height='100%';
+    setTimeout(()=>el.style.height='0',130);
+  });
+}, 4000 + Math.random()*1500);
+
+function tap(mood){
+  const r = document.getElementById('r-' + mood);
+  if(!r) return;
+  r.classList.remove('bounce','celebrate');
+  void r.offsetWidth;
+  const anim = ['happy','excited'].includes(mood) ? 'celebrate' : 'bounce';
+  r.classList.add(anim);
+  setTimeout(()=>r.classList.remove(anim), 800);
 }
 </script>
-</body></html>
+</body>
+</html>
