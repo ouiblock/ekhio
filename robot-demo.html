@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ekhio Robot — Wall-E Style</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Fredoka+One&display=swap" rel="stylesheet">
+  <style>
+    :root { --accent: #FFB800; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:linear-gradient(135deg,#0F0A1E,#1A0A3E); min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:32px; padding:32px; font-family:'Nunito',sans-serif; }
+    h1 { font-family:'Fredoka One',cursive; color:#FFB800; font-size:28px; }
+    .moods { display:flex; flex-wrap:wrap; gap:32px; justify-content:center; }
+    .mood-card { display:flex; flex-direction:column; align-items:center; gap:12px; }
+    .mood-label { font-size:12px; font-weight:800; color:rgba(255,255,255,.4); letter-spacing:1px; text-transform:uppercase; }
+    
+/* ============================================================
+   EKHIO ROBOT — Wall-E style, CSS pur
+   Corps compact + chenilles + yeux binoculaires sur tiges
+   + bras articulés + antenne + tous les états émotionnels
+   ============================================================ */
+
+.robot-scene {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 180px;
+  position: relative;
+}
+
+/* ---- FLOAT ---- */
+.robot-float {
+  animation: walle-float 3.8s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+@keyframes walle-float {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  30%      { transform: translateY(-8px) rotate(-1.5deg); }
+  70%      { transform: translateY(-5px) rotate(1deg); }
+}
+
+/* ---- WRAP ---- */
+.walle-wrap {
+  position: relative;
+  width: 120px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ---- CHENILLES ---- */
+.walle-tracks {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+.walle-track {
+  width: 44px;
+  height: 14px;
+  background: linear-gradient(180deg, #3A3A3A 0%, #222 50%, #3A3A3A 100%);
+  border-radius: 7px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 3px 8px rgba(0,0,0,.5);
+}
+.walle-track::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 0;
+  width: 200%; height: 8px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255,255,255,.1) 0px,
+    rgba(255,255,255,.1) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  animation: track-roll 1.2s linear infinite;
+}
+@keyframes track-roll { from{left:0} to{left:-50%} }
+
+/* ---- CORPS ---- */
+.walle-body {
+  width: 80px;
+  height: 68px;
+  background: linear-gradient(160deg, #3A2E10 0%, #2A2008 60%, #1E1605 100%);
+  border-radius: 14px 14px 10px 10px;
+  margin: 0 auto;
+  position: relative;
+  box-shadow:
+    0 6px 24px rgba(0,0,0,.5),
+    inset 0 1px 0 rgba(255,255,255,.08),
+    inset 0 -2px 0 rgba(0,0,0,.3);
+  border: 1.5px solid rgba(255,184,0,.15);
+}
+
+/* Plaque solaire sur le corps */
+.walle-solar {
+  position: absolute;
+  top: 10px; left: 50%; transform: translateX(-50%);
+  width: 48px; height: 22px;
+  background: linear-gradient(135deg, #1a3a5c 0%, #0d2240 50%, #1a3a5c 100%);
+  border-radius: 4px;
+  border: 1px solid rgba(0,100,200,.3);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 1px;
+  padding: 2px;
+}
+.walle-solar-cell {
+  background: rgba(0,150,255,.2);
+  border-radius: 1px;
+}
+.walle-solar-cell:nth-child(odd) { background: rgba(0,100,200,.3); }
+
+/* Poignée/détail latéral */
+.walle-body::before {
+  content: 'E';
+  position: absolute;
+  bottom: 8px; left: 50%; transform: translateX(-50%);
+  font-family: 'Fredoka One', cursive;
+  font-size: 16px;
+  color: rgba(255,184,0,.4);
+  letter-spacing: 1px;
+}
+
+/* Indicateur charge */
+.walle-charge {
+  position: absolute;
+  bottom: 7px; right: 8px;
+  display: flex; gap: 2px; align-items: flex-end;
+}
+.walle-charge-bar {
+  width: 3px; border-radius: 1px;
+  background: var(--accent, #FFB800);
+  opacity: .5;
+}
+.walle-charge-bar:nth-child(1) { height: 4px; }
+.walle-charge-bar:nth-child(2) { height: 6px; }
+.walle-charge-bar:nth-child(3) { height: 8px; opacity:.8; }
+
+/* ---- BRAS ---- */
+.walle-arms {
+  position: absolute;
+  top: 18px;
+  left: -14px;
+  right: -14px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+.walle-arm {
+  width: 11px; height: 30px;
+  background: linear-gradient(180deg, #3A2E10, #2A2008);
+  border-radius: 4px 4px 6px 6px;
+  border: 1px solid rgba(255,184,0,.12);
+  position: relative;
+  transform-origin: top center;
+  transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+}
+.walle-arm.left { transform: rotate(-15deg); }
+.walle-arm.right { transform: rotate(15deg); }
+/* Pince */
+.walle-arm::after {
+  content: '';
+  position: absolute;
+  bottom: -5px; left: 50%; transform: translateX(-50%);
+  width: 9px; height: 6px;
+  background: #3A2E10;
+  border-radius: 0 0 4px 4px;
+  border: 1px solid rgba(255,184,0,.15);
+}
+
+/* ---- TIGES YEUX ---- */
+.walle-neck {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  position: relative;
+  z-index: 2;
+  transform-origin: bottom center;
+  transition: transform .5s cubic-bezier(.34,1.56,.64,1);
+}
+.walle-stem {
+  width: 5px; height: 22px;
+  background: linear-gradient(180deg, #4A3A18 0%, #2A2008 100%);
+  border-radius: 2px;
+  position: relative;
+  transition: height .4s ease, transform .4s ease;
+}
+/* Articulation */
+.walle-stem::before {
+  content: '';
+  position: absolute;
+  top: 8px; left: 50%; transform: translateX(-50%);
+  width: 8px; height: 5px;
+  background: #3A2E10;
+  border-radius: 2px;
+  border: 1px solid rgba(255,184,0,.15);
+}
+
+/* ---- YEUX (binoculaires) ---- */
+.walle-eyes {
+  display: flex;
+  gap: 14px;
+  position: absolute;
+  bottom: calc(100% - 2px);
+  left: 50%; transform: translateX(-50%);
+}
+.walle-eye-unit {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+}
+.walle-eye {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1A1208, #0A0A0A);
+  border: 2.5px solid #5A4A20;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 3px 10px rgba(0,0,0,.6),
+    inset 0 -2px 4px rgba(0,0,0,.5);
+  transition: all .4s cubic-bezier(.34,1.56,.64,1);
+}
+/* Iris */
+.walle-iris {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%,
+    var(--eye-color, #00D4FF) 0%,
+    rgba(0,80,160,.8) 60%,
+    rgba(0,20,60,.9) 100%
+  );
+  box-shadow: 0 0 10px var(--eye-glow, rgba(0,212,255,.5));
+  transition: all .4s ease;
+}
+/* Pupille */
+.walle-iris::after {
+  content: '';
+  position: absolute;
+  top: 25%; left: 25%;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(0,0,0,.8);
+  transition: all .4s ease;
+}
+/* Reflet */
+.walle-eye::before {
+  content: '';
+  position: absolute;
+  top: 5px; left: 7px;
+  width: 7px; height: 5px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.6);
+  z-index: 2;
+  transition: all .3s ease;
+}
+/* Paupière */
+.walle-eyelid {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 0;
+  background: #2A1E08;
+  border-radius: 50% 50% 0 0 / 60% 60% 0 0;
+  transition: height .3s ease;
+  z-index: 3;
+}
+/* Capot oculaire */
+.walle-eye-hood {
+  width: 32px; height: 10px;
+  background: linear-gradient(180deg, #4A3818, #2A2008);
+  border-radius: 6px 6px 0 0;
+  margin-bottom: -2px;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 -2px 6px rgba(0,0,0,.4);
+  transition: transform .3s ease;
+}
+
+/* ---- MOODS ---- */
+
+/* happy — yeux grands + sourire bras levés */
+.walle-wrap.happy .walle-iris {
+  --eye-color: #FFB800;
+  --eye-glow: rgba(255,184,0,.6);
+  width: 20px; height: 20px;
+}
+.walle-wrap.happy .walle-arm.left  { transform: rotate(-40deg) translateY(-4px); }
+.walle-wrap.happy .walle-arm.right { transform: rotate(40deg) translateY(-4px); }
+.walle-wrap.happy .walle-neck      { transform: scale(1.05) translateY(-2px); }
+
+/* excited — yeux étoile + sautille */
+.walle-wrap.excited .walle-iris {
+  --eye-color: #2ECC71;
+  --eye-glow: rgba(46,204,113,.7);
+  border-radius: 20%;
+  width: 20px; height: 20px;
+}
+.walle-wrap.excited .walle-arm.left  { transform: rotate(-55deg) translateY(-6px); }
+.walle-wrap.excited .walle-arm.right { transform: rotate(55deg) translateY(-6px); }
+
+/* curious — yeux de tailles différentes + tête penchée */
+.walle-wrap.curious .walle-neck { transform: rotate(-8deg); }
+.walle-wrap.curious .walle-eye-unit:first-child .walle-iris {
+  width: 20px; height: 20px;
+}
+.walle-wrap.curious .walle-eye-unit:last-child .walle-iris {
+  width: 14px; height: 14px;
+}
+
+/* sleeping — paupières mi-closes + bras tombants */
+.walle-wrap.sleeping .walle-eyelid   { height: 60%; }
+.walle-wrap.sleeping .walle-iris     { --eye-color: #444; --eye-glow: transparent; }
+.walle-wrap.sleeping .walle-arm.left  { transform: rotate(-5deg) translateY(8px); }
+.walle-wrap.sleeping .walle-arm.right { transform: rotate(5deg) translateY(8px); }
+.walle-wrap.sleeping .walle-neck      { transform: translateY(3px); }
+
+/* proud — chest glow + bras croisés */
+.walle-wrap.proud .walle-body {
+  box-shadow: 0 0 20px rgba(255,184,0,.3), 0 6px 24px rgba(0,0,0,.5);
+}
+.walle-wrap.proud .walle-iris {
+  --eye-color: #8B5CF6;
+  --eye-glow: rgba(139,92,246,.6);
+}
+.walle-wrap.proud .walle-arm.left  { transform: rotate(20deg); }
+.walle-wrap.proud .walle-arm.right { transform: rotate(-20deg); }
+
+/* sad — yeux baissés + capots froncés */
+.walle-wrap.sad .walle-eye-hood { transform: rotate(8deg); }
+.walle-wrap.sad .walle-eye-unit:last-child .walle-eye-hood { transform: rotate(-8deg); }
+.walle-wrap.sad .walle-iris     { --eye-color: #6B9FBF; --eye-glow: rgba(100,150,200,.3); }
+.walle-wrap.sad .walle-stem     { height: 16px; }
+.walle-wrap.sad .walle-arm.left  { transform: rotate(-5deg) translateY(6px); }
+.walle-wrap.sad .walle-arm.right { transform: rotate(5deg) translateY(6px); }
+
+/* ---- ANIMATIONS ---- */
+.walle-wrap.bounce { animation: walle-bounce .45s cubic-bezier(.36,.07,.19,.97); }
+@keyframes walle-bounce {
+  0%,100% { transform: scale(1) rotate(0deg); }
+  25%      { transform: scale(1.12) rotate(-3deg); }
+  75%      { transform: scale(.95) rotate(2deg); }
+}
+.walle-wrap.celebrate { animation: walle-celebrate .7s ease-in-out; }
+@keyframes walle-celebrate {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  20%      { transform: translateY(-14px) rotate(-5deg); }
+  50%      { transform: translateY(-18px) rotate(5deg); }
+  80%      { transform: translateY(-8px) rotate(-2deg); }
+}
+
+/* Shadow under robot */
+.robot-shadow {
+  width: 70px; height: 8px;
+  background: radial-gradient(ellipse, rgba(0,0,0,.4) 0%, transparent 70%);
+  margin: 2px auto 0;
+  transition: width .3s ease, opacity .3s ease;
+}
+
+  </style>
+</head>
+<body>
+<h1>☀️ Ekhio — Robot Wall-E Style</h1>
+<div class="moods">
+
+  <div class="mood-card">
+    <div class="robot-scene">
+      <div class="robot-float">
+        <div class="walle-wrap neutral" id="robot-neutral" onclick="tap(this)">
+          <div class="walle-neck">
+            <div class="walle-stem"></div>
+            <div class="walle-eyes">
+              <div class="walle-eye-unit">
+                <div class="walle-eye-hood"></div>
+                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+              </div>
+              <div class="walle-eye-unit">
+                <div class="walle-eye-hood"></div>
+                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+              </div>
+            </div>
+            <div class="walle-stem"></div>
+          </div>
+          <div class="walle-arms">
+            <div class="walle-arm left"></div>
+            <div class="walle-arm right"></div>
+          </div>
+          <div class="walle-body">
+            <div class="walle-solar"><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div></div>
+            <div class="walle-charge">
+              <div class="walle-charge-bar"></div>
+              <div class="walle-charge-bar"></div>
+              <div class="walle-charge-bar"></div>
+            </div>
+          </div>
+          <div class="walle-tracks">
+            <div class="walle-track"></div>
+            <div class="walle-track"></div>
+          </div>
+        </div>
+      </div>
+      <div class="robot-shadow"></div>
+    </div>
+    <div class="mood-label">neutral</div>
+  </div>
+
+  <div class="mood-card">
+    <div class="robot-scene">
+      <div class="robot-float">
+        <div class="walle-wrap happy" id="robot-happy" onclick="tap(this)">
+          <div class="walle-neck">
+            <div class="walle-stem"></div>
+            <div class="walle-eyes">
+              <div class="walle-eye-unit">
+                <div class="walle-eye-hood"></div>
+                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+              </div>
+              <div class="walle-eye-unit">
+                <div class="walle-eye-hood"></div>
+                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+              </div>
+            </div>
+            <div class="walle-stem"></div>
+          </div>
+          <div class="walle-arms">
+            <div class="walle-arm left"></div>
+            <div class="walle-arm right"></div>
+          </div>
+          <div class="walle-body">
+            <div class="walle-solar"><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div></div>
+            <div class="walle-charge">
+              <div class="walle-charge-bar"></div>
+              <div class="walle-charge-bar"></div>
+              <div class="walle-charge-bar"></div>
+            </div>
+          </div>
+          <div class="walle-tracks">
+            <div class="walle-track"></div>
+            <div class="walle-track"></div>
+          </div>
+        </div>
+      </div>
+      <div class="robot-shadow"></div>
+    </div>
+    <div class="mood-label">happy</div>
+  </div>
+
+  <div class="mood-card">
+    <div class="robot-scene">
+      <div class="robot-float">
+        <div class="walle-wrap excited" id="robot-excited" onclick="tap(this)">
+          <div class="walle-neck">
+            <div class="walle-stem"></div>
+            <div class="walle-eyes">
+              <div class="walle-eye-unit">
+                <div class="walle-eye-hood"></div>
+                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+              </div>
+              <div class="walle-eye-unit">
+                <div class="walle-eye-hood"></div>
+                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+              </div>
+            </div>
+            <div class="walle-stem"></div>
+          </div>
+          <div class="walle-arms">
+            <div class="walle-arm left"></div>
+            <div class="walle-arm right"></div>
+          </div>
+          <div class="walle-body">
+            <div class="walle-solar"><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div></div>
+            <div class="walle-charge">
+              <div class="walle-charge-bar"></div>
+              <div class="walle-charge-bar"></div>
+              <div class="walle-charge-bar"></div>
+            </div>
+          </div>
+          <div class="walle-tracks">
+            <div class="walle-track"></div>
+            <div class="walle-track"></div>
+          </div>
+        </div>
+      </div>
+      <div class="robot-shadow"></div>
+    </div>
+    <div class="mood-label">excited</div>
+  </div>
+
+  <div class="mood-card">
+    <div class="robot-scene">
+      <div class="robot-float">
+        <div class="walle-wrap curious" id="robot-curious" onclick="tap(this)">
+          <div class="walle-neck">
+            <div class="walle-stem"></div>
+            <div class="walle-eyes">
+              <div class="walle-eye-unit">
+                <div class="walle-eye-hood"></div>
+                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+              </div>
+              <div class="walle-eye-unit">
+                <div class="walle-eye-hood"></div>
+                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+              </div>
+            </div>
+            <div class="walle-stem"></div>
+          </div>
+          <div class="walle-arms">
+            <div class="walle-arm left"></div>
+            <div class="walle-arm right"></div>
+          </div>
+          <div class="walle-body">
+            <div class="walle-solar"><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div></div>
+            <div class="walle-charge">
+              <div class="walle-charge-bar"></div>
+              <div class="walle-charge-bar"></div>
+              <div class="walle-charge-bar"></div>
+            </div>
+          </div>
+          <div class="walle-tracks">
+            <div class="walle-track"></div>
+            <div class="walle-track"></div>
+          </div>
+        </div>
+      </div>
+      <div class="robot-shadow"></div>
+    </div>
+    <div class="mood-label">curious</div>
+  </div>
+
+  <div class="mood-card">
+    <div class="robot-scene">
+      <div class="robot-float">
+        <div class="walle-wrap proud" id="robot-proud" onclick="tap(this)">
+          <div class="walle-neck">
+            <div class="walle-stem"></div>
+            <div class="walle-eyes">
+              <div class="walle-eye-unit">
+                <div class="walle-eye-hood"></div>
+                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+              </div>
+              <div class="walle-eye-unit">
+                <div class="walle-eye-hood"></div>
+                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+              </div>
+            </div>
+            <div class="walle-stem"></div>
+          </div>
+          <div class="walle-arms">
+            <div class="walle-arm left"></div>
+            <div class="walle-arm right"></div>
+          </div>
+          <div class="walle-body">
+            <div class="walle-solar"><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div></div>
+            <div class="walle-charge">
+              <div class="walle-charge-bar"></div>
+              <div class="walle-charge-bar"></div>
+              <div class="walle-charge-bar"></div>
+            </div>
+          </div>
+          <div class="walle-tracks">
+            <div class="walle-track"></div>
+            <div class="walle-track"></div>
+          </div>
+        </div>
+      </div>
+      <div class="robot-shadow"></div>
+    </div>
+    <div class="mood-label">proud</div>
+  </div>
+
+  <div class="mood-card">
+    <div class="robot-scene">
+      <div class="robot-float">
+        <div class="walle-wrap sleeping" id="robot-sleeping" onclick="tap(this)">
+          <div class="walle-neck">
+            <div class="walle-stem"></div>
+            <div class="walle-eyes">
+              <div class="walle-eye-unit">
+                <div class="walle-eye-hood"></div>
+                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+              </div>
+              <div class="walle-eye-unit">
+                <div class="walle-eye-hood"></div>
+                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+              </div>
+            </div>
+            <div class="walle-stem"></div>
+          </div>
+          <div class="walle-arms">
+            <div class="walle-arm left"></div>
+            <div class="walle-arm right"></div>
+          </div>
+          <div class="walle-body">
+            <div class="walle-solar"><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div></div>
+            <div class="walle-charge">
+              <div class="walle-charge-bar"></div>
+              <div class="walle-charge-bar"></div>
+              <div class="walle-charge-bar"></div>
+            </div>
+          </div>
+          <div class="walle-tracks">
+            <div class="walle-track"></div>
+            <div class="walle-track"></div>
+          </div>
+        </div>
+      </div>
+      <div class="robot-shadow"></div>
+    </div>
+    <div class="mood-label">sleeping</div>
+  </div>
+
+  <div class="mood-card">
+    <div class="robot-scene">
+      <div class="robot-float">
+        <div class="walle-wrap sad" id="robot-sad" onclick="tap(this)">
+          <div class="walle-neck">
+            <div class="walle-stem"></div>
+            <div class="walle-eyes">
+              <div class="walle-eye-unit">
+                <div class="walle-eye-hood"></div>
+                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+              </div>
+              <div class="walle-eye-unit">
+                <div class="walle-eye-hood"></div>
+                <div class="walle-eye"><div class="walle-eyelid"></div><div class="walle-iris"></div></div>
+              </div>
+            </div>
+            <div class="walle-stem"></div>
+          </div>
+          <div class="walle-arms">
+            <div class="walle-arm left"></div>
+            <div class="walle-arm right"></div>
+          </div>
+          <div class="walle-body">
+            <div class="walle-solar"><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div><div class='walle-solar-cell'></div></div>
+            <div class="walle-charge">
+              <div class="walle-charge-bar"></div>
+              <div class="walle-charge-bar"></div>
+              <div class="walle-charge-bar"></div>
+            </div>
+          </div>
+          <div class="walle-tracks">
+            <div class="walle-track"></div>
+            <div class="walle-track"></div>
+          </div>
+        </div>
+      </div>
+      <div class="robot-shadow"></div>
+    </div>
+    <div class="mood-label">sad</div>
+  </div>
+
+</div>
+<script>
+function tap(el){
+  el.classList.add('bounce');
+  setTimeout(()=>el.classList.remove('bounce'),450);
+}
+</script>
+</body></html>
