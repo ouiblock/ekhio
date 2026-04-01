@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="fr" id="html-root">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ekhio — Licence, CGU, CGV & Données personnelles</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+  <style>
+    :root{--sun:#FFB800;--dark:#0F0A1E;--text:#1A1208;--muted:#5A4A2E;--bg:#FFF9F0;--white:#fff}
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text)}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,249,240,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,.07);padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+    .nav-logo{font-family:'Fredoka One',cursive;font-size:20px;color:var(--dark);text-decoration:none;display:flex;align-items:center;gap:6px}
+    .nav-logo em{color:var(--sun);font-style:normal}
+    .nav-back{background:var(--dark);color:#fff;border-radius:999px;padding:8px 18px;font-weight:800;font-size:13px;text-decoration:none}
+
+    .hero-legal{background:linear-gradient(135deg,#0F0A1E,#1A0A3E);padding:100px 24px 56px;text-align:center}
+    .hero-legal h1{font-family:'Fredoka One',cursive;font-size:clamp(32px,6vw,52px);color:#fff;margin-bottom:12px}
+    .hero-legal h1 em{color:var(--sun);font-style:normal}
+    .hero-legal p{font-size:15px;color:rgba(255,255,255,.55);max-width:52ch;margin:0 auto}
+
+    .toc{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;padding:32px 24px 0;max-width:900px;margin:0 auto}
+    .toc-link{background:#fff;border:2px solid #e8e0d0;border-radius:12px;padding:10px 18px;font-weight:800;font-size:13px;text-decoration:none;color:var(--muted);transition:.2s}
+    .toc-link:hover{background:var(--dark);color:#fff;border-color:var(--dark)}
+
+    .legal-body{max-width:820px;margin:0 auto;padding:48px 24px 80px}
+    .legal-section{background:#fff;border-radius:22px;padding:36px;box-shadow:0 4px 22px rgba(0,0,0,.07);margin-bottom:32px;scroll-margin-top:80px}
+    .legal-section .sec-icon{font-size:36px;margin-bottom:12px}
+    .legal-section h2{font-family:'Fredoka One',cursive;font-size:26px;color:var(--dark);margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid #F5EFE6}
+    .legal-section h3{font-family:'Fredoka One',cursive;font-size:18px;color:var(--dark);margin:22px 0 8px}
+    .legal-section h3:first-of-type{margin-top:0}
+    .legal-section p,.legal-section li{font-size:14px;color:var(--muted);line-height:1.85;margin-bottom:8px}
+    .legal-section ul{padding-left:20px;margin-bottom:12px}
+    .legal-section strong{color:var(--dark)}
+    .legal-section a{color:var(--sun);text-decoration:none}
+    .legal-section a:hover{text-decoration:underline}
+    .highlight{background:#FFF8E1;border-left:4px solid var(--sun);border-radius:0 12px 12px 0;padding:14px 18px;margin:14px 0;font-size:13.5px;color:#664d03;line-height:1.7}
+    .highlight strong{color:#856404}
+
+    .licence-box{background:var(--dark);border-radius:18px;padding:28px;margin-top:20px}
+    .licence-box pre{font-family:monospace;font-size:12px;color:rgba(255,255,255,.65);white-space:pre-wrap;line-height:1.8}
+
+    footer{background:var(--dark);color:rgba(255,255,255,.4);padding:40px 24px 28px;text-align:center}
+    .footer-logo{font-family:'Fredoka One',cursive;font-size:24px;color:#fff;margin-bottom:8px}
+    .footer-logo em{color:var(--sun);font-style:normal}
+    .lic-badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:16px 0}
+    .lic-badge{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:4px 12px;font-size:11px;font-weight:700;color:rgba(255,255,255,.4)}
+    footer p{font-size:12px;line-height:1.8}
+    footer a{color:rgba(255,255,255,.4);text-decoration:none}
+    footer a:hover{color:var(--sun)}
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">☀️ <em>Ekhio</em></a>
+  <a class="nav-back" href="index.html">← Retour à l'accueil</a>
+</nav>
+
+<div class="hero-legal">
+  <h1>Licence, CGU, CGV<br><em>& Données personnelles</em></h1>
+  <p>Documents légaux de l'application Ekhio — développée par Artean Digital, distribuée par l'association Herrichain</p>
+</div>
+
+<div class="toc">
+  <a class="toc-link" href="#mentions">📋 Mentions légales</a>
+  <a class="toc-link" href="#cgu">📄 CGU</a>
+  <a class="toc-link" href="#cgv">💳 CGV</a>
+  <a class="toc-link" href="#confidentialite">🔒 Données personnelles</a>
+  <a class="toc-link" href="#licence">⚖️ Licence open source</a>
+</div>
+
+<div class="legal-body">
+
+  <!-- MENTIONS LÉGALES -->
+  <div class="legal-section" id="mentions">
+    <div class="sec-icon">📋</div>
+    <h2>Mentions légales</h2>
+
+    <h3>Éditeur de l'application</h3>
+    <p><strong>Artean Digital</strong><br>
+    Développeur et éditeur de l'application Ekhio<br>
+    Site web : <a href="https://arteandigital.fr" target="_blank">arteandigital.fr</a><br>
+    Contact : <a href="mailto:contact@arteandigital.fr">contact@arteandigital.fr</a></p>
+
+    <h3>Distributeur</h3>
+    <p><strong>Association Herrichain</strong><br>
+    Association loi 1901 à but non lucratif<br>
+    Numéro RNA : <strong>W641015204</strong><br>
+    Siège social : Bidart, 64210, Pyrénées-Atlantiques, France<br>
+    L'association Herrichain assure la distribution gratuite de l'application Ekhio à destination des familles.</p>
+
+    <h3>Hébergement</h3>
+    <p>L'application Ekhio est une Progressive Web App (PWA) hébergée sur la plateforme <strong>Netlify, Inc.</strong>, 512 2nd Street, Suite 200, San Francisco, CA 94107, États-Unis.<br>
+    Politique de confidentialité Netlify : <a href="https://www.netlify.com/privacy/" target="_blank">netlify.com/privacy</a></p>
+
+    <h3>Code source</h3>
+    <p>Code source disponible sur GitHub : <a href="https://github.com/ouiblock/ekhio" target="_blank">github.com/ouiblock/ekhio</a></p>
+
+    <h3>Propriété intellectuelle</h3>
+    <p>L'ensemble des éléments constituant l'application Ekhio (code, design, contenus, mascotte, nom, logo) sont la propriété exclusive d'Artean Digital, sauf mention contraire. Le code source est distribué sous licence MIT avec Commons Clause — <strong>tout usage commercial est interdit sans accord écrit préalable d'Artean Digital.</strong></p>
+
+    <h3>Responsabilité</h3>
+    <p>Artean Digital et l'association Herrichain s'efforcent d'assurer l'exactitude des informations diffusées dans l'application, mais ne sauraient être tenus responsables des erreurs ou omissions, ni des conséquences de l'utilisation ou de la non-utilisation des fonctionnalités proposées.</p>
+    <p>Le contenu à caractère scientifique (neurosciences, psychologie du développement, pédopsychiatrie) est fourni à titre de vulgarisation uniquement et ne constitue en aucun cas un avis médical, psychologique ou psychiatrique.</p>
+
+    <h3>Droit applicable</h3>
+    <p>Les présentes mentions légales sont soumises au droit français. En cas de litige, les tribunaux compétents de <strong>Bayonne (64)</strong> seront seuls compétents.</p>
+  </div>
+
+  <!-- CGU -->
+  <div class="legal-section" id="cgu">
+    <div class="sec-icon">📄</div>
+    <h2>Conditions Générales d'Utilisation (CGU)</h2>
+
+    <div class="highlight"><strong>Version en vigueur :</strong> 1er avril 2026 — Artean Digital / Association Herrichain</div>
+
+    <h3>Article 1 — Objet</h3>
+    <p>Les présentes Conditions Générales d'Utilisation (CGU) définissent les modalités d'utilisation de l'application <strong>Ekhio</strong>, développée par Artean Digital et distribuée gratuitement par l'association loi 1901 Herrichain (RNA : W641015204).</p>
+
+    <h3>Article 2 — Accès et gratuité</h3>
+    <p>L'application Ekhio est accessible <strong>gratuitement</strong>, sans inscription, sans création de compte et sans abonnement. Aucun paiement n'est demandé à l'utilisateur pour accéder aux fonctionnalités de l'application.</p>
+
+    <h3>Article 3 — Nature de l'application</h3>
+    <p>Ekhio est un outil d'accompagnement familial à visée ludique et éducative. <strong>Elle ne constitue en aucun cas un dispositif médical, un logiciel de santé, un outil de diagnostic, de thérapie ou de conseil psychologique.</strong> Les contenus scientifiques sont fournis à titre informatif uniquement.</p>
+    <div class="highlight"><strong>⚠️ Avertissement :</strong> En cas de difficultés comportementales, émotionnelles, développementales ou de santé mentale chez votre enfant, consultez impérativement un médecin, pédopsychiatre, psychologue ou tout autre professionnel de santé compétent.</div>
+
+    <h3>Article 4 — Utilisation autorisée</h3>
+    <ul>
+      <li>Usage personnel et familial non-commercial</li>
+      <li>Installation sur les appareils personnels de la famille</li>
+      <li>Modification du code source pour usage personnel</li>
+      <li>Contribution au projet via GitHub</li>
+      <li>Distribution gratuite à d'autres familles sans modification de la licence</li>
+    </ul>
+
+    <h3>Article 5 — Utilisation interdite</h3>
+    <ul>
+      <li>Toute exploitation commerciale directe ou indirecte</li>
+      <li>Revente, mise à disposition payante ou intégration dans un service commercial</li>
+      <li>Suppression ou modification des mentions légales, de la licence ou des crédits</li>
+      <li>Usage à des fins de surveillance abusive, de contrôle coercitif ou de maltraitance</li>
+      <li>Utilisation contraire aux lois françaises et européennes applicables</li>
+    </ul>
+
+    <h3>Article 6 — Responsabilité</h3>
+    <p>Artean Digital et l'association Herrichain déclinent toute responsabilité concernant :</p>
+    <ul>
+      <li>Les décisions parentales prises sur la base des contenus de l'application</li>
+      <li>Les conséquences de l'utilisation ou de la non-utilisation de l'application</li>
+      <li>Les éventuels dysfonctionnements techniques, pertes de données ou interruptions de service</li>
+      <li>Tout dommage direct ou indirect résultant de l'utilisation de l'application</li>
+    </ul>
+    <p>L'utilisateur reconnaît utiliser l'application sous sa seule et entière responsabilité.</p>
+
+    <h3>Article 7 — Modifications</h3>
+    <p>Artean Digital se réserve le droit de modifier les présentes CGU à tout moment. Les modifications prennent effet dès leur publication dans l'application ou sur le site web associé.</p>
+
+    <h3>Article 8 — Droit applicable et juridiction</h3>
+    <p>Les présentes CGU sont soumises au droit français. Tout litige relatif à leur interprétation ou exécution relève de la compétence exclusive des tribunaux de <strong>Bayonne (Pyrénées-Atlantiques, France)</strong>.</p>
+  </div>
+
+  <!-- CGV -->
+  <div class="legal-section" id="cgv">
+    <div class="sec-icon">💳</div>
+    <h2>Conditions Générales de Vente (CGV)</h2>
+
+    <h3>Article 1 — Application entièrement gratuite</h3>
+    <p><strong>L'application Ekhio est entièrement et définitivement gratuite.</strong> Aucune transaction commerciale n'est réalisée dans le cadre de son utilisation. Il n'existe pas de version payante, d'abonnement, d'achat intégré (in-app purchase), de module premium, ni de monétisation d'aucune sorte à l'égard des utilisateurs finaux.</p>
+
+    <h3>Article 2 — Absence de contrat de vente</h3>
+    <p>Dans la mesure où aucune vente de produit ou de service n'est réalisée par Artean Digital ou l'association Herrichain dans le cadre de l'application Ekhio, les présentes CGV ont pour unique objet de préciser cette absence de transaction commerciale et de protéger les droits des utilisateurs.</p>
+
+    <h3>Article 3 — Dons bénévoles</h3>
+    <p>L'association Herrichain peut être soutenue par des dons bénévoles de particuliers ou d'entreprises. Ces dons sont <strong>entièrement volontaires</strong>, ne donnent accès à aucune fonctionnalité supplémentaire, et sont soumis aux règles fiscales et légales applicables aux associations loi 1901 françaises.</p>
+
+    <h3>Article 4 — Licence commerciale</h3>
+    <p>Toute utilisation commerciale du code source d'Ekhio requiert l'obtention préalable d'une <strong>licence commerciale spécifique</strong> auprès d'Artean Digital.</p>
+    <p>Pour toute demande de licence commerciale : <a href="mailto:contact@arteandigital.fr">contact@arteandigital.fr</a></p>
+
+    <h3>Article 5 — Droit applicable</h3>
+    <p>Les présentes CGV sont soumises au droit français. Tout litige relève de la compétence exclusive des tribunaux de Bayonne (64).</p>
+  </div>
+
+  <!-- DONNÉES PERSONNELLES -->
+  <div class="legal-section" id="confidentialite">
+    <div class="sec-icon">🔒</div>
+    <h2>Données personnelles & RGPD</h2>
+
+    <div class="highlight"><strong>Principe fondamental : Ekhio ne collecte, ne transmet et ne stocke aucune donnée personnelle sur des serveurs distants.</strong> Il n'existe aucune base de données utilisateurs, aucun compte, aucun identifiant, aucun mot de passe.</div>
+
+    <h3>Stockage local exclusif (localStorage)</h3>
+    <p>Toutes les données de l'application (prénom de l'enfant, score d'étoiles, comportements, historique de récompenses, paramètres) sont stockées <strong>exclusivement sur votre appareil</strong> via le mécanisme <code>localStorage</code> du navigateur. Ces données ne quittent jamais votre appareil et sont inaccessibles à Artean Digital, Herrichain ou à tout tiers.</p>
+
+    <h3>Cookies et localStorage</h3>
+    <p>L'application utilise le <code>localStorage</code> du navigateur — techniquement assimilable à un cookie fonctionnel au sens de la directive ePrivacy — <strong>uniquement pour mémoriser les préférences et la progression de l'enfant</strong> entre les sessions.</p>
+    <p>Conformément aux recommandations de la CNIL, ces données étant strictement nécessaires au fonctionnement de l'application, elles ne nécessitent pas de consentement explicite. Aucun cookie tiers, publicitaire ou de tracking n'est utilisé.</p>
+    <p>Vous pouvez effacer ces données à tout moment via la fonction "Remettre à zéro" de l'application, ou en effaçant les données de navigation de votre navigateur.</p>
+
+    <h3>Protection des données relatives aux mineurs</h3>
+    <p>Dans le respect de la <strong>loi n°2024-120 du 19 février 2024</strong> relative au droit à l'image des enfants et du RGPD (art. 8 et considérant 38), aucune donnée relative à des mineurs n'est collectée, transmise ou traitée par nos soins. Le prénom saisi dans l'application reste exclusivement sur l'appareil de la famille.</p>
+
+    <h3>Hébergement et données techniques</h3>
+    <p>L'application est hébergée sur <strong>Netlify</strong>. Netlify peut collecter des données techniques anonymes (logs de connexion, adresse IP transitoire) dans le cadre normal du service d'hébergement. Ces données sont soumises à la politique de confidentialité de Netlify et sont hors du contrôle d'Artean Digital : <a href="https://www.netlify.com/privacy/" target="_blank">netlify.com/privacy</a></p>
+
+    <h3>Vos droits (RGPD)</h3>
+    <p>Conformément au Règlement Général sur la Protection des Données (RGPD — UE 2016/679), vous disposez des droits suivants : accès, rectification, suppression, portabilité, limitation et opposition au traitement de vos données.</p>
+    <p>Dans la mesure où <strong>aucune donnée personnelle n'est collectée</strong> par Artean Digital ou Herrichain, ces droits s'exercent directement sur votre appareil via les fonctionnalités de l'application ou les paramètres de votre navigateur.</p>
+
+    <h3>Responsable de traitement</h3>
+    <p>Artean Digital — <a href="mailto:contact@arteandigital.fr">contact@arteandigital.fr</a></p>
+    <p>Aucun Délégué à la Protection des Données (DPO) n'est requis au vu de l'absence de traitement de données personnelles.</p>
+
+    <h3>Date de mise à jour</h3>
+    <p>1er avril 2026</p>
+  </div>
+
+  <!-- LICENCE -->
+  <div class="legal-section" id="licence">
+    <div class="sec-icon">⚖️</div>
+    <h2>Licence open source</h2>
+
+    <p>Ekhio est distribuée sous <strong>licence MIT assortie de la Commons Clause version 1.0</strong>. Cette combinaison permet la libre utilisation personnelle tout en interdisant toute exploitation commerciale sans accord préalable.</p>
+
+    <h3>Ce que vous pouvez faire ✅</h3>
+    <ul>
+      <li>Utiliser l'application gratuitement pour votre famille</li>
+      <li>Télécharger, modifier et adapter le code source pour un usage personnel</li>
+      <li>Forker le projet sur GitHub</li>
+      <li>Contribuer au projet (pull requests bienvenues)</li>
+      <li>Redistribuer gratuitement sans modifier la licence ni supprimer les crédits</li>
+    </ul>
+
+    <h3>Ce qui est interdit ❌</h3>
+    <ul>
+      <li>Vendre l'application ou un service basé sur son code</li>
+      <li>Intégrer le code dans un produit ou service commercial</li>
+      <li>Proposer un SaaS ou hébergement payant basé sur Ekhio</li>
+      <li>Supprimer ou modifier les mentions de licence et de copyright</li>
+    </ul>
+
+    <h3>Licence commerciale</h3>
+    <p>Pour toute utilisation commerciale, contactez : <a href="mailto:contact@arteandigital.fr">contact@arteandigital.fr</a></p>
+
+    <h3>Texte intégral de la licence</h3>
+    <div class="licence-box">
+      <pre>MIT License + Commons Clause
+
+Copyright (c) 2026 Artean Digital
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+COMMONS CLAUSE RESTRICTION
+--------------------------
+Without limiting other conditions in the License, the grant of rights
+under the License will not include, and the License does not grant to
+you, the right to Sell the Software.
+
+For purposes of the foregoing, "Sell" means practicing any or all of
+the rights granted to you under the License to provide to third
+parties, for a fee or other consideration, a product or service whose
+value derives, entirely or substantially, from the functionality of
+the Software.
+
+Licensor: Artean Digital — contact@arteandigital.fr
+Software: Ekhio — https://github.com/ouiblock/ekhio
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY.</pre>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-logo">☀️ <em>Ekhio</em></div>
+  <p>Développée par <a href="https://arteandigital.fr" target="_blank">Artean Digital</a> · Distribuée par l'association <strong style="color:rgba(255,255,255,.6)">Herrichain</strong> (RNA : W641015204) · Bidart 64210, France</p>
+  <div class="lic-badges">
+    <span class="lic-badge">📄 MIT + Commons Clause</span>
+    <span class="lic-badge">🚫 Usage commercial interdit</span>
+    <span class="lic-badge">✅ Fork personnel autorisé</span>
+    <span class="lic-badge">© 2026 Artean Digital</span>
+  </div>
+  <p style="font-size:11px;color:rgba(255,255,255,.2);margin-top:10px">⚠️ Application à visée ludique uniquement — Ne constitue pas un avis médical ou psychologique</p>
+</footer>
+
+</body>
+</html>
