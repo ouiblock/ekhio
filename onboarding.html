@@ -1,478 +1,391 @@
 <!DOCTYPE html>
-<html lang="fr" id="html-root">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Ekhio — Bienvenue</title>
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Ekhio — Onboarding</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="robot.css">
   <style>
     :root {
-      --sun:#FFB800; --sun-d:#E8A000; --dark:#0F0A1E; --dark2:#1A1030;
-      --green:#2ECC71; --red:#E8344A; --cyan:#00D4FF; --purple:#8B5CF6;
-      --white:#fff; --text:#1A1208; --muted:#6B5B3E;
+      --bg: #0F0A1E;
+      --surface: #1A1030;
+      --text: #FFF;
+      --accent: #FFB800;
+      --robot-accent: #FFB800;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 0; font-family: 'Nunito', sans-serif;
+      background: var(--bg); color: var(--text);
+      display: flex; flex-direction: column; min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body.dark {
+      --surface: #1A1030;
+      --text: #FFF;
       --accent: #FFB800;
     }
-    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-    html,body { height:100%; overflow:hidden; }
-    body {
-      font-family:'Nunito',sans-serif;
-      background: linear-gradient(160deg, #0F0A1E 0%, #1A0A3E 60%, #0A1A2E 100%);
-      color:#fff;
-      display:flex; align-items:center; justify-content:center;
+
+    #stars-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    
+    .ob-container {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 480px; margin: 0 auto;
+      flex: 1; display: flex; flex-direction: column;
+      padding: 24px;
     }
 
-    /* ===== STARS BG ===== */
-    #stars { position:fixed; inset:0; pointer-events:none; z-index:0; }
+    /* Top Progress */
+    .ob-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
+    .logo { font-family: 'Fredoka One', cursive; font-size: 20px; color: var(--accent); }
+    .progress-dots { display: flex; gap: 8px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: 0.3s; }
+    .dot.active { background: var(--accent); transform: scale(1.2); }
+    .dot.done { background: rgba(255,255,255,0.6); }
 
-    /* ===== MAIN WRAP ===== */
-    .ob-wrap {
-      position:relative; z-index:1;
-      width:100%; max-width:420px;
-      min-height:100vh;
-      display:flex; flex-direction:column;
-      padding:24px 20px 32px;
+    /* Scene: Robot Area */
+    .robot-area {
+      flex-shrink: 0; display: flex; justify-content: center; align-items: flex-end;
+      height: 220px; position:relative; margin-bottom: 20px;
     }
 
-    /* ===== TOP BAR ===== */
-    .ob-topbar {
-      display:flex; align-items:center; justify-content:space-between;
-      margin-bottom:8px;
+    /* Bubble */
+    .bubble {
+      position: absolute; top: -10px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: #FFF; color: #1A1208; padding: 12px 18px; border-radius: 18px;
+      font-weight: 800; font-size: 15px; text-align: center; width:max-content; max-width: 280px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3); opacity: 0; transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 10; pointer-events: none;
     }
-    .ob-logo { font-family:'Fredoka One',cursive; font-size:18px; color:var(--sun); }
-    .lang-pills { display:flex; gap:5px; }
-    .lang-pill {
-      background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12);
-      border-radius:999px; padding:4px 10px; font-size:11px; font-weight:800;
-      color:rgba(255,255,255,.5); cursor:pointer; transition:.2s;
+    .bubble::after {
+      content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+      border-width: 8px 8px 0; border-style: solid; border-color: #FFF transparent transparent transparent;
     }
-    .lang-pill.active { background:var(--sun); color:#000; border-color:var(--sun); }
+    .bubble.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* ===== PROGRESS ===== */
-    .ob-progress {
-      display:flex; gap:6px; justify-content:center;
-      margin-bottom:20px;
+    /* Cards content */
+    .step-content {
+      flex: 1; display: none; flex-direction: column;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px; padding: 24px; box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+      animation: slideIn 0.4s ease forwards;
     }
-    .ob-dot {
-      width:8px; height:8px; border-radius:50%;
-      background:rgba(255,255,255,.15); transition:.4s;
+    .step-content.active { display: flex; }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    .step-title { font-family: 'Fredoka One', cursive; font-size: 24px; margin-bottom: 12px; text-align: center; }
+    .step-desc { font-size: 14px; color: rgba(255,255,255,0.6); text-align: center; margin-bottom: 24px; line-height: 1.6; }
+
+    /* Forms */
+    .ob-input {
+      width: 100%; padding: 16px; background: rgba(0,0,0,0.2); border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 16px; color: #FFF; font-family: 'Fredoka One', cursive; font-size: 20px; text-align: center;
+      transition: border-color 0.2s; outline: none; margin-bottom: 24px;
     }
-    .ob-dot.active { background:var(--accent); transform:scale(1.3); }
-    .ob-dot.done { background:rgba(255,255,255,.4); }
+    .ob-input:focus { border-color: var(--accent); }
 
+    /* Age Slider */
+    .age-display { font-family: 'Fredoka One', cursive; font-size: 42px; text-align: center; color: var(--accent); margin-bottom: 16px; transition: color 0.3s;}
+    .range-wrap { position: relative; width: 100%; margin-bottom: 24px; }
+    input[type=range] {
+      -webkit-appearance: none; appearance: none; width: 100%; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.2); outline: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none; width: 28px; height: 28px; border-radius: 50%;
+      background: var(--accent); cursor: pointer; border: 3px solid #FFF; box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      transition: background 0.3s;
+    }
+    input[type=range]::-moz-range-thumb {
+      appearance: none; width: 28px; height: 28px; border-radius: 50%;
+      background: var(--accent); cursor: pointer; border: 3px solid #FFF; box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      transition: background 0.3s;
+    }
 
+    /* Colors */
+    .color-grid { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+    .color-btn {
+      width: 44px; height: 44px; border-radius: 50%; border: 3px solid transparent; cursor: pointer;
+      transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .color-btn.active { border-color: #FFF; transform: scale(1.15); }
 
-/* ============================================================
-   EKHIO ROBOT — Compact binocular style
-   Corps + chenilles + yeux sur tiges + bouche LCD expressifs
-   ============================================================ */
+    /* Buttons */
+    .btn {
+      width: 100%; padding: 16px; border-radius: 999px; border: none; font-family: 'Nunito', sans-serif;
+      font-weight: 900; font-size: 16px; cursor: pointer; transition: 0.2s;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), #FF6B35); color: #0F0A1E; box-shadow: 0 6px 20px rgba(255,184,0,0.3); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,184,0,0.4); }
+    .btn:disabled { opacity: 0.5; pointer-events: none; }
+    .beh-card:active{transform:scale(0.97);}
+    .beh-card.done{opacity:0.4; pointer-events:none;}
+  </style>
+  <script>
+    /* Redirect check before rendering */
+    window.onload = function() {
+      if (localStorage.getItem('ekhio_active_profile') && !window.location.search.includes('add=1')) {
+        window.location.replace('app.html');
+      }
+    };
+  </script>
+</head>
+<body>
 
-:root {
-  --robot-accent: #FFB800;
-  --robot-eye: #00D4FF;
-}
+  <canvas id="stars-bg"></canvas>
 
-.robot-scene {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  height: 190px;
-  position: relative;
-}
+  <div class="ob-container">
+    <div class="ob-top">
+      <div class="logo">☀️ Ekhio</div>
+      <div class="progress-dots" id="dots">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
 
-/* ---- FLOAT ---- */
-.robot-float {
-  animation: r-float 3.8s ease-in-out infinite;
-  transform-origin: center bottom;
-}
-@keyframes r-float {
-  0%,100% { transform: translateY(0) rotate(0deg); }
-  30%      { transform: translateY(-9px) rotate(-1.2deg); }
-  70%      { transform: translateY(-5px) rotate(.8deg); }
-}
+    <!-- Robot Area -->
+    <div class="robot-area">
+      <div class="bubble" id="rbBubble">Salut ! Je suis Ekhio.</div>
+      <!-- Robot snippet included directly here for simplicity (can use JS to inject but hardcoding is faster) -->
+      <div class="robot-scene" style="transform: scale(0.9);">
+        <div class="robot-float" id="robot-float">
+          <div class="walle-wrap curious" id="robot">
+            <div class="walle-neck" id="robot-neck">
+              <div class="walle-stem"></div>
+              <div class="walle-eyes">
+                <div class="walle-eye-unit"><div class="walle-eye-hood"></div><div class="walle-eye"><div class="walle-eyelid" id="eyelid-l"></div><div class="walle-iris"></div><div class="walle-pupil"></div><div class="walle-eye-shine"></div></div></div>
+                <div class="walle-eye-unit"><div class="walle-eye-hood"></div><div class="walle-eye"><div class="walle-eyelid" id="eyelid-r"></div><div class="walle-iris"></div><div class="walle-pupil"></div><div class="walle-eye-shine"></div></div></div>
+              </div>
+              <div class="walle-stem"></div>
+            </div>
+            <div class="walle-arms"><div class="walle-arm left"></div><div class="walle-arm right"></div></div>
+            <div class="walle-body">
+              <div class="walle-solar">
+                <div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div>
+                <div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div>
+              </div>
+              <div class="walle-screen"><div class="walle-screen-inner"><div class="walle-mouth" id="robot-mouth"><svg viewBox="0 0 38 14"><path class="mouth-path" id="mouth-path" d="M4,7 Q19,7 34,7"/></svg></div></div></div>
+              <div class="walle-charge"><div class="walle-charge-bar"></div><div class="walle-charge-bar"></div><div class="walle-charge-bar"></div></div>
+            </div>
+            <div class="walle-tracks">
+              <div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div>
+              <div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="robot-shadow"></div>
+      </div>
+    </div>
 
-.walle-wrap {
-  position: relative;
-  width: 120px;
-  cursor: pointer;
-  user-select: none;
-}
+    <!-- STEPS -->
+    <div class="step-content active" id="step-1">
+      <h1 class="step-title">Bienvenue !</h1>
+      <p class="step-desc">Je suis Ekhio, ton nouveau compagnon pour grandir tous les jours. Ensemble, on va faire de grandes choses !</p>
+      <div style="flex:1"></div>
+      <button class="btn btn-primary" onclick="nextStep(2)">Commencer 🚀</button>
+    </div>
 
-/* ---- CHENILLES ---- */
-.walle-tracks {
-  display: flex;
-  justify-content: center;
-  gap: 5px;
-  margin-top: 3px;
-}
-.walle-track {
-  width: 46px; height: 15px;
-  background: linear-gradient(180deg, #3A3A3A 0%, #1E1E1E 50%, #3A3A3A 100%);
-  border-radius: 7px;
-  position: relative; overflow: hidden;
-  box-shadow: 0 3px 8px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06);
-}
-.walle-track::before {
-  content:'';
-  position:absolute; top:3px; left:0; right:0; bottom:3px;
-  background: repeating-linear-gradient(
-    90deg,
-    rgba(255,255,255,.08) 0px 4px,
-    transparent 4px 8px
-  );
-  animation: track-roll 1s linear infinite;
-}
-.walle-track::after {
-  content:'';
-  position:absolute; top:0; left:0; right:0; bottom:0;
-  border-radius:7px;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,.4);
-}
-@keyframes track-roll { from{background-position:0 0} to{background-position:-16px 0} }
+    <div class="step-content" id="step-2">
+      <h1 class="step-title">Comment tu t'appelles ?</h1>
+      <p class="step-desc">Pour que je puisse t'encourager personnellement.</p>
+      <input type="text" id="ob-name" class="ob-input" placeholder="Ton prénom" autocomplete="off">
+      <div style="flex:1"></div>
+      <button class="btn btn-primary" id="btn-s2" onclick="nextStep(3)" disabled>Suivant →</button>
+    </div>
 
-/* Roue avant/arrière */
-.walle-track-wheel {
-  position:absolute; top:50%; transform:translateY(-50%);
-  width:12px; height:12px; border-radius:50%;
-  background:radial-gradient(circle at 35% 35%, #555, #222);
-  box-shadow: 0 1px 3px rgba(0,0,0,.5);
-}
-.walle-track-wheel.front { right:1px; }
-.walle-track-wheel.back  { left:1px; }
+    <div class="step-content" id="step-3">
+      <h1 class="step-title">Quel âge as-tu ?</h1>
+      <p class="step-desc">Pour adapter mes défis à ta taille !</p>
+      <div class="age-display" id="age-val">5 <span style="font-size: 20px;">ans</span></div>
+      <div class="range-wrap">
+        <input type="range" id="ob-age" min="3" max="18" value="5" step="1">
+      </div>
+      <div style="flex:1"></div>
+      <button class="btn btn-primary" onclick="nextStep(4)">Suivant →</button>
+    </div>
 
-/* ---- CORPS ---- */
-.walle-body {
-  width: 84px; height: 70px;
-  background: linear-gradient(160deg, #3A2E10 0%, #251E08 55%, #1A1505 100%);
-  border-radius: 15px 15px 10px 10px;
-  margin: 0 auto;
-  position: relative;
-  box-shadow:
-    0 6px 28px rgba(0,0,0,.55),
-    inset 0 1px 0 rgba(255,255,255,.07),
-    inset 0 -2px 0 rgba(0,0,0,.3),
-    inset 2px 0 0 rgba(255,255,255,.03),
-    inset -2px 0 0 rgba(255,255,255,.03);
-  border: 1.5px solid rgba(255,184,0,.12);
-}
+    <div class="step-content" id="step-4">
+      <h1 class="step-title">Personnalise-moi !</h1>
+      <p class="step-desc">Choisis ma couleur pour me rendre unique.</p>
+      <div class="color-grid" id="color-grid">
+        <div class="color-btn active" style="background:#FFB800" data-color="#FFB800"></div>
+        <div class="color-btn" style="background:#2ECC71" data-color="#2ECC71"></div>
+        <div class="color-btn" style="background:#00D4FF" data-color="#00D4FF"></div>
+        <div class="color-btn" style="background:#8B5CF6" data-color="#8B5CF6"></div>
+        <div class="color-btn" style="background:#E8344A" data-color="#E8344A"></div>
+      </div>
+      <div style="flex:1"></div>
+      <button class="btn btn-primary" onclick="finishOnboarding()">C'est parti ! 🎉</button>
+    </div>
 
-/* Panneau solaire */
-.walle-solar {
-  position:absolute; top:9px; left:50%; transform:translateX(-50%);
-  width:50px; height:24px;
-  background:linear-gradient(135deg,#1a3a5c,#0d2240,#1a3a5c);
-  border-radius:5px;
-  border:1px solid rgba(0,100,200,.25);
-  display:grid; grid-template-columns:repeat(4,1fr); gap:1.5px; padding:2px;
-}
-.walle-solar-cell {
-  border-radius:1px;
-  background: rgba(0,140,255,.18);
-  box-shadow: inset 0 0 2px rgba(0,100,200,.2);
-}
-.walle-solar-cell:nth-child(odd) { background:rgba(0,80,180,.28); }
+  </div>
 
-/* Écran LCD bouche — key feature */
-.walle-screen {
-  position:absolute;
-  bottom:10px; left:50%; transform:translateX(-50%);
-  width:52px; height:20px;
-  background:#050D05;
-  border-radius:5px;
-  border:1.5px solid rgba(0,255,80,.15);
-  box-shadow:
-    0 0 8px rgba(0,255,80,.08),
-    inset 0 0 4px rgba(0,0,0,.8);
-  overflow:hidden;
-  display:flex; align-items:center; justify-content:center;
-}
-.walle-screen-inner {
-  position:relative;
-  width:100%; height:100%;
-  display:flex; align-items:center; justify-content:center;
-}
+  <script src="robot.js"></script>
+  <script>
+    // Stars Background
+    const canvas = document.getElementById('stars-bg');
+    const ctx = canvas.getContext('2d');
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.addEventListener('resize', resize);
+    resize();
+    const stars = Array.from({length: 80}, () => ({
+      x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+      r: Math.random() * 1.5, p: Math.random() * Math.PI * 2, v: 0.02 + Math.random() * 0.03
+    }));
+    function drawStars() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      stars.forEach(s => {
+        s.p += s.v;
+        ctx.fillStyle = `rgba(255,255,255,${0.2 + Math.sin(s.p)*0.4})`;
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
+      });
+      requestAnimationFrame(drawStars);
+    }
+    drawStars();
 
-/* Bouche SVG inline via clip-path */
-.walle-mouth {
-  width:38px; height:14px;
-  position:relative;
-  transition: all .45s cubic-bezier(.34,1.2,.64,1);
-}
-.walle-mouth svg {
-  width:100%; height:100%;
-  overflow:visible;
-}
-.mouth-path {
-  fill: none;
-  stroke: #00FF50;
-  stroke-width: 2.5;
-  stroke-linecap: round;
-  filter: drop-shadow(0 0 3px rgba(0,255,80,.8));
-  transition: d .45s cubic-bezier(.34,1.2,.64,1);
-}
-/* Scan line */
-.walle-screen::after {
-  content:'';
-  position:absolute; top:0; left:0; right:0;
-  height:40%;
-  background:linear-gradient(180deg, rgba(0,255,80,.04) 0%, transparent 100%);
-  pointer-events:none;
-  animation: scan .08s steps(1) infinite;
-}
-@keyframes scan {
-  0%{top:0} 50%{top:60%} 100%{top:0}
-}
+    // Data collection
+    let OB = { name: '', age: 5, color: '#FFB800' };
 
-/* Indicateur de charge */
-.walle-charge {
-  position:absolute; bottom:8px; right:8px;
-  display:flex; gap:2px; align-items:flex-end;
-}
-.walle-charge-bar {
-  width:3px; border-radius:1px;
-  background:var(--robot-accent); opacity:.5;
-  transition: opacity .3s;
-}
-.walle-charge-bar:nth-child(1){height:4px;}
-.walle-charge-bar:nth-child(2){height:6px;}
-.walle-charge-bar:nth-child(3){height:8px; opacity:.8;}
+    // Dark Mode Detection
+    if(localStorage.getItem('ekhio_dark_mode') === 'true') {
+      document.body.classList.add('dark');
+    }
 
-/* ---- BRAS ---- */
-.walle-arms {
-  position:absolute; top:14px; left:-16px; right:-16px;
-  display:flex; justify-content:space-between; pointer-events:none;
-}
-.walle-arm {
-  width:12px; height:32px;
-  background:linear-gradient(180deg,#3A2E10,#1E1505);
-  border-radius:5px 5px 7px 7px;
-  border:1.5px solid rgba(255,184,0,.1);
-  position:relative;
-  transform-origin:top center;
-  transition:transform .5s cubic-bezier(.34,1.56,.64,1);
-  box-shadow:2px 2px 6px rgba(0,0,0,.3);
-}
-.walle-arm.left  { transform: rotate(-18deg); }
-.walle-arm.right { transform: rotate(18deg); }
-/* Pince */
-.walle-arm::after {
-  content:'';
-  position:absolute; bottom:-6px; left:50%; transform:translateX(-50%);
-  width:10px; height:7px;
-  background:linear-gradient(180deg,#3A2E10,#1A1205);
-  border-radius:0 0 5px 5px;
-  border:1px solid rgba(255,184,0,.12);
-}
-/* Articulation milieu bras */
-.walle-arm::before {
-  content:'';
-  position:absolute; top:11px; left:50%; transform:translateX(-50%);
-  width:6px; height:4px;
-  background:#1A1505;
-  border-radius:2px;
-  border:1px solid rgba(255,184,0,.08);
-}
+    // Logic
+    const nameInput = document.getElementById('ob-name');
+    const btnS2 = document.getElementById('btn-s2');
+    nameInput.addEventListener('input', e => {
+      OB.name = e.target.value.trim();
+      btnS2.disabled = OB.name.length < 2;
+      speak(`Enchanté ${OB.name} !`);
+      if(OB.name.length > 2) Robot.set('happy');
+    });
 
-/* ---- TIGES OCULAIRES ---- */
-.walle-neck {
-  display:flex; justify-content:center; gap:20px;
-  position:relative; z-index:2;
-  transform-origin:bottom center;
-  transition:transform .5s cubic-bezier(.34,1.56,.64,1);
-}
-.walle-stem {
-  width:6px; height:24px;
-  background:linear-gradient(180deg,#4A3A18,#2A2008);
-  border-radius:3px;
-  position:relative;
-  transition:height .4s ease, transform .4s ease;
-  box-shadow:1px 1px 4px rgba(0,0,0,.4);
-}
-.walle-stem::before {
-  content:'';
-  position:absolute; top:9px; left:50%; transform:translateX(-50%);
-  width:9px; height:5px;
-  background:#2A1E08;
-  border-radius:2px;
-  border:1px solid rgba(255,184,0,.12);
-}
+    // Apply color theme to CSS variables
+    function applyRobotTheme(color) {
+      const root = document.documentElement;
+      root.style.setProperty('--robot-accent', color);
+      
+      // Calculate darker variants for body/shadows
+      const rgb = hexToRgb(color);
+      if (rgb) {
+        root.style.setProperty('--robot-accent-rgb', `${rgb.r},${rgb.g},${rgb.b}`);
+        const body = shadeColor(color, -60);
+        const dark = shadeColor(color, -80);
+        root.style.setProperty('--robot-body', body);
+        root.style.setProperty('--robot-dark', dark);
+      }
+    }
 
-/* ---- YEUX ---- */
-.walle-eyes {
-  display:flex; gap:16px;
-  position:absolute;
-  bottom:calc(100% - 2px);
-  left:50%; transform:translateX(-50%);
-}
-.walle-eye-unit {
-  display:flex; flex-direction:column; align-items:center;
-  transition:transform .4s cubic-bezier(.34,1.56,.64,1);
-}
-.walle-eye-hood {
-  width:34px; height:11px;
-  background:linear-gradient(180deg,#4A3818,#2A2008);
-  border-radius:7px 7px 0 0;
-  position:relative; z-index:1;
-  box-shadow:0 -2px 6px rgba(0,0,0,.4);
-  transition:transform .35s ease;
-}
-.walle-eye {
-  width:30px; height:30px; border-radius:50%;
-  background:linear-gradient(135deg,#1A1208,#0A0800);
-  border:2.5px solid #5A4828;
-  position:relative; overflow:hidden;
-  box-shadow:0 4px 12px rgba(0,0,0,.7), inset 0 -2px 4px rgba(0,0,0,.5);
-  transition:all .4s cubic-bezier(.34,1.56,.64,1);
-}
-/* Iris */
-.walle-iris {
-  position:absolute; top:50%; left:50%;
-  transform:translate(-50%,-50%);
-  width:20px; height:20px; border-radius:50%;
-  background:radial-gradient(circle at 38% 32%,
-    var(--eye-hi, #80EEFF) 0%,
-    var(--eye-mid, #00A8D4) 40%,
-    var(--eye-dark, #004060) 100%
-  );
-  box-shadow: 0 0 12px var(--eye-glow, rgba(0,212,255,.55));
-  transition:all .4s ease;
-}
-/* Pupille */
-.walle-pupil {
-  position:absolute; top:50%; left:50%;
-  transform:translate(-50%,-50%);
-  width:8px; height:8px; border-radius:50%;
-  background:rgba(0,0,0,.85);
-  transition:all .4s ease;
-  z-index:2;
-}
-/* Mini-reflet */
-.walle-eye-shine {
-  position:absolute; top:5px; left:7px;
-  width:7px; height:5px; border-radius:50%;
-  background:rgba(255,255,255,.65); z-index:3;
-}
-/* Paupière */
-.walle-eyelid {
-  position:absolute; top:0; left:0; right:0;
-  height:0;
-  background:linear-gradient(180deg,#2A1E08,#1A1208);
-  border-radius:50% 50% 0 0 / 60% 60% 0 0;
-  transition:height .35s ease; z-index:4;
-}
+    function hexToRgb(hex) {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? { r:parseInt(result[1], 16), g:parseInt(result[2], 16), b:parseInt(result[3], 16) } : null;
+    }
 
-/* ---- MOODS ---- */
+    function shadeColor(color, percent) {
+      let R = parseInt(color.substring(1,3),16);
+      let G = parseInt(color.substring(3,5),16);
+      let B = parseInt(color.substring(5,7),16);
+      R = parseInt(R * (100 + percent) / 100);
+      G = parseInt(G * (100 + percent) / 100);
+      B = parseInt(B * (100 + percent) / 100);
+      R = (R<255)?R:255; G = (G<255)?G:255; B = (B<255)?B:255;
+      const RR = ((R.toString(16).length==1)?"0"+R.toString(16):R.toString(16));
+      const GG = ((G.toString(16).length==1)?"0"+G.toString(16):G.toString(16));
+      const BB = ((B.toString(16).length==1)?"0"+B.toString(16):B.toString(16));
+      return "#"+RR+GG+BB;
+    }
 
-/* neutral */
-.walle-wrap.neutral { --eye-hi:#80EEFF; --eye-mid:#00A8D4; --eye-dark:#004060; --eye-glow:rgba(0,212,255,.5); }
+    const ageInput = document.getElementById('ob-age');
+    const ageVal = document.getElementById('age-val');
+    ageInput.addEventListener('input', e => {
+      OB.age = parseInt(e.target.value, 10);
+      ageVal.innerHTML = `${OB.age} <span style="font-size: 20px;">ans</span>`;
+      Robot.set('curious');
+      let ageColor = '#FFB800';
+      if(OB.age >= 7) ageColor = '#2ECC71';
+      if(OB.age >= 11) ageColor = '#00D4FF';
+      if(OB.age >= 14) ageColor = '#8B5CF6';
+      if(OB.age >= 17) ageColor = '#E8344A';
+      document.documentElement.style.setProperty('--accent', ageColor);
+      applyRobotTheme(ageColor);
+    });
 
-/* happy — or, bras levés, capots relevés */
-.walle-wrap.happy {
-  --eye-hi:#FFE066; --eye-mid:#FFB800; --eye-dark:#804000; --eye-glow:rgba(255,184,0,.7);
-}
-.walle-wrap.happy .walle-arm.left  { transform:rotate(-50deg) translateY(-5px); }
-.walle-wrap.happy .walle-arm.right { transform:rotate(50deg) translateY(-5px); }
-.walle-wrap.happy .walle-neck      { transform:scale(1.06) translateY(-3px); }
-.walle-wrap.happy .walle-eye       { border-color:#8A6820; }
-.walle-wrap.happy .walle-iris      { width:22px; height:22px; }
+    const colorGrid = document.getElementById('color-grid');
+    colorGrid.addEventListener('click', e => {
+      if(e.target.classList.contains('color-btn')) {
+        document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        OB.color = e.target.dataset.color;
+        applyRobotTheme(OB.color);
+        Robot.set('excited');
+        speak("Wouah ! J'adore cette couleur !");
+      }
+    });
 
-/* excited — vert, bras grands ouverts, tiges allongées */
-.walle-wrap.excited {
-  --eye-hi:#90FF90; --eye-mid:#2ECC71; --eye-dark:#005020; --eye-glow:rgba(46,204,113,.75);
-}
-.walle-wrap.excited .walle-arm.left  { transform:rotate(-65deg) translateY(-7px); }
-.walle-wrap.excited .walle-arm.right { transform:rotate(65deg) translateY(-7px); }
-.walle-wrap.excited .walle-stem      { height:30px; }
-.walle-wrap.excited .walle-iris      { width:22px; height:22px; border-radius:30%; }
-.walle-wrap.excited .walle-pupil     { width:6px; height:6px; }
+    // Initial theme
+    applyRobotTheme(OB.color);
 
-/* curious — tête penchée, pupilles asymétriques */
-.walle-wrap.curious .walle-neck { transform:rotate(-10deg); }
-.walle-wrap.curious .walle-eye-unit:first-child .walle-iris  { width:22px; height:22px; }
-.walle-wrap.curious .walle-eye-unit:last-child  .walle-iris  { width:14px; height:14px; }
-.walle-wrap.curious .walle-eye-unit:last-child  .walle-pupil { width:5px; height:5px; }
-.walle-wrap.curious .walle-eye-unit:first-child .walle-eye-hood { transform:rotate(-12deg); }
-.walle-wrap.curious .walle-eye-unit:last-child  .walle-eye-hood { transform:rotate(6deg); }
+    function nextStep(step) {
+      document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+      document.getElementById(`step-${step}`).classList.add('active');
+      
+      const dots = document.querySelectorAll('.dot');
+      dots.forEach((d, i) => {
+        d.className = 'dot';
+        if(i < step - 1) d.classList.add('done');
+        if(i === step - 1) d.classList.add('active');
+      });
 
-/* proud — violet, capots froncés vers l'intérieur */
-.walle-wrap.proud {
-  --eye-hi:#D0A0FF; --eye-mid:#8B5CF6; --eye-dark:#2D006A; --eye-glow:rgba(139,92,246,.7);
-}
-.walle-wrap.proud .walle-body  { box-shadow:0 0 22px rgba(139,92,246,.25), 0 6px 28px rgba(0,0,0,.55); }
-.walle-wrap.proud .walle-arm.left  { transform:rotate(22deg); }
-.walle-wrap.proud .walle-arm.right { transform:rotate(-22deg); }
-.walle-wrap.proud .walle-eye-unit:first-child .walle-eye-hood { transform:rotate(-10deg); }
-.walle-wrap.proud .walle-eye-unit:last-child  .walle-eye-hood { transform:rotate(10deg); }
-.walle-wrap.proud .walle-iris { width:22px; height:22px; }
+      if (step === 2) {
+        Robot.set('curious');
+        speak("Dis-moi ton prénom");
+        setTimeout(() => nameInput.focus(), 300);
+      } else if (step === 3) {
+        Robot.set('excited');
+        speak("Et ton âge ?");
+      } else if (step === 4) {
+        Robot.set('happy');
+        speak("Choisis ma couleur !");
+      }
+    }
 
-/* sleeping — paupières tombées, bras pendants, tiges courtes */
-.walle-wrap.sleeping .walle-eyelid  { height:75%; }
-.walle-wrap.sleeping .walle-iris    { --eye-hi:#666; --eye-mid:#333; --eye-dark:#111; --eye-glow:transparent; width:14px; height:14px; }
-.walle-wrap.sleeping .walle-arm.left  { transform:rotate(-6deg) translateY(10px); }
-.walle-wrap.sleeping .walle-arm.right { transform:rotate(6deg) translateY(10px); }
-.walle-wrap.sleeping .walle-stem    { height:14px; }
-.walle-wrap.sleeping .walle-neck    { transform:translateY(5px); }
-.walle-wrap.sleeping .walle-charge-bar { opacity:.2; }
+    function speak(text) {
+      const bubble = document.getElementById('rbBubble');
+      bubble.textContent = text;
+      bubble.classList.add('show');
+      setTimeout(() => bubble.classList.remove('show'), 3000);
+    }
 
-/* sad — bleu pâle, capots froncés externe, bras bas, tiges courtes */
-.walle-wrap.sad {
-  --eye-hi:#A0C8E0; --eye-mid:#4A80A0; --eye-dark:#0A2030; --eye-glow:rgba(80,140,180,.3);
-}
-.walle-wrap.sad .walle-eye-unit:first-child .walle-eye-hood { transform:rotate(14deg) translateX(3px); }
-.walle-wrap.sad .walle-eye-unit:last-child  .walle-eye-hood { transform:rotate(-14deg) translateX(-3px); }
-.walle-wrap.sad .walle-stem    { height:17px; }
-.walle-wrap.sad .walle-neck    { transform:translateY(3px); }
-.walle-wrap.sad .walle-arm.left  { transform:rotate(-5deg) translateY(8px); }
-.walle-wrap.sad .walle-arm.right { transform:rotate(5deg) translateY(8px); }
-.walle-wrap.sad .walle-eyelid  { height:20%; }
+    function finishOnboarding() {
+      // Save to localStorage
+      const id = 'ekhio_p_' + Date.now();
+      const newProfile = { id, name: OB.name, age: OB.age, avatar: OB.color, createdAt: new Date().toISOString() };
+      
+      let profiles = [];
+      try { profiles = JSON.parse(localStorage.getItem('ekhio_profiles') || '[]'); } catch(e){}
+      profiles.push(newProfile);
+      
+      localStorage.setItem('ekhio_profiles', JSON.stringify(profiles));
+      localStorage.setItem('ekhio_active_profile', id);
+      localStorage.setItem('ekhio_onboarding_done', 'true'); // Just in case, though profile existence is enough
+      
+      Robot.celebrate();
+      speak("C'est parti !!");
+      setTimeout(() => {
+        window.location.replace('app.html');
+      }, 1500);
+    }
 
-/* ---- MOUTH EXPRESSIONS ---- */
-/* Les paths sont mis à jour dynamiquement via JS */
-/* Mais on définit les couleurs d'écran par mood */
-.walle-wrap.happy   .mouth-path { stroke:#FFB800; filter:drop-shadow(0 0 4px rgba(255,184,0,.9)); }
-.walle-wrap.excited .mouth-path { stroke:#2ECC71; filter:drop-shadow(0 0 4px rgba(46,204,113,.9)); }
-.walle-wrap.proud   .mouth-path { stroke:#A070FF; filter:drop-shadow(0 0 4px rgba(160,112,255,.9)); }
-.walle-wrap.sleeping .mouth-path { stroke:#444; filter:none; }
-.walle-wrap.sad     .mouth-path { stroke:#4A90B8; filter:drop-shadow(0 0 2px rgba(74,144,184,.5)); }
-.walle-wrap.curious .mouth-path { stroke:#00D4FF; filter:drop-shadow(0 0 4px rgba(0,212,255,.7)); }
+    setTimeout(() => {
+      speak("Salut ! Je suis Ekhio.");
+      Robot.set('welcome'); // Triggers neutral
+      Robot.bounce(); // bounce
+    }, 1000);
 
-/* ---- ANIMATIONS ---- */
-.walle-wrap.bounce {
-  animation: r-bounce .45s cubic-bezier(.36,.07,.19,.97) !important;
-}
-@keyframes r-bounce {
-  0%,100% { transform:scale(1) rotate(0deg); }
-  25%      { transform:scale(1.13) rotate(-3.5deg); }
-  75%      { transform:scale(.94) rotate(2deg); }
-}
-.walle-wrap.celebrate {
-  animation: r-celebrate .75s ease-in-out !important;
-}
-@keyframes r-celebrate {
-  0%,100% { transform:translateY(0) rotate(0deg); }
-  15%      { transform:translateY(-16px) rotate(-6deg); }
-  40%      { transform:translateY(-22px) rotate(6deg); }
-  65%      { transform:translateY(-12px) rotate(-3deg); }
-  85%      { transform:translateY(-5px) rotate(2deg); }
-}
-.walle-wrap.shake {
-  animation: r-shake .4s ease-in-out !important;
-}
-@keyframes r-shake {
-  0%,100% { transform:translateX(0); }
-  20%      { transform:translateX(-8px); }
-  40%      { transform:translateX(8px); }
-  60%      { transform:translateX(-5px); }
-  80%      { transform:translateX(5px); }
-}
-
-/* Shadow */
-.robot-shadow {
-  width:72px; height:9px;
-  background:radial-gradient(ellipse,rgba(0,0,0,.45) 0%,transparent 70%);
-  margin:3px auto 0;
-  transition:width .4s ease, opacity .4s ease;
-}
-
-
+  </script>
+</body>
+</html>

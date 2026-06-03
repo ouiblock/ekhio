@@ -8,7 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&amp;family=Nunito:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <!-- Icons -->
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="robot.css">
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
       tailwind.config = {
@@ -83,111 +82,61 @@
       .hover-lift:hover {
         transform: translateY(-10px) scale(1.02);
       }
-      /* Mini robot inline icon */
-      .mini-robot {
-        display: inline-flex; width: 36px; height: 36px;
-        background: #FFB800; border-radius: 10px;
-        align-items: center; justify-content: center;
-        font-size: 20px; line-height: 1;
-      }
-      /* Hero robot proportional sizing */
-      .hero-robot-wrapper .robot-scene {
-        transform: scale(1) !important;
-        width: 100%; max-width: 100%;
-        aspect-ratio: 1 / 1;
-        display: flex; align-items: center; justify-content: center;
-      }
-      @media (max-width: 1024px) {
-        .hero-robot-wrapper .robot-scene { max-width: 320px; margin: 0 auto; }
-      }
-      /* Language switcher */
-      .lang-switch { display: flex; gap: 4px; align-items: center; }
-      .lang-switch button { padding: 4px 8px; border-radius: 8px; font-size: 12px; font-weight: 800; border: none; cursor: pointer; transition: 0.2s; background: transparent; color: #6B5B3E; }
-      .lang-switch button.active { background: #0F0A1E; color: #FFB800; }
-      .lang-switch button:hover { background: rgba(15,10,30,0.1); }
     </style>
-    <script src="i18n.js"></script>
 </head>
 <body class="bg-surface font-body text-midnight antialiased overflow-x-hidden">
 <!-- Barre de navigation -->
 <header class="fixed top-0 w-full z-50 glass-nav h-20">
 <nav class="flex justify-between items-center max-w-7xl mx-auto px-8 h-full">
-<a href="#" class="flex items-center gap-2 group cursor-pointer">
-<div class="w-10 h-10 bg-midnight rounded-xl flex items-center justify-center transition-transform group-hover:rotate-12 overflow-hidden">
-<span class="mini-robot" style="width:100%;height:100%;border-radius:10px;font-size:22px;">🤖</span>
+<div class="flex items-center gap-2 group cursor-pointer">
+<div class="w-10 h-10 bg-midnight rounded-xl flex items-center justify-center transition-transform group-hover:rotate-12">
+<span class="material-symbols-outlined text-amber-sun" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
 </div>
 <span class="font-headline text-2xl text-midnight tracking-tight">Ekhio</span>
-</a>
+</div>
 <div class="hidden md:flex gap-10 items-center">
-<a class="font-bold text-sm text-amber-sun border-b-2 border-amber-sun pb-1" href="#neuro" data-i18n="nav_neuro">Neurosciences</a>
-<a class="font-semibold text-sm text-slate-500 hover:text-midnight transition-colors" href="#" data-i18n="nav_psycho">Psychologie</a>
-<a class="font-semibold text-sm text-slate-500 hover:text-midnight transition-colors" href="#" data-i18n="nav_psychiatry">Psychiatrie</a>
-<a class="font-semibold text-sm text-slate-500 hover:text-midnight transition-colors" href="privacy.html" data-i18n="nav_privacy">Confidentialité</a>
+<a class="font-bold text-sm text-amber-sun border-b-2 border-amber-sun pb-1" href="#">Neurosciences</a>
+<a class="font-semibold text-sm text-slate-500 hover:text-midnight transition-colors" href="#">Psychologie</a>
+<a class="font-semibold text-sm text-slate-500 hover:text-midnight transition-colors" href="#">Psychiatrie</a>
+<a class="font-semibold text-sm text-slate-500 hover:text-midnight transition-colors" href="#">Confidentialité</a>
 </div>
-<div class="flex items-center gap-3">
-<div class="lang-switch hidden md:flex">
-  <button onclick="switchLang('fr')" id="lang-fr">FR</button>
-  <button onclick="switchLang('en')" id="lang-en">EN</button>
-  <button onclick="switchLang('es')" id="lang-es">ES</button>
-  <button onclick="switchLang('eu')" id="lang-eu">EU</button>
-</div>
-<a href="app.html" class="flex items-center bg-midnight text-white font-bold px-8 py-3 rounded-full hover:bg-slate-800 transition-all duration-300 transform hover:scale-105 active:scale-95 text-sm h-[44px]" data-i18n="nav_launch">
+<button class="bg-midnight text-white font-bold px-8 py-3 rounded-full hover:bg-slate-800 transition-all duration-300 transform hover:scale-105 active:scale-95 text-sm">
             Lancer l'application
-</a>
-</div>
+        </button>
 </nav>
 </header>
 <main class="relative">
 <!-- Hero Section -->
-<section class="relative pt-32 pb-24 md:pt-52 md:pb-40 overflow-hidden hero-gradient" id="vision">
+<section class="relative pt-32 pb-24 md:pt-52 md:pb-40 overflow-hidden hero-gradient">
 <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
 <div class="z-10 text-center lg:text-left">
 <h1 class="font-headline text-5xl md:text-8xl text-midnight leading-[1.05] mb-8 text-glow">
-                    <span data-i18n="hero_title_1">Grandir,</span> <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-midnight via-slate-700 to-amber-sun" data-i18n="hero_title_2">une étoile</span> <span data-i18n="hero_title_3">à la fois</span>
+                    Grandir, <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-midnight via-slate-700 to-amber-sun">une étoile</span> à la fois
                 </h1>
-<p class="text-xl md:text-2xl text-slate-600 mb-12 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium" data-i18n="hero_sub">
+<p class="text-xl md:text-2xl text-slate-600 mb-12 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium">
                     Le compagnon intelligent qui allie les neurosciences et la bienveillance pour guider chaque enfant vers son plein potentiel.
                 </p>
 <div class="flex flex-col sm:flex-row items-center gap-6 mb-10 justify-center lg:justify-start">
-<a href="app.html" class="flex items-center justify-center w-full sm:w-auto bg-amber-sun text-midnight font-bold px-12 py-5 rounded-full amber-glow text-xl hover:brightness-110 transition-all transform hover:scale-105 active:scale-95" data-i18n="hero_cta">
+<button class="w-full sm:w-auto bg-amber-sun text-midnight font-bold px-12 py-5 rounded-full amber-glow text-xl hover:brightness-110 transition-all transform hover:scale-105 active:scale-95">
                         Démarrer l'aventure
-</a>
+                    </button>
 </div>
 <div class="flex items-center justify-center lg:justify-start gap-4 text-sm text-slate-400 font-semibold tracking-wide uppercase">
 <span class="material-symbols-outlined text-amber-sun" style="font-variation-settings: 'FILL' 1;">verified_user</span>
-<span data-i18n="hero_badge">Accès gratuit • 100% anonyme • Confidentialité totale</span>
+<span>Accès gratuit • 100% anonyme • Confidentialité totale</span>
 </div>
 </div>
 <!-- Mascotte Robot -->
-<div class="relative flex justify-center items-center hero-robot-wrapper">
+<div class="relative flex justify-center items-center">
 <div class="absolute inset-0 bg-amber-sun/20 blur-[120px] asymmetric-shape -z-10 animate-pulse"></div>
-  <!-- ROBOT ANIMé PROPORTIONNEL -->
-  <div class="robot-scene block" style="--robot-accent: #FFB800; z-index: 10;">
-    <div class="robot-float" id="robot-float">
-      <div class="walle-wrap curious" id="robot" onclick="Robot && Robot.bounce()">
-        <div class="walle-neck" id="robot-neck">
-          <div class="walle-stem"></div>
-          <div class="walle-eyes">
-            <div class="walle-eye-unit"><div class="walle-eye-hood"></div><div class="walle-eye"><div class="walle-eyelid" id="eyelid-l"></div><div class="walle-iris"></div><div class="walle-pupil"></div><div class="walle-eye-shine"></div></div></div>
-            <div class="walle-eye-unit"><div class="walle-eye-hood"></div><div class="walle-eye"><div class="walle-eyelid" id="eyelid-r"></div><div class="walle-iris"></div><div class="walle-pupil"></div><div class="walle-eye-shine"></div></div></div>
-          </div>
-          <div class="walle-stem"></div>
-        </div>
-        <div class="walle-arms"><div class="walle-arm left"></div><div class="walle-arm right"></div></div>
-        <div class="walle-body">
-          <div class="walle-solar"><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div><div class="walle-solar-cell"></div></div>
-          <div class="walle-screen"><div class="walle-screen-inner"><div class="walle-mouth" id="robot-mouth"><svg viewBox="0 0 38 14"><path class="mouth-path" id="mouth-path" d="M4,7 Q19,7 34,7"/></svg></div></div></div>
-          <div class="walle-charge"><div class="walle-charge-bar"></div><div class="walle-charge-bar"></div><div class="walle-charge-bar"></div></div>
-        </div>
-        <div class="walle-tracks"><div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div><div class="walle-track"><div class="walle-track-wheel front"></div><div class="walle-track-wheel back"></div></div></div>
-      </div>
-    </div>
-  </div>
+<div class="w-full max-w-[550px] relative transition-transform duration-1000 ease-in-out hover:scale-[1.03]">
+<img alt="Guide Robot Ekhio Amical" class="w-full h-auto drop-shadow-[0_35px_35px_rgba(0,0,0,0.15)] rounded-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhx8O0f3sGABqsKgA8E_cZrtLdNls1611esI-l2BqqVRR9KYe4oJNgcZLx1j2ht3rrFRySOz5wQH-HFuXXh-24RCxLW4XiEx03IhyQdBgoIiBhFHZYnLDnx6RwUwiFxcEyxhyNrSQKaqHI2udDJgc0JonMwWfo4qreHgRWpAt9juIy4MHmIYxFkvhsQ0hOKa4qyu1XlszB_sMtm0lAde80kYSAqEpY6a8-vBzE0-uRqqDT0ZZambIOj3JzF1vuMK-HQWaeQswnHIam"/>
+</div>
 </div>
 </div>
 </section>
 <!-- Pillars Section -->
-<section class="py-32 bg-white/30" id="neuro">
+<section class="py-32 bg-white/30">
 <div class="max-w-7xl mx-auto px-8">
 <div class="mb-20 text-center max-w-3xl mx-auto">
 <h2 class="font-headline text-4xl md:text-6xl text-midnight mb-6">L'expertise au service du lien</h2>
@@ -234,7 +183,7 @@
 <span class="text-xs font-black uppercase tracking-[0.2em] text-blue-500 mb-3 block">3 - 6 ans</span>
 <h4 class="font-headline text-2xl text-midnight mb-4">L'Éveil Magique</h4>
 <div class="overflow-hidden rounded-xl mb-6">
-<img alt="Salle de jeu" class="w-full h-40 object-cover transform hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60"/>
+<img alt="Salle de jeu" class="w-full h-40 object-cover transform hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmMQZzmw2l9WCRH67zzqteLj572o4wPJWjrbhBUJvBFnYIKOvxFKkyYzM7zN3hH2WpzCvd8uFihQGR4b6RnG_32S4teoq1rbXOzjhfKUN4wwwl7w_X5SJxe4P8oq9UwewZuqyqpYVYguZuP_5V7hg9yBi5OKWjcZBsrpaI_q1hQhZXjVJZYvAVv1A3iOXyyt1A0o5hYHaJVO9pPAl1F9Xwae2aEqt89-mvJ9lL8TMe9E3hQ2ez6e9GJzufOns7uOLq6GHqZFJ4QyrV"/>
 </div>
 <p class="text-slate-600 font-medium leading-relaxed">Exploration sensorielle et premiers pas vers l'autonomie ludique.</p>
 </div>
@@ -243,7 +192,7 @@
 <span class="text-xs font-black uppercase tracking-[0.2em] text-amber-500 mb-3 block">7 - 12 ans</span>
 <h4 class="font-headline text-2xl text-midnight mb-4">Le Petit Savant</h4>
 <div class="overflow-hidden rounded-xl mb-6">
-<img alt="Étude scientifique" class="w-full h-40 object-cover transform hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60"/>
+<img alt="Étude scientifique" class="w-full h-40 object-cover transform hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCjBRQl2gNW6f3gzPdmdFWHrUXtm0n5V0E5iOUfCbMICbMCzkP7pZ7NJUvXeKWls_4rMFtULDQ3EbLP6ZIaKVGYeRpWB5H57CmFskfqqZfuyWzHge9-aysPgBu7UuX3tHbSlcsEO5dpgQfZhbPjOF_xu46FyVJ61TqFJ67lNaGhMFouAEkq8Y0_J8rUQeyRzW4cyys6ONVbccjUaeAGlk6Jz7_2ul9yetnqzRD0wFxJlmbfz5llFwFGbFROsbwDNJLJdm72DAv2vtF"/>
 </div>
 <p class="text-slate-600 font-medium leading-relaxed">Développement de la logique, de la persévérance et des amitiés.</p>
 </div>
@@ -252,7 +201,7 @@
 <span class="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-3 block">13 - 15 ans</span>
 <h4 class="font-headline text-2xl text-white mb-4">L'Explorateur</h4>
 <div class="overflow-hidden rounded-xl mb-6 opacity-80">
-<img alt="Espace ado" class="w-full h-40 object-cover transform hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60"/>
+<img alt="Espace ado" class="w-full h-40 object-cover transform hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2EMlOQXVbbN71AFhNChh-lDJwqDQ5-9oMbHC6v4Trx5zXXha9MFgXfbI0LUJKVpmRux1FvjdxlXuIVKghO7Xh_C8o8N7AudURHLP81i0Gl31ttUlU0gTvhoNshGUXk-BfO8ES056csuqP_dTX6Ys_EMdbLLXWeQmuVfoa6sYSRYCVnZ9m6myI6O-BfULpO0m_v9vfBpKkYo9f_YmlVRsP5-yAJGSFNWxXNJR-JOPQK5L0WuFa-9qdWDC7Vt3_JTKDTvPqpq_y-QjE"/>
 </div>
 <p class="text-slate-400 font-medium leading-relaxed">Construction de l'identité et gestion des premières responsabilités.</p>
 </div>
@@ -261,7 +210,7 @@
 <span class="text-xs font-black uppercase tracking-[0.2em] text-purple-400 mb-3 block">16 - 18 ans</span>
 <h4 class="font-headline text-2xl text-white mb-4">Vers le Futur</h4>
 <div class="overflow-hidden rounded-xl mb-6 opacity-60">
-<img alt="Productivité" class="w-full h-40 object-cover transform hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60"/>
+<img alt="Productivité" class="w-full h-40 object-cover transform hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuBi0Ne2SceWmb2j7Cv1XNmGZiH_C0MEaftmbUlGPb2Yai_GbnZ9Y50BakT_XDvOadazkJo2Xk7HxjBqP_iIr1g2wEgAm9XhPdFdIMjTpdoiKUaEOgmgMyizVK3t9A9rWyMHPNjuBSO0ifzsLFgE864q_5rD7Zw0Vwcu75wt5Gdd6YJnYrOlWwOKiyhl0wWonSAvkY3QSn7XpvSwlp7CBj2AUcV2MW2zrQntwvl_aKliXMx8iDLCs0xnK1rBOKbvGeUxsUMngjkS0B"/>
 </div>
 <p class="text-slate-500 font-medium leading-relaxed">Productivité, orientation et préparation à l'envol vers l'âge adulte.</p>
 </div>
@@ -315,13 +264,13 @@
 <p class="text-sm text-slate-400 font-bold uppercase tracking-wider">Expertise validée</p>
 </div>
 <div class="bg-white/5 p-6 rounded-3xl border border-white/5 opacity-80">
-<img alt="Carte de tâche" class="w-full h-32 object-cover rounded-2xl mb-4" src="https://images.unsplash.com/photo-1584824486509-11459466a14e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60"/>
+<img alt="Carte de tâche" class="w-full h-32 object-cover rounded-2xl mb-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbsCcG_wFqeS-CJfC-rNBV6m30792otSlN-Sw2LQRAu4D8U7EYVrj0RXivvWrgRgbUmK8pGr8TwpB63MXoSgByMOX85ts2EhKk7tW3r-Q75fNdNDAb7q9l2_DH5xBT5ABZVzu1_jht-1eLDGjlqQnhfxe41RV-jXwkfoojo1aaPyqoQXtw45xrOav2Sj1p1zJ2vgEJysRNqh18H_b1fa01LS-2r8MavPtSjW8054ETu99hG4woafXhBsF3mMRe2QcEhWQwdTPWg0GF"/>
 <h5 class="font-headline text-base">Défi : Rangement Zen</h5>
 </div>
 </div>
 <div class="pt-16 space-y-6">
 <div class="bg-white/5 p-6 rounded-3xl border border-white/5 opacity-80">
-<div class="w-full h-32 bg-gradient-to-br from-amber-sun/20 to-white/5 rounded-2xl mb-4 flex items-center justify-center text-6xl">🤖</div>
+<img alt="Insigne" class="w-full h-32 object-cover rounded-2xl mb-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAv6aEVkwxSKNgd-i4r-U7_Gpykr5ROmf9f8nChDqZL9O2qKZ39DBuYY2Bs4PWV9C3gQOvXRs13RQvLsJE7WuZKB6pQVveQMfBm1g1aNEkLygK8NyJAPo18xLtRL3KMsmy_0PviXjb_w6JFHd5QvwAJA2yKfzZEGaHZKFWLjEyZTRkIBQyy_o-Jk9KIVS6ThZB__XtYhExCI2Ml4VLczhVKLPdBSxlR1855DPGTMlCNjQWDV5FTaJvbkG28c3LszZUxT9Mxth03sizx"/>
 <h5 class="font-headline text-base">Insigne Empathie</h5>
 </div>
 <div class="bg-amber-sun p-8 rounded-3xl text-midnight shadow-[0_20px_50px_rgba(255,184,0,0.3)] hover:scale-105 transition-transform cursor-default">
@@ -342,9 +291,9 @@
 <p class="text-slate-500 text-xl mb-16 leading-relaxed max-w-2xl mx-auto font-medium">Ekhio est une application web progressive. Pas de magasin d'applications, pas de traçage, pas de nuage. Vos données sont vôtres, uniquement vôtres.</p>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
 <div class="bg-soft-cream p-10 rounded-3xl border border-midnight/5 hover:border-amber-sun/30 transition-all group">
-<span class="material-symbols-outlined text-amber-sun text-4xl mb-6 group-hover:scale-110 transition-transform">no_accounts</span>
-<h4 class="font-headline text-2xl mb-4">Pas de compte requis</h4>
-<p class="text-slate-600 leading-relaxed font-medium">Pas de formulaire, pas d'inscription. Ajoutez Ekhio à votre écran d'accueil directement depuis votre navigateur.</p>
+<span class="material-symbols-outlined text-amber-sun text-4xl mb-6 group-hover:scale-110 transition-transform">download_done</span>
+<h4 class="font-headline text-2xl mb-4">Zéro Boutique</h4>
+<p class="text-slate-600 leading-relaxed font-medium">Évitez les intermédiaires. Ajoutez Ekhio à votre écran d'accueil directement depuis votre navigateur.</p>
 </div>
 <div class="bg-soft-cream p-10 rounded-3xl border border-midnight/5 hover:border-amber-sun/30 transition-all group">
 <span class="material-symbols-outlined text-amber-sun text-4xl mb-6 group-hover:scale-110 transition-transform">no_accounts</span>
@@ -354,13 +303,13 @@
 <div class="bg-soft-cream p-10 rounded-3xl border border-midnight/5 hover:border-amber-sun/30 transition-all group">
 <span class="material-symbols-outlined text-amber-sun text-4xl mb-6 group-hover:scale-110 transition-transform">lock</span>
 <h4 class="font-headline text-2xl mb-4">Stockage Local</h4>
-<p class="text-slate-600 leading-relaxed font-medium">Toutes les informations sont stockées localement sur votre appareil.</p>
+<p class="text-slate-600 leading-relaxed font-medium">Toutes les informations sont stockées localement sur votre processeur sécurisé.</p>
 </div>
 </div>
-<a href="app.html" class="mt-20 bg-midnight text-white font-bold px-14 py-6 rounded-full text-xl hover:bg-slate-800 transition-all flex w-[max-content] items-center gap-4 mx-auto hover:scale-105 active:scale-95 shadow-xl">
+<button class="mt-20 bg-midnight text-white font-bold px-14 py-6 rounded-full text-xl hover:bg-slate-800 transition-all flex items-center gap-4 mx-auto hover:scale-105 active:scale-95 shadow-xl">
 <span class="material-symbols-outlined">add_to_home_screen</span>
                     Installer Ekhio
-</a>
+                </button>
 </div>
 </div>
 </section>
@@ -370,18 +319,18 @@
 <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-24">
 <div class="space-y-10">
 <div class="flex items-center gap-3">
-<div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-2xl">
-🤖
+<div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-amber-sun" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
 </div>
 <span class="font-headline text-4xl text-white block">Ekhio</span>
 </div>
 <p class="max-w-md text-lg leading-relaxed font-medium">Une initiative de l'<span class="text-white">Association Herrichain (loi 1901)</span>. Notre mission est de démocratiser les neurosciences pour accompagner les parents et les enfants.</p>
 <div class="space-y-2 pt-4">
 <p class="text-sm leading-relaxed">
-                    Elle est développée bénévolement par <strong class="text-white">Artean Digital</strong>.
+                    Elle est développée bénévolement par <a class="text-amber-sun hover:underline" href="https://www.arteandigital.fr">Artean Digital</a>.
                 </p>
 </div>
-<p class="text-xs opacity-50 font-bold uppercase tracking-widest pt-6">© 2026 Ekhio Studio. Design d'exception.</p>
+<p class="text-xs opacity-50 font-bold uppercase tracking-widest pt-6">© 2024 Ekhio Studio. Design d'exception.</p>
 </div>
 <div class="grid grid-cols-2 gap-12">
 <div class="space-y-8">
@@ -390,14 +339,15 @@
 <li><a class="hover:text-amber-sun transition-colors" href="#">Notre Vision</a></li>
 <li><a class="hover:text-amber-sun transition-colors" href="#">Neurosciences</a></li>
 <li><a class="hover:text-amber-sun transition-colors" href="#">Comité Scientifique</a></li>
-<li><a class="hover:text-amber-sun transition-colors" href="app.html">Lancer l'application</a></li>
+<li><a class="hover:text-amber-sun transition-colors" href="#">Lancer l'application</a></li>
 </ul>
 </div>
 <div class="space-y-8">
 <h5 class="text-white font-black text-xs uppercase tracking-[0.3em]">Légal</h5>
 <ul class="space-y-4 text-base font-semibold">
-<li><a class="hover:text-amber-sun transition-colors" href="privacy.html">Confidentialité</a></li>
-<li><a class="hover:text-amber-sun transition-colors" href="cgu.html">Conditions d'utilisation</a></li>
+<li><a class="hover:text-amber-sun transition-colors" href="#">Confidentialité</a></li>
+<li><a class="hover:text-amber-sun transition-colors" href="#">Conditions</a></li>
+<li><a class="hover:text-amber-sun transition-colors" href="#">Témoins</a></li>
 <li><a class="hover:text-amber-sun transition-colors" href="#">Contact</a></li>
 </ul>
 </div>
@@ -405,17 +355,7 @@
 </div>
 </footer>
 <!-- Bouton d'action flottant -->
-<a href="app.html" class="fixed bottom-10 right-10 w-20 h-20 bg-amber-sun text-midnight rounded-2xl shadow-2xl flex items-center justify-center transform hover:scale-110 hover:-rotate-6 active:scale-90 transition-all z-40 group amber-glow" title="Lancer l'application">
-<span class="text-4xl transition-transform group-hover:translate-y-[-4px]">🤖</span>
-</a>
-<script src="robot.js"></script>
-<script>
-  // Highlight active language button
-  document.addEventListener('DOMContentLoaded', function() {
-    const lang = getEkhioLang();
-    document.querySelectorAll('.lang-switch button').forEach(b => b.classList.remove('active'));
-    const activeBtn = document.getElementById('lang-' + lang);
-    if (activeBtn) activeBtn.classList.add('active');
-  });
-</script>
+<button class="fixed bottom-10 right-10 w-20 h-20 bg-amber-sun text-midnight rounded-2xl shadow-2xl flex items-center justify-center transform hover:scale-110 hover:-rotate-6 active:scale-90 transition-all z-40 group amber-glow">
+<span class="material-symbols-outlined text-4xl transition-transform group-hover:translate-y-[-4px]" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+</button>
 </body></html>

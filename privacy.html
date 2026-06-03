@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Ekhio — Politique de Confidentialité</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { "midnight": "#0F0A1E", "amber-sun": "#FFB800", "soft-cream": "#FFF9F0", "surface": "#FFF9F0" },
+          fontFamily: { "headline": ["Fredoka One", "sans-serif"], "body": ["Nunito", "sans-serif"] },
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-surface font-body text-midnight antialiased">
+
+  <!-- Nav -->
+  <header class="sticky top-0 z-50 bg-soft-cream/80 backdrop-blur-xl border-b border-midnight/5 h-16">
+    <nav class="flex justify-between items-center max-w-4xl mx-auto px-6 h-full">
+      <a href="index.html" class="flex items-center gap-2 font-headline text-xl text-midnight">
+        <span class="text-xl">🤖</span> Ekhio
+      </a>
+      <a href="index.html" class="text-sm font-bold text-amber-sun hover:underline">← Retour à l'accueil</a>
+    </nav>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-6 py-16">
+
+    <h1 class="font-headline text-4xl md:text-5xl text-midnight mb-4">Politique de Confidentialité</h1>
+    <p class="text-slate-400 text-sm font-bold uppercase tracking-widest mb-12">Dernière mise à jour : 2 avril 2026</p>
+
+    <div class="space-y-12 text-slate-700 text-lg leading-relaxed">
+
+      <section>
+        <h2 class="font-headline text-2xl text-midnight mb-4">1. Identité du responsable</h2>
+        <p>Ekhio est un projet porté par l'<strong>Association Herrichain</strong>, association loi 1901 dont le siège social est situé au Pays Basque (France). Le développement technique est assuré bénévolement par <strong>Artean Digital</strong>.</p>
+        <p class="mt-3">L'Association Herrichain a pour objet la démocratisation des neurosciences appliquées à l'éducation positive.</p>
+      </section>
+
+      <section>
+        <h2 class="font-headline text-2xl text-midnight mb-4">2. Aucune collecte de données personnelles</h2>
+        <p>Ekhio est une <strong>application web progressive (PWA)</strong> qui fonctionne entièrement sur votre appareil. Nous ne collectons, ne stockons et ne transmettons <strong>aucune donnée personnelle</strong> à un quelconque serveur distant.</p>
+        <div class="bg-amber-sun/10 border-l-4 border-amber-sun p-6 rounded-r-xl mt-4">
+          <p class="font-bold text-midnight">En résumé :</p>
+          <ul class="list-disc pl-6 mt-2 space-y-1">
+            <li>Aucune adresse e-mail n'est demandée.</li>
+            <li>Aucun compte utilisateur n'est créé.</li>
+            <li>Aucun cookie de traçage n'est déposé.</li>
+            <li>Aucune donnée n'est envoyée à un serveur tiers.</li>
+            <li>Aucun outil d'analyse (Google Analytics, etc.) n'est utilisé.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="font-headline text-2xl text-midnight mb-4">3. Stockage local</h2>
+        <p>Les informations que vous saisissez dans Ekhio (prénoms, âges, comportements, étoiles, récompenses) sont stockées exclusivement dans le <strong>localStorage</strong> de votre navigateur, sur votre propre appareil.</p>
+        <p class="mt-3">Ces données ne quittent jamais votre téléphone, tablette ou ordinateur. Si vous supprimez les données du navigateur ou désinstallez la PWA, toutes les informations sont définitivement effacées.</p>
+      </section>
+
+      <section>
+        <h2 class="font-headline text-2xl text-midnight mb-4">4. Données des mineurs</h2>
+        <p>Ekhio est conçu pour être utilisé par des <strong>parents ou responsables légaux</strong> pour accompagner leurs enfants. L'application ne s'adresse pas directement aux mineurs de manière autonome.</p>
+        <p class="mt-3">Conformément au Règlement Général sur la Protection des Données (RGPD) et au Code de l'éducation, aucune donnée relative aux mineurs n'est collectée ni transmise à des tiers.</p>
+      </section>
+
+      <section>
+        <h2 class="font-headline text-2xl text-midnight mb-4">5. Hébergement</h2>
+        <p>Le site web vitrine d'Ekhio est hébergé de manière statique. Aucune base de données côté serveur n'existe. Le service est fourni « en l'état » sans engagement de disponibilité.</p>
+      </section>
+
+      <section>
+        <h2 class="font-headline text-2xl text-midnight mb-4">6. Vos droits</h2>
+        <p>Conformément au RGPD (articles 15 à 22), vous disposez d'un droit d'accès, de rectification, d'effacement et de portabilité de vos données. Étant donné qu'aucune donnée n'est collectée par nos soins, ces droits s'exercent directement sur votre appareil en effaçant les données du navigateur.</p>
+      </section>
+
+      <section>
+        <h2 class="font-headline text-2xl text-midnight mb-4">7. Contact</h2>
+        <p>Pour toute question relative à cette Politique de Confidentialité, vous pouvez contacter l'Association Herrichain par voie postale ou via les canaux de communication mentionnés sur le site.</p>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="bg-midnight text-slate-500 py-16 mt-16">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <p class="text-sm">© 2026 Ekhio — Association Herrichain (loi 1901). Développé bénévolement par Artean Digital.</p>
+      <div class="flex justify-center gap-8 mt-4 text-sm font-semibold">
+        <a href="privacy.html" class="text-amber-sun">Confidentialité</a>
+        <a href="cgu.html" class="hover:text-amber-sun transition-colors">CGU</a>
+        <a href="index.html" class="hover:text-amber-sun transition-colors">Accueil</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
