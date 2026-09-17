@@ -20,7 +20,24 @@ if(!localStorage.getItem('ekhio_profiles') || !localStorage.getItem('ekhio_activ
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <meta name="theme-color" content="#FFB800">
-<title>Ekhio</title>
+<title>Ekhio — Application</title>
+<meta name="description" content="Tableau de bord d'éducation positive Ekhio. Développé par Artean Digital Studio (arteandigital.fr) et déployé par l'Association Herrichain (herrichain.org)." />
+<!-- PWA Support -->
+<link rel="manifest" href="manifest.json" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<link rel="apple-touch-icon" href="icon.svg" />
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('Service Worker registered successfully.', reg.scope))
+        .catch(err => console.warn('Service Worker registration failed.', err));
+    });
+  }
+</script>
 <link rel="stylesheet" href="robot.css">
 <script src="i18n.js"></script>
 <script src="robot.js"></script>
@@ -116,22 +133,64 @@ body.dark {
 .star-counter {
   font-family: 'Fredoka One', cursive; font-size: 56px; color: var(--age-color);
   line-height: 1; margin-bottom: 8px; text-shadow: 0 0 30px rgba(255,184,0,0.5);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s;
 }
+.star-counter.pop { transform: scale(1.3); }
 .star-label{font-size:12px;font-weight:800;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em;}
 .robot-container{display:flex;justify-content:center;margin:30px 0 10px;height:180px;position:relative;transform:scale(0.95);}
 .robot-bubble{position:absolute;top:-20px;left:50%;transform:translateX(-50%);background:#fff;color:#1A1208;padding:10px 16px;border-radius:18px;font-size:13px;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.3);transition:.3s;z-index:10;max-width:80%;text-align:center;}
 .robot-bubble::after{content:'';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);border-width:6px 6px 0;border-style:solid;border-color:#fff transparent transparent transparent;}
 .daily-prog{background:rgba(255,255,255,.1);border-radius:999px;height:12px;overflow:hidden;margin-top:14px;}
-.daily-fill{height:100%;background:var(--age-color);border-radius:999px;transition:width 0.5s ease;}
-.daily-visual-stars { display: flex; justify-content: center; gap: 8px; margin-top: 10px; font-size: 24px; }
-.v-star { opacity: 0.2; transition: 0.3s transform; }
-.v-star.on { opacity: 1; transform: scale(1.2); }
+.daily-fill{height:100%;background:var(--age-color);border-radius:999px;transition:width 0.6s cubic-bezier(0.22, 1, 0.36, 1);}
+.daily-visual-stars { display: flex; justify-content: center; gap: 6px; margin-top: 10px; font-size: 20px; flex-wrap: wrap; }
+.v-star { opacity: 0.2; transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); transform: scale(0.8); }
+.v-star.on {
+  opacity: 1; transform: scale(1.15);
+  filter: drop-shadow(0 0 6px rgba(255,184,0,0.5));
+  animation: starPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes starPop {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1.15); opacity: 1; }
+}
+/* Glow pulse on active stars */
+.v-star.on { animation: starGlow 2s ease-in-out infinite alternate; }
+@keyframes starGlow {
+  0% { filter: drop-shadow(0 0 4px rgba(255,184,0,0.3)); }
+  100% { filter: drop-shadow(0 0 10px rgba(255,184,0,0.7)); }
+}
+@media (max-width: 380px) {
+  .daily-visual-stars { font-size: 16px; gap: 4px; }
+}
+
+/* Confetti burst */
+.confetti-burst {
+  position: fixed; top: 50%; left: 50%; z-index: 9999; pointer-events: none;
+}
+.confetti-particle {
+  position: absolute; width: 8px; height: 8px; border-radius: 2px;
+  animation: confettiFall 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+@keyframes confettiFall {
+  0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+  100% { transform: translate(var(--cx), var(--cy)) rotate(720deg) scale(0); opacity: 0; }
+}
 
 /* GRID LISTS */
 .beh-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.beh-card{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;padding:16px 12px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 2px 8px rgba(0,0,0,.06);position:relative}
+.beh-card{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;padding:16px 12px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 2px 8px rgba(0,0,0,.06);position:relative;overflow:hidden;}
 .beh-card:active{transform:scale(.96);}
 .beh-card.done{opacity:0.4; pointer-events:none;}
+/* Ripple effect */
+.beh-card .ripple {
+  position: absolute; border-radius: 50%; transform: scale(0);
+  animation: rippleAnim 0.6s ease-out; background: rgba(255,184,0,0.25);
+  pointer-events: none;
+}
+@keyframes rippleAnim {
+  to { transform: scale(4); opacity: 0; }
+}
     
 /* PARENT FAB */
 .fab-parent { 
@@ -146,6 +205,7 @@ body.dark {
   background: var(--surface); border: 2.5px solid var(--age-color);
   border-radius: 20px; padding: 12px; display: none; flex-direction: column; gap: 8px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.25); min-width: 180px;
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
 }
 .parent-tools-menu.open { display: flex !important; }
 .ptm-btn {
@@ -165,6 +225,8 @@ body.dark {
 .rew-item.ul{border-color:#2ECC71;background:linear-gradient(135deg,#F0FFF7,#E0FFEE);cursor:pointer}
 .rew-item.nx{border-color:var(--age-color);background:linear-gradient(135deg,#FFFBF0,#FFF3DC)}
 .rew-item.lk{opacity:.6}
+body.dark .rew-item.ul{background:linear-gradient(135deg,rgba(46,204,113,0.1),rgba(46,204,113,0.05));}
+body.dark .rew-item.nx{background:linear-gradient(135deg,rgba(255,184,0,0.1),rgba(255,184,0,0.05));}
 .rew-ic{font-size:32px;flex-shrink:0}
 .rew-info{flex:1}
 .rew-title{font-weight:800;font-size:14px;color:var(--text)}
@@ -185,17 +247,25 @@ body.dark {
 .s-card{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;padding:18px;margin-bottom:14px}
 .s-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.06)}
 .s-row:last-child{border-bottom:none}
-.s-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;font:inherit;font-size:14px;font-weight:700;background:var(--bg);margin-bottom:8px;}
+.s-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;font:inherit;font-size:14px;font-weight:700;background:var(--bg);margin-bottom:8px;color:var(--text);}
 .s-input:focus{outline:none;border-color:var(--age-color);}
 .btn-save{background:var(--age-color);color:#fff;border-radius:12px;padding:14px;font-weight:800;font-size:15px;width:100%;text-align:center;border:none;}
 
+/* Language selector */
+.lang-select {
+  padding: 10px 14px; border-radius: 12px; border: 1.5px solid var(--border);
+  background: var(--bg); color: var(--text); font: inherit; font-weight: 700;
+  font-size: 14px; width: 140px; cursor: pointer;
+}
+.lang-select:focus { outline: none; border-color: var(--age-color); }
+
 /* NAVIGATION */
 .bottom-nav {
-  position: fixed; bottom: 20px; left: 20px; right: 20px;
+  position: fixed; bottom: 20px; left: 16px; right: 16px;
   background: rgba(255, 249, 240, 0.7);
   backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(15, 10, 30, 0.05);
-  display: flex; justify-content: space-around; padding: 12px 8px;
+  display: flex; justify-content: space-around; padding: 10px 4px;
   border-radius: 28px;
   box-shadow: 0 8px 32px rgba(15, 10, 30, 0.15); z-index: 200;
 }
@@ -204,18 +274,217 @@ body.dark .bottom-nav {
   border-color: rgba(255, 184, 0, 0.1);
 }
 .nav-item {
-  display: flex; flex-direction: column; align-items: center; gap: 4px;
-  width: 60px; border-radius: 16px; color: var(--faint); font-size: 10px;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  min-width: 48px; border-radius: 16px; color: var(--faint); font-size: 9px;
   font-weight: 800; text-transform: uppercase; transition: .3s;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.nav-item .ni { font-size: 24px; line-height: 1; transition: 0.3s; }
+.nav-item .ni { font-size: 22px; line-height: 1; transition: 0.3s; }
 .nav-item.act { color: var(--age-color); }
 .nav-item.act .ni { transform: translateY(-4px) scale(1.1); filter: drop-shadow(0 4px 8px rgba(255,184,0,0.4)); }
+@media (max-width: 380px) {
+  .nav-item { font-size: 8px; min-width: 40px; }
+  .nav-item .ni { font-size: 20px; }
+  .bottom-nav { padding: 8px 2px; bottom: 12px; left: 10px; right: 10px; }
+}
 
 .profile-selector{display:flex;gap:12px;overflow-x:auto;padding-bottom:12px;margin-bottom:10px;}
 .p-sel-item{background:rgba(255,255,255,.1);border-radius:18px;padding:12px;display:flex;flex-direction:column;align-items:center;min-width:85px;border:2px solid transparent;color:#fff;transition:0.3s;}
 .p-sel-item.act{border-color:var(--age-color);background:rgba(255,255,255,0.2);box-shadow: 0 8px 24px rgba(0,0,0,0.2);}
 .p-sel-item .av{width:44px;height:44px;border-radius:14px;margin-bottom:8px;background:var(--age-color);box-shadow: 0 4px 10px rgba(0,0,0,0.15);}
+.p-sel-add{opacity:0.5;border:2px dashed rgba(255,255,255,0.3);}
+.p-sel-add:hover{opacity:0.8;}
+
+/* --- OVERLAYS & MODALS (GLASSMORPHISM) --- */
+.overlay {
+  position: fixed; inset: 0; z-index: 2000;
+  background: rgba(15, 10, 30, 0.6);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  display: flex; align-items: flex-end; justify-content: center;
+  padding: 16px; opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.overlay.open {
+  opacity: 1; pointer-events: all;
+}
+.modal {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 24px; padding: 24px;
+  width: 100%; max-width: 400px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  transform: translateY(40px);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-align: center;
+}
+.overlay.open .modal {
+  transform: translateY(0);
+}
+.m-em {
+  font-size: 48px; display: block; margin-bottom: 8px; line-height: 1;
+}
+.m-title {
+  font-family: 'Fredoka One', cursive; font-size: 24px; margin-bottom: 8px; color: var(--text);
+}
+.m-desc {
+  font-size: 14px; color: var(--muted); margin-bottom: 20px; line-height: 1.5;
+}
+.m-actions {
+  display: flex; gap: 12px;
+}
+.btn {
+  flex: 1; padding: 12px; border-radius: 999px; font-weight: 800; font-size: 14px;
+  text-align: center; cursor: pointer; transition: transform 0.15s, filter 0.15s;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.btn:active { transform: scale(0.96); }
+.btn-p {
+  background: var(--age-color); color: #FFF;
+  box-shadow: 0 4px 12px rgba(var(--robot-accent-rgb, 255,184,0), 0.3);
+}
+.btn-p:hover { filter: brightness(1.1); }
+.btn-s {
+  background: rgba(0,0,0,0.05); color: var(--muted);
+}
+body.dark .btn-s { background: rgba(255,255,255,0.08); color: var(--muted); }
+
+/* --- PARENT PIN SPACE --- */
+.pin-dots {
+  display: flex; justify-content: center; gap: 16px; margin: 20px 0;
+}
+.pin-dot {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid var(--faint); background: transparent;
+  transition: background 0.2s, border-color 0.2s;
+}
+.pin-dot.fill {
+  background: var(--age-color); border-color: var(--age-color);
+  box-shadow: 0 0 10px var(--age-color);
+}
+.pin-pad {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  max-width: 280px; margin: 0 auto;
+}
+.pin-btn {
+  aspect-ratio: 1; width: 70px; border-radius: 50%;
+  background: rgba(0,0,0,0.04); color: var(--text);
+  font-family: 'Fredoka One', cursive; font-size: 24px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s, transform 0.1s;
+}
+body.dark .pin-btn { background: rgba(255,255,255,0.06); }
+.pin-btn:active {
+  background: var(--age-color); color: #0F0A1E; transform: scale(0.9);
+}
+
+/* --- SOS / BREATH GUIDE --- */
+.breath-circle {
+  width: 120px; height: 120px; border-radius: 50%;
+  background: radial-gradient(circle, var(--age-color) 0%, rgba(255,184,0,0.4) 100%);
+  margin: 30px auto;
+  box-shadow: 0 0 30px rgba(var(--robot-accent-rgb, 255,184,0), 0.5);
+  animation: breathe 14s infinite ease-in-out;
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(0.7); filter: brightness(0.8); } /* Start Inhale (4s) */
+  28.5% { transform: scale(1.3); filter: brightness(1.2); }    /* End Inhale (4s) */
+  57.1% { transform: scale(1.3); filter: brightness(1.2); }    /* Hold (4s) */
+  100% { transform: scale(0.7); filter: brightness(0.8); }     /* Exhale (6s) */
+}
+
+/* --- RULES --- */
+.rule-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 16px; padding: 14px 18px; margin-bottom: 10px;
+  display: flex; flex-direction: column; gap: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.rule-title {
+  font-weight: 800; font-size: 15px; color: var(--text);
+}
+
+/* --- HISTORY --- */
+.hist-item {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 16px; padding: 12px 16px; display: flex; align-items: center;
+  gap: 12px; margin-bottom: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.hist-item.type-earn { border-left: 4px solid var(--age-color); }
+.hist-item.type-use { border-left: 4px solid #E8344A; }
+
+/* --- WEEK BAR --- */
+.week-bar {
+  display: flex; flex-direction: row; justify-content: center; gap: 8px;
+  margin-bottom: 16px; padding: 8px 0; align-items: flex-start;
+  flex-wrap: nowrap;
+}
+.w-day {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  min-width: 32px;
+}
+.wd-l {
+  font-size: 11px; font-weight: 900; color: rgba(255,255,255,0.4);
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.wd-d {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,255,255,0.08); display: flex;
+  align-items: center; justify-content: center;
+  font-size: 12px; opacity: 0.3; transition: 0.3s;
+}
+.w-day.act .wd-l { color: var(--age-color); }
+.w-day.act .wd-d {
+  opacity: 1; background: var(--age-color);
+  box-shadow: 0 0 12px rgba(255,184,0,0.4);
+  transform: scale(1.15);
+}
+@media (max-width: 380px) {
+  .week-bar { gap: 4px; }
+  .wd-l { font-size: 9px; }
+  .wd-d { width: 24px; height: 24px; font-size: 10px; }
+}
+
+/* --- SOS BUTTON --- */
+.sos-btn {
+  position: absolute; top: 12px; right: 12px;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(232, 52, 74, 0.2); border: 2px solid rgba(232, 52, 74, 0.4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; cursor: pointer; z-index: 10;
+  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: sosPulse 2s infinite;
+}
+.sos-btn:active { transform: scale(0.9); }
+@keyframes sosPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(232,52,74,0.3); }
+  50% { box-shadow: 0 0 0 8px rgba(232,52,74,0); }
+}
+
+/* --- GAME LOCKED --- */
+.game-locked {
+  text-align: center; padding: 40px 20px;
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 24px; margin-bottom: 20px;
+}
+
+/* --- BANK BOX (Teens) --- */
+.bank-box {
+  background: linear-gradient(135deg, var(--surface), rgba(255,184,0,0.08));
+  border: 1.5px solid var(--border); border-radius: 20px;
+  padding: 20px; text-align: center; margin-bottom: 16px;
+}
+.bank-val {
+  font-family: 'Fredoka One', cursive; font-size: 36px;
+  color: var(--age-color); line-height: 1;
+}
+
+/* --- GAME CANVAS --- */
+#gameCanvas {
+  max-width: 100%; height: auto; aspect-ratio: 400 / 250;
+  border-radius: 16px; border: 2.5px solid var(--border);
+  background: var(--bg); display: block; margin: 0 auto;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
 </style>
 </head>
 <body>
@@ -238,11 +507,11 @@ body.dark .bottom-nav {
     <!-- Parent Floating Menu -->
     <button class="fab-parent" onclick="toggleParentTools()" id="fabP">⚙️</button>
     <div class="parent-tools-menu" id="ptm">
-      <div style="font-size:11px; font-weight:900; opacity:0.6; text-transform:uppercase; margin-bottom:4px;">Parent Quick Hub</div>
-      <button class="ptm-btn" onclick="promptAddBehavior()">➕ Nouveau Défi</button>
-      <button class="ptm-btn" onclick="promptAddReward()">🎁 Nouvelle Récompense</button>
-      <button class="ptm-btn" onclick="fastBonus()">⭐ Donner +1 Étoile</button>
-      <button class="ptm-btn" onclick="openNav('parent')" style="margin-top:4px; opacity:0.7;">⚙️ Paramètres Complets</button>
+      <div style="font-size:11px; font-weight:900; opacity:0.6; text-transform:uppercase; margin-bottom:4px;" data-i18n="app_parent_hub"></div>
+      <button class="ptm-btn" onclick="promptAddBehavior()">➕ <span data-i18n="app_new_challenge"></span></button>
+      <button class="ptm-btn" onclick="promptAddReward()">🎁 <span data-i18n="app_new_reward"></span></button>
+      <button class="ptm-btn" onclick="fastBonus()">⭐ <span data-i18n="app_give_star"></span></button>
+      <button class="ptm-btn" onclick="openNav('parent')" style="margin-top:4px; opacity:0.7;">⚙️ <span data-i18n="app_full_settings"></span></button>
     </div>
     <div class="hero" id="hero-box">
       <!-- Selector for multi-profiles inside hero if > 1 -->
@@ -257,7 +526,7 @@ body.dark .bottom-nav {
       <div class="star-label" id="heroName">NomEnfant</div>
       
       <div class="robot-container">
-        <div class="robot-bubble" id="rbBubble">Salut ! Prêt pour de nouveaux défis ?</div>
+        <div class="robot-bubble" id="rbBubble"></div>
         <div class="robot-scene" style="transform: scale(0.95); transform-origin: top center;">
           <div class="robot-float" id="robot-float">
             <div class="walle-wrap curious" id="robot" onclick="Robot.bounce()">
@@ -282,37 +551,38 @@ body.dark .bottom-nav {
         </div>
       </div>
 
+      <div class="daily-visual-stars" id="dailyVisualStars"></div>
       <div class="daily-prog"><div class="daily-fill" id="dailyProgFill" style="width:0%"></div></div>
-      <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:6px;font-weight:700;"><span id="dailyStars">0</span> / <span id="maxStars">5</span>⭐ aujourd'hui</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:6px;font-weight:700;"><span id="dailyStars">0</span> / <span id="maxStars">5</span>⭐ <span data-i18n="app_today"></span></div>
     </div>
 
     <div class="sec-title" style="display:flex;justify-content:space-between;align-items:center;">
-      Défis du jour
-      <button class="btn btn-s" style="padding:6px 12px;font-size:12px;flex:none;" onclick="_openTab('rules')">Règles</button>
+      <span data-i18n="app_daily_challenges"></span>
+      <button class="btn btn-s" style="padding:6px 12px;font-size:12px;flex:none;" onclick="_openTab('rules')" data-i18n="app_rules_btn"></button>
     </div>
     <div class="beh-grid" id="behGrid"></div>
   </div>
 
   <!-- RULES VIEW -->
   <div class="view" id="view-rules">
-    <div class="sec-title" style="margin-top:4px;">Règles de Vie</div>
+    <div class="sec-title" style="margin-top:4px;" data-i18n="app_rules_title"></div>
     <div id="rulesList"></div>
-    <button class="btn-save" style="margin-top:20px;" onclick="_openTab('home')">Retour</button>
+    <button class="btn-save" style="margin-top:20px;" onclick="_openTab('home')" data-i18n="app_back"></button>
   </div>
 
   <!-- REWARDS VIEW -->
   <div class="view" id="view-rewards">
-    <div class="sec-title" id="rewTitle" style="margin-top:4px;">Catalogue de Récompenses</div>
+    <div class="sec-title" id="rewTitle" style="margin-top:4px;" data-i18n="app_rewards_catalog"></div>
     
     <!-- Bank for Teens -->
     <div id="bankView" style="display:none;">
       <div class="bank-box">
-        <div style="font-size:12px;font-weight:800;opacity:0.6;margin-bottom:4px;text-transform:uppercase;">Compte Épargne</div>
+        <div style="font-size:12px;font-weight:800;opacity:0.6;margin-bottom:4px;text-transform:uppercase;" data-i18n="app_savings_account"></div>
         <div class="bank-val" id="bankStars">0⭐</div>
-        <div style="font-size:14px;margin-top:10px;">Économise pour de grands objectifs !</div>
+        <div style="font-size:14px;margin-top:10px;" data-i18n="app_save_for_goals"></div>
       </div>
       <div style="display:flex;gap:8px;margin-bottom:20px;">
-        <button class="btn btn-p" onclick="mvBank(1)">+1 dans l'épargne</button>
+        <button class="btn btn-p" onclick="mvBank(1)" data-i18n="app_add_to_savings"></button>
         <button class="btn btn-p" onclick="mvBank(5)">+5</button>
       </div>
     </div>
@@ -321,112 +591,119 @@ body.dark .bottom-nav {
   </div>
 
   <!-- HISTORY VIEW (Badges + Hist) -->
-  <div class="view" id="view-history">
-    <div class="sec-title" style="margin-top:4px;">Trophées</div>
+  <div class="view" id="view-stats">
+    <div class="sec-title" style="margin-top:4px;" data-i18n="app_trophies"></div>
     <div class="badges-grid" id="badgesGrid"></div>
-    <div class="sec-title" style="margin-top:20px;">Historique Récent</div>
+    <div class="sec-title" style="margin-top:20px;" data-i18n="app_recent_history"></div>
     <div id="histList"></div>
   </div>
 
   <!-- GAME VIEW -->
   <div class="view" id="view-game">
-    <div class="sec-title" id="gameTitle" style="margin-top:4px;">Mini-Jeu Ekhio</div>
+    <div class="sec-title" id="gameTitle" style="margin-top:4px;" data-i18n="app_game_title"></div>
     
     <!-- Game section -->
     <div id="gameSection">
       <div id="gameLocked" class="game-locked">
         <div style="font-size:64px;margin-bottom:16px;">🔒</div>
-        <div style="font-family:'Fredoka One';font-size:24px;">Jeu bloqué</div>
-        <div style="margin-top:10px;color:var(--muted)">Il faut <strong id="gameReqStars">10</strong> étoiles pour débloquer le jeu !</div>
+        <div style="font-family:'Fredoka One';font-size:24px;" data-i18n="app_game_locked"></div>
+        <div style="margin-top:10px;color:var(--muted)"><strong id="gameReqStars">10</strong> <span data-i18n="app_game_locked_desc"></span></div>
       </div>
       <div id="gamePlay" style="display:none;text-align:center;">
         <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;">
-          <div style="font-family:'Fredoka One';font-size:20px;">Score: <span id="gScore">0</span></div>
+          <div style="font-family:'Fredoka One';font-size:20px;"><span data-i18n="app_game_score"></span>: <span id="gScore">0</span></div>
           <div style="font-size:20px;color:#E8344A;" id="gLives">❤️❤️❤️</div>
         </div>
         <canvas id="gameCanvas" width="400" height="250"></canvas>
-        <button class="btn-save" style="margin-top:16px;" onclick="startGame()">▶ Jouer</button>
-        <div style="font-size:12px;color:var(--muted);margin-top:12px;">Tape l'écran pour sauter et éviter les obstacles !</div>
+        <button class="btn-save" style="margin-top:16px;" onclick="startGame()" data-i18n="app_game_play"></button>
+        <div style="font-size:12px;color:var(--muted);margin-top:12px;" data-i18n="app_game_tap"></div>
       </div>
     </div>
 
     <!-- Emotion Journal section for teens -->
     <div id="journalSection" style="display:none;">
-      <p style="margin-bottom:20px;color:var(--muted)">Comment te sens-tu aujourd'hui ?</p>
+      <p style="margin-bottom:20px;color:var(--muted)" data-i18n="app_journal_prompt"></p>
       <div class="beh-grid">
-        <div class="beh-card" onclick="logMood('😀','Super')"><div class="ic">😀</div><div class="lbl">Super</div></div>
-        <div class="beh-card" onclick="logMood('🙂','Bien')"><div class="ic">🙂</div><div class="lbl">Bien</div></div>
-        <div class="beh-card" onclick="logMood('😐','Neutre')"><div class="ic">😐</div><div class="lbl">Neutre</div></div>
-        <div class="beh-card" onclick="logMood('😠','Énervé')"><div class="ic">😠</div><div class="lbl">Énervé</div></div>
-        <div class="beh-card" onclick="logMood('😢','Triste')"><div class="ic">😢</div><div class="lbl">Triste</div></div>
-        <div class="beh-card" onclick="logMood('🥱','Fatigué')"><div class="ic">🥱</div><div class="lbl">Fatigué</div></div>
+        <div class="beh-card" onclick="logMood('😀','app_mood_great')"><div class="ic">😀</div><div class="lbl" data-i18n="app_mood_great"></div></div>
+        <div class="beh-card" onclick="logMood('🙂','app_mood_good')"><div class="ic">🙂</div><div class="lbl" data-i18n="app_mood_good"></div></div>
+        <div class="beh-card" onclick="logMood('😐','app_mood_neutral')"><div class="ic">😐</div><div class="lbl" data-i18n="app_mood_neutral"></div></div>
+        <div class="beh-card" onclick="logMood('😠','app_mood_angry')"><div class="ic">😠</div><div class="lbl" data-i18n="app_mood_angry"></div></div>
+        <div class="beh-card" onclick="logMood('😢','app_mood_sad')"><div class="ic">😢</div><div class="lbl" data-i18n="app_mood_sad"></div></div>
+        <div class="beh-card" onclick="logMood('🥱','app_mood_tired')"><div class="ic">🥱</div><div class="lbl" data-i18n="app_mood_tired"></div></div>
       </div>
     </div>
   </div>
 
   <!-- PARENT VIEW -->
   <div class="view" id="view-parent">
-    <div class="sec-title" style="margin-top:4px;">Mode Parent</div>
+    <div class="sec-title" style="margin-top:4px;" data-i18n="app_parent_mode"></div>
     <div class="s-card">
       <div class="s-row">
-        <div><strong>Nom de l'enfant</strong></div>
+        <div><strong data-i18n="app_child_name"></strong></div>
         <input type="text" id="set-name" class="s-input" style="width:140px;margin:0" onchange="saveProfileSettings()">
       </div>
       <div class="s-row">
-        <div><strong>Âge (3-18)</strong></div>
+        <div><strong data-i18n="app_child_age"></strong></div>
         <input type="number" id="set-age" class="s-input" min="3" max="18" style="width:80px;margin:0" onchange="saveProfileSettings()">
       </div>
       <div class="s-row">
-        <div><strong>Couleur Avatar</strong></div>
+        <div><strong data-i18n="app_avatar_color"></strong></div>
         <input type="color" id="set-color" class="s-input" style="width:80px;height:40px;padding:2px;margin:0" onchange="saveProfileSettings()">
       </div>
       <div class="s-row">
-        <div><strong>Étoiles Max/Jour</strong></div>
+        <div><strong data-i18n="app_max_stars_day"></strong></div>
         <input type="number" id="set-max" class="s-input" min="1" max="10" style="width:80px;margin:0" onchange="saveProfileSettings()">
       </div>
       <div class="s-row">
-        <div><strong>Code PIN Parent</strong><div style="font-size:11px;color:var(--muted);">Protéger cette zone (4 chiffres)</div></div>
+        <div><strong data-i18n="app_pin_code"></strong><div style="font-size:11px;color:var(--muted);" data-i18n="app_pin_protect"></div></div>
         <input type="number" id="set-pin" class="s-input" placeholder="0000" style="width:100px;margin:0" onchange="saveProfileSettings()">
+      </div>
+      <div class="s-row">
+        <div><strong data-i18n="app_language"></strong></div>
+        <select class="lang-select" id="set-lang" onchange="switchLang(this.value)">
+          <option value="fr">🇫🇷 Français</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="es">🇪🇸 Español</option>
+          <option value="eu">🟢 Euskara</option>
+        </select>
       </div>
     </div>
 
     <!-- Behavior & Rewards Manage -->
-    <div class="sec-title" style="font-size:18px;">Gérer les comportements</div>
+    <div class="sec-title" style="font-size:18px;" data-i18n="app_manage_behaviors"></div>
     <div class="s-card">
-      <button class="btn-save" style="margin-bottom:16px;background:#2ECC71" onclick="fastBonus()">🎁 Donner +1⭐ Immédiat</button>
+      <button class="btn-save" style="margin-bottom:16px;background:#2ECC71" onclick="fastBonus()" data-i18n="app_give_bonus"></button>
       <div style="display:flex;gap:8px;margin-bottom:8px;">
         <input type="text" id="nbEm" class="s-input" placeholder="🎯" style="width:60px">
-        <input type="text" id="nbL" class="s-input" placeholder="Nouveau défi">
+        <input type="text" id="nbL" class="s-input" data-i18n="app_new_challenge">
         <input type="number" id="nbS" class="s-input" placeholder="⭐" style="width:60px" value="1">
       </div>
-      <button class="btn-save" style="border-radius:12px;padding:10px;" onclick="addBehavior()">Ajouter</button>
+      <button class="btn-save" style="border-radius:12px;padding:10px;" onclick="addBehavior()" data-i18n="app_add"></button>
       <div id="behManageList" style="margin-top:16px;"></div>
     </div>
     
-    <div class="sec-title" style="font-size:18px;">Gérer les récompenses</div>
+    <div class="sec-title" style="font-size:18px;" data-i18n="app_manage_rewards"></div>
     <div class="s-card">
       <div style="display:flex;gap:8px;margin-bottom:8px;">
         <input type="text" id="nrEm" class="s-input" placeholder="🎁" style="width:60px">
-        <input type="text" id="nrL" class="s-input" placeholder="Nouvelle récompense">
+        <input type="text" id="nrL" class="s-input" data-i18n="app_new_reward">
         <input type="number" id="nrS" class="s-input" placeholder="Cout ⭐" style="width:80px">
       </div>
-      <button class="btn-save" style="border-radius:12px;padding:10px;" onclick="addReward()">Ajouter</button>
+      <button class="btn-save" style="border-radius:12px;padding:10px;" onclick="addReward()" data-i18n="app_add"></button>
       <div id="rewManageList" style="margin-top:16px;"></div>
     </div>
 
-    </div>
-
     <!-- Manage Profiles -->
-    <div class="sec-title" style="font-size:18px;">Gérer les profils</div>
+    <div class="sec-title" style="font-size:18px;" data-i18n="app_manage_profiles"></div>
     <div class="s-card">
       <div id="profileManageList" style="display:flex; flex-direction:column; gap:10px;"></div>
     </div>
 
-    <div class="sec-title" style="font-size:18px;">Options Avancées</div>
+    <div class="sec-title" style="font-size:18px;" data-i18n="app_advanced_options"></div>
     <div class="s-card" style="display:flex; flex-direction:column; gap:8px;">
-      <button class="btn-save" style="background:#E8344A;" onclick="addProfile()">+ Ajouter un enfant</button>
-      <button class="btn-save" style="background:transparent;border:2px solid #E8344A;color:#E8344A;" onclick="resetStats()">Remettre à zéro stats</button>
-      <button class="btn-save" style="background:transparent;border:2px dashed #B8A898;color:#B8A898;" onclick="repairDashboard()">🛠️ Réparer Défis Manquants</button>
+      <button class="btn-save" style="background:#E8344A;" onclick="addProfile()" data-i18n="app_add_profile"></button>
+      <button class="btn-save" style="background:transparent;border:2px solid #E8344A;color:#E8344A;" onclick="resetStats()" data-i18n="app_reset_stats"></button>
+      <button class="btn-save" style="background:transparent;border:2px dashed #B8A898;color:#B8A898;" onclick="repairDashboard()" data-i18n="app_repair_dashboard"></button>
     </div>
   </div>
 
@@ -435,23 +712,23 @@ body.dark .bottom-nav {
 <nav class="bottom-nav">
   <button class="nav-item act" id="n-home" onclick="_openTab('home')">
     <span class="ni">🏠</span>
-    <span data-i18n="app_challenges">Défis</span>
+    <span data-i18n="app_challenges"></span>
   </button>
   <button class="nav-item" id="n-rewards" onclick="_openTab('rewards')">
     <span class="ni">🎁</span>
-    <span data-i18n="app_rewards">Récompenses</span>
+    <span data-i18n="app_rewards" id="n-rew-tx"></span>
   </button>
   <button class="nav-item" id="n-stats" onclick="_openTab('stats')">
     <span class="ni">🏆</span>
-    <span data-i18n="app_trophies">Trophées</span>
+    <span data-i18n="app_trophies"></span>
   </button>
   <button class="nav-item" id="n-game" onclick="_openTab('game')">
-    <span class="ni">🎮</span>
-    <span data-i18n="app_game">Jeu</span>
+    <span class="ni" id="n-game-ic">🎮</span>
+    <span data-i18n="app_game" id="n-game-tx"></span>
   </button>
   <button class="nav-item" id="n-parent" onclick="openNav('parent')">
     <span class="ni">⚙️</span>
-    <span data-i18n="app_settings">Paramètres</span>
+    <span data-i18n="app_settings"></span>
   </button>
 </nav>
 
@@ -459,11 +736,11 @@ body.dark .bottom-nav {
 <div class="overlay" id="valModal">
   <div class="modal">
     <span class="m-em" id="vmEm">⭐</span>
-    <h2 class="m-title" id="vmT">Super !</h2>
+    <h2 class="m-title" id="vmT"></h2>
     <p id="vmD" style="color:var(--muted);margin-bottom:20px;"></p>
     <div class="m-actions">
-      <button class="btn btn-s" onclick="closeModals()">Annuler</button>
-      <button class="btn btn-p" id="vmOk" onclick="confirmValidate()">Gagner l'étoile</button>
+      <button class="btn btn-s" onclick="closeModals()" data-i18n="app_cancel"></button>
+      <button class="btn btn-p" id="vmOk" onclick="confirmValidate()"></button>
     </div>
   </div>
 </div>
@@ -471,11 +748,11 @@ body.dark .bottom-nav {
 <div class="overlay" id="rewModal">
   <div class="modal">
     <span class="m-em" id="rmEm">🎁</span>
-    <h2 class="m-title" id="rmT">Récompense</h2>
+    <h2 class="m-title" id="rmT"></h2>
     <p id="rmD" style="color:var(--muted);margin-bottom:20px;"></p>
     <div class="m-actions">
-      <button class="btn btn-s" onclick="closeModals()">Plus tard</button>
-      <button class="btn btn-p" id="rmOk" onclick="confirmReward()">Obtenir</button>
+      <button class="btn btn-s" onclick="closeModals()" data-i18n="app_modal_later"></button>
+      <button class="btn btn-p" id="rmOk" onclick="confirmReward()" data-i18n="app_modal_get"></button>
     </div>
   </div>
 </div>
@@ -483,18 +760,18 @@ body.dark .bottom-nav {
 <div class="overlay" id="badgeModal">
   <div class="modal">
     <span class="m-em" id="bmEm">🏆</span>
-    <h2 class="m-title" id="bmT">Nouveau Trophée !</h2>
-    <p id="bmD" style="color:var(--muted);margin-bottom:20px;">Tu as gagné un bonus !</p>
+    <h2 class="m-title" id="bmT"></h2>
+    <p id="bmD" style="color:var(--muted);margin-bottom:20px;"></p>
     <div class="m-actions">
-      <button class="btn btn-p" style="width:100%" onclick="closeModals();Robot.bounce()">Super !</button>
+      <button class="btn btn-p" style="width:100%" onclick="closeModals();Robot.bounce()" data-i18n="app_modal_great"></button>
     </div>
   </div>
 </div>
 
 <div class="overlay" id="pinModal">
   <div class="modal">
-    <h2 class="m-title">Espace Parent</h2>
-    <p style="color:var(--muted);font-size:14px;">Entrez le code PIN</p>
+    <h2 class="m-title" data-i18n="app_modal_parent_space"></h2>
+    <p style="color:var(--muted);font-size:14px;" data-i18n="app_modal_enter_pin"></p>
     <div class="pin-dots" id="pinDots">
       <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
     </div>
@@ -516,17 +793,17 @@ body.dark .bottom-nav {
 </div>
 
 <div class="overlay" id="sosModal">
-    <h2 class="m-title">Gros chagrin ?</h2>
-    <p style="color:var(--muted);margin-bottom:10px;">On va respirer avec la bulle magique...</p>
+  <div class="modal">
+    <h2 class="m-title" data-i18n="app_modal_big_sadness"></h2>
+    <p style="color:var(--muted);margin-bottom:10px;" data-i18n="app_modal_breathe"></p>
     <div class="breath-circle" id="sosBreath"></div>
-    <div id="sosText" style="font-family:'Fredoka One';font-size:24px;margin-bottom:20px;color:var(--age-color);">Inspire...</div>
+    <div id="sosText" style="font-family:'Fredoka One';font-size:24px;margin-bottom:20px;color:var(--age-color);"></div>
     <div class="m-actions">
-      <button class="btn btn-p" id="sosFinish" onclick="finishSOS()" style="display:none;">Je me sens mieux ❤️</button>
+      <button class="btn btn-p" id="sosFinish" onclick="finishSOS()" style="display:none;" data-i18n="app_modal_feel_better"></button>
     </div>
   </div>
 </div>
 
-<script src="robot.js"></script>
 <script>
 // =============== STATE & CONSTANTS ===============
 const P = window.__ekhioProfile;
@@ -544,14 +821,15 @@ const SK_ROBOT = `ekhio_robot_${PID}`;
 const SK_BANK  = `ekhio_bank_${PID}`;
 const SK_RULES = `ekhio_rules_${PID}`;
 const SK_STATS = `ekhio_stats_${PID}`;
+const SK_WEEK  = `ekhio_weekhist_${PID}`;
 
 const DDATE = new Date().toISOString().split('T')[0];
 
 const BADGES_CFG = [
-  { id: 'b_1', e: '🌱', l: 'Premier Pas', d: 'Gagne 1 étoile au total', req: 1, bonus: 5 },
-  { id: 'b_2', e: '🚀', l: 'Décollage', d: 'Gagne 10 étoiles au total', req: 10, bonus: 10 },
-  { id: 'b_3', e: '💫', l: 'Étoile Filante', d: 'Gagne 50 étoiles au total', req: 50, bonus: 20 },
-  { id: 'b_4', e: '👑', l: 'Légende', d: 'Gagne 100 étoiles au total', req: 100, bonus: 50 }
+  { id: 'b_1', e: '🌱', lk: 'app_badge_first', dk: 'app_badge_first_d', req: 1, bonus: 5 },
+  { id: 'b_2', e: '🚀', lk: 'app_badge_launch', dk: 'app_badge_launch_d', req: 10, bonus: 10 },
+  { id: 'b_3', e: '💫', lk: 'app_badge_shooting', dk: 'app_badge_shooting_d', req: 50, bonus: 20 },
+  { id: 'b_4', e: '👑', lk: 'app_badge_legend', dk: 'app_badge_legend_d', req: 100, bonus: 50 }
 ];
 
 const AGE_COLORS = [
@@ -639,13 +917,19 @@ dedupeProfiles();
 
 
 const BASE_REW = [
-  {id:'r1',e:'🎲',l:'Salle de jeux / activité ensemble',c:3},
-  {id:'r2',e:'🍕',l:'Repas préféré (choix de l\'enfant)',c:4},
-  {id:'r3',e:'📺',l:'1 épisode TV',c:5},
-  {id:'r4',e:'🎢',l:'Super aire de jeux',c:10},
-  {id:'r5',e:'🎬',l:'Soirée film',c:20},
-  {id:'r6',e:'🎁',l:'Petit cadeau surprise',c:50}
+  {id:'r1',e:'🎯',l:'rew_family_activity',c:3,i18n:true},
+  {id:'r2',e:'🍽️',l:'rew_meal_choice',c:4,i18n:true},
+  {id:'r3',e:'⏰',l:'rew_free_time',c:5,i18n:true},
+  {id:'r4',e:'🌳',l:'rew_outing',c:10,i18n:true},
+  {id:'r5',e:'🎬',l:'rew_movie_night',c:15,i18n:true},
+  {id:'r6',e:'🎁',l:'rew_surprise_gift',c:30,i18n:true}
 ];
+
+// Helper: resolve reward label (supports i18n keys)
+function rewLabel(r) {
+  if(r.i18n) return t(r.l);
+  return r.l;
+}
 
 let S = {};
 
@@ -659,7 +943,8 @@ function syncState() {
     rules: JSON.parse(localStorage.getItem(SK_RULES)||'null'),
     day: JSON.parse(localStorage.getItem(SK_DAY+DDATE)||'{"e":0,"done":[]}'),
     sets: JSON.parse(localStorage.getItem(SK_SET)||`{"mx":5, "pin":"0000"}`),
-    stats: JSON.parse(localStorage.getItem(SK_STATS)||'null')
+    stats: JSON.parse(localStorage.getItem(SK_STATS)||'null'),
+    weekHist: JSON.parse(localStorage.getItem(SK_WEEK)||'{}')
   };
   
   if(!S.stats) {
@@ -694,14 +979,23 @@ let selItem = null;
 // Ext
 function sv(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
 
+// =============== WEEK HISTORY (persistent) ===============
+function saveWeekDay() {
+  if(S.day.e > 0) {
+    S.weekHist[DDATE] = S.day.e;
+    sv(SK_WEEK, S.weekHist);
+  }
+}
+
 // =============== UI INIT ===============
 function initUI() {
   document.getElementById('heroName').textContent = P.name;
+  document.getElementById('rbBubble').textContent = t('app_robot_hello');
   
   // Tutorial Hint for new parents
   if(!localStorage.getItem('ekhio_tut_done')) {
     setTimeout(() => {
-      speak("Coucou ! Appuie sur l'engrenage en bas à droite pour ajouter de nouveaux défis !");
+      speak(t('app_robot_tutorial'));
       Robot.set('excited');
     }, 2500);
     localStorage.setItem('ekhio_tut_done', 'true');
@@ -716,13 +1010,13 @@ function initUI() {
   // Adapt Nav Text and Icons
   if(P.age >= 13) {
     document.getElementById('n-game-ic').textContent = '📓';
-    document.getElementById('n-game-tx').textContent = 'Journal';
-    document.getElementById('gameTitle').textContent = 'Mon Journal';
+    document.getElementById('n-game-tx').textContent = t('app_journal_title');
+    document.getElementById('gameTitle').textContent = t('app_journal_title');
     document.getElementById('gameSection').style.display = 'none';
     document.getElementById('journalSection').style.display = 'block';
     
-    document.getElementById('n-rew-tx').textContent = 'Tirelire';
-    document.getElementById('rewTitle').textContent = 'Objectifs Épargne';
+    document.getElementById('n-rew-tx').textContent = t('app_piggybank');
+    document.getElementById('rewTitle').textContent = t('app_savings_goals');
     document.getElementById('bankView').style.display = 'block';
   } else if(P.age <= 10) {
     document.getElementById('sosBtn').style.display = 'flex';
@@ -743,9 +1037,9 @@ function initUI() {
       <div style="font-size:11px;font-weight:800">${pr.name}</div>
     </div>
   `).join('') + `
-    <div class="p-sel-item" onclick="window.location.href='onboarding.html?add=1'">
-      <div class="av" style="background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:16px;">+</div>
-      <div style="font-size:11px;font-weight:800">Ajouter</div>
+    <div class="p-sel-item p-sel-add" onclick="window.location.href='onboarding.html?add=1'">
+      <div class="av" style="background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:20px;">+</div>
+      <div style="font-size:10px;font-weight:800;opacity:0.6">${t('app_add')}</div>
     </div>
   `;
 
@@ -755,6 +1049,10 @@ function initUI() {
   document.getElementById('set-color').value = P.avatar;
   document.getElementById('set-max').value = S.sets.mx;
   document.getElementById('set-pin').value = S.sets.pin || '';
+  
+  // Language selector
+  const langSel = document.getElementById('set-lang');
+  if(langSel) langSel.value = getEkhioLang();
 
   // Render Profiles Manage List
   const pList = document.getElementById('profileManageList');
@@ -763,12 +1061,21 @@ function initUI() {
       <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(0,0,0,0.03);border-radius:12px;">
         <div style="display:flex;align-items:center;gap:10px;">
           <div style="width:12px;height:12px;border-radius:50%;background:${pr.avatar}"></div>
-          <span style="font-weight:800;font-size:14px;">${pr.name} ${pr.id===PID?'(Actuel)':''}</span>
+          <span style="font-weight:800;font-size:14px;">${pr.name} ${pr.id===PID?t('app_current'):''}</span>
         </div>
-        ${pr.id!==PID ? `<button onclick="deleteProfile('${pr.id}')" style="color:#E8344A;font-weight:900;font-size:12px;padding:4px 8px;border:1.5px solid #E8344A;border-radius:8px;">Supprimer</button>` : ''}
+        ${pr.id!==PID ? `<button onclick="deleteProfile('${pr.id}')" style="color:#E8344A;font-weight:900;font-size:12px;padding:4px 8px;border:1.5px solid #E8344A;border-radius:8px;">${t('app_delete_profile')}</button>` : ''}
       </div>
     `).join('');
   }
+
+  // Dark mode restore
+  if(localStorage.getItem('ekhio_dark_mode') === 'true') {
+    document.body.classList.add('dark');
+    document.getElementById('darkBtn').textContent = '☀️';
+  }
+
+  // Apply i18n
+  applyI18n();
 
   renderAll();
 }
@@ -782,7 +1089,8 @@ function switchP(id) {
 // =============== RENDERING ===============
 function renderAll() {
   if(P.age <= 6) {
-    document.getElementById('totalStars').innerHTML = '⭐'.repeat(Math.min(S.stars, 10)) + (S.stars > 10 ? '+' : '');
+    const starCount = Math.min(S.stars, 10);
+    document.getElementById('totalStars').innerHTML = '⭐'.repeat(starCount) + (S.stars > 10 ? '<span style="font-size:24px;vertical-align:middle;">+</span>' : '');
   } else {
     document.getElementById('totalStars').textContent = S.stars;
   }
@@ -792,10 +1100,11 @@ function renderAll() {
   document.getElementById('dailyStars').textContent = S.day.e;
   document.getElementById('maxStars').textContent = S.sets.mx;
 
-  // Visual Stars (Daily Goal) - handle gracefully if removed from DOM
+  // Visual Stars (Daily Goal) with staggered animation
   let vs = '';
   for(let i=1; i<=S.sets.mx; i++) {
-    vs += `<span class="v-star ${i<=S.day.e?'on':''}">⭐</span>`;
+    const delay = i * 0.08;
+    vs += `<span class="v-star ${i<=S.day.e?'on':''}" style="animation-delay:${delay}s">⭐</span>`;
   }
   let vsEl = document.getElementById('dailyVisualStars');
   if(vsEl) vsEl.innerHTML = vs;
@@ -815,9 +1124,12 @@ function renderAll() {
   const bl = document.getElementById('behManageList');
   if(bl) bl.innerHTML = S.behs.map(b=>`<div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>${b.e} ${b.l} (${b.s}⭐)</span> <button onclick="delB('${b.id}')" style="color:red">X</button></div>`).join('');
   const rl = document.getElementById('rewManageList');
-  if(rl) rl.innerHTML = S.rews.map(r=>`<div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>${r.e} ${r.l} (${r.c}⭐)</span> <button onclick="delR('${r.id}')" style="color:red">X</button></div>`).join('');
+  if(rl) rl.innerHTML = S.rews.map(r=>`<div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>${r.e} ${rewLabel(r)} (${r.c}⭐)</span> <button onclick="delR('${r.id}')" style="color:red">X</button></div>`).join('');
   const rulL = document.getElementById('rulManageList');
   if(rulL) rulL.innerHTML = S.rules.map(r=>`<div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:12px"><span>${r.e} <b>${r.l}</b></span> <button onclick="delRule('${r.id}')" style="color:red">X</button></div>`).join('');
+
+  // Save week day on each render
+  saveWeekDay();
 }
 
 function rBehs() {
@@ -827,7 +1139,7 @@ function rBehs() {
   // All behaviors for this child (age-adapted, modifiable by parent)
   S.behs.forEach(b => {
     const done = S.day.done.includes(b.id);
-    ht += `<div class="beh-card ${done?'done':''}" onclick="${done?'':`tapB('${b.id}')`}">
+    ht += `<div class="beh-card ${done?'done':''}" onclick="${done?'':`tapB('${b.id}', event)`}">
       <div class="ic">${b.e}</div><div class="lbl">${b.l}</div><div class="badge">+${b.s}⭐</div>
     </div>`;
   });
@@ -835,7 +1147,7 @@ function rBehs() {
   // Dashboard Action to add quickly
   if(P.age <= 18) {
     ht += `<div class="beh-card" onclick="promptAddBehavior()" style="border:2px dashed var(--age-color); background:transparent; opacity:0.8; justify-content:center; box-shadow:none; display:flex !important;">
-      <div class="ic" style="font-size:24px;">➕</div><div class="lbl" style="color:var(--text);font-weight:800;">Nouveau</div>
+      <div class="ic" style="font-size:24px;">➕</div><div class="lbl" style="color:var(--text);font-weight:800;">${t('app_add_new')}</div>
     </div>`;
   }
   
@@ -850,16 +1162,16 @@ function rRews() {
   let ht = sR.map((r,i) => {
     const ul = S.stars >= r.c;
     const nx = !ul && (i===0 || S.stars >= sR[i-1].c);
-    return `<div class="rew-item ${ul?'ul':nx?'nx':'lk'}" onclick="${ul?`tapR('${r.id}')`:''}">
+    return `<div class="rew-item ${ul?'ul':nx?'nx':'lk'}" onclick="${ul?`tapR('${r.id}')`:''}" >
       <div class="rew-ic">${r.e}</div>
-      <div class="rew-info"><div class="rew-title">${r.l}</div></div>
+      <div class="rew-info"><div class="rew-title">${rewLabel(r)}</div></div>
       <div class="rew-cost">${r.c}⭐</div>
     </div>`;
   }).join('');
 
   // Floating + inside rewards too
   ht += `<div class="rew-item" onclick="promptAddReward()" style="border:2px dashed var(--age-color); background:transparent; opacity:0.6; justify-content:center; box-shadow:none; padding:10px;">
-    <div class="rew-ic" style="font-size:20px;">➕</div><div class="rew-info"><div class="rew-title">Ajouter Cadeau</div></div>
+    <div class="rew-ic" style="font-size:20px;">➕</div><div class="rew-info"><div class="rew-title">${t('app_add_reward_label')}</div></div>
   </div>`;
   l.innerHTML = ht;
 }
@@ -883,29 +1195,39 @@ function rBadges() {
     return `<div class="b-card ${un?'unlocked':''}">
       <div class="b-bonus">+${b.bonus}⭐</div>
       <div class="b-em">${b.e}</div>
-      <div class="b-ti">${b.l}</div>
-      <div class="b-de">${b.d}</div>
+      <div class="b-ti">${t(b.lk)}</div>
+      <div class="b-de">${t(b.dk)}</div>
     </div>`;
   }).join('');
 }
 
 function logMood(emo, lbl) {
-  S.hist.push({t:'earn', e:emo, l:'Journal - humeur: '+lbl, v:0, d:new Date().toLocaleString()});
+  S.hist.push({t:'earn', e:emo, l:t('app_hist_mood') + ': ' + t(lbl), v:0, d:new Date().toLocaleString()});
   sv(SK_HIST, S.hist);
   Robot.bounce();
-  speak("Humeur notée !");
+  speak(t('app_mood_logged'));
   _openTab('home');
 }
 
 function rWeek() {
   const w = document.getElementById('weekBar');
-  const days = ['L','M','M','J','V','S','D'];
+  const dayNames = t('app_week_days');
   const curd = (new Date().getDay() + 6) % 7; // Lundi = 0
   
-  w.innerHTML = days.map((d, i) => {
+  // Get dates for this week
+  const today = new Date();
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - curd);
+  
+  w.innerHTML = dayNames.map((d, i) => {
+    const dayDate = new Date(monday);
+    dayDate.setDate(monday.getDate() + i);
+    const dateStr = dayDate.toISOString().split('T')[0];
+    
     let act = false;
     if(i === curd && S.day.e > 0) act = true;
-    else if(i < curd) act = Math.random() > 0.3; // Fake historic past visual for demo purposes
+    else if(i < curd && S.weekHist[dateStr] && S.weekHist[dateStr] > 0) act = true;
+    
     return `<div class="w-day ${act?'act':''}">
       <div class="wd-l">${d}</div><div class="wd-d">⭐</div>
     </div>`;
@@ -917,7 +1239,7 @@ function rRules() {
   rl.innerHTML = S.rules.map(r => `
     <div class="rule-card">
       <div class="rule-title">${r.e} ${r.l}</div>
-      <div style="font-size:12px;color:rgba(0,0,0,0.6)">${r.d}</div>
+      <div style="font-size:12px;color:var(--muted)">${r.d}</div>
     </div>
   `).join('');
 }
@@ -926,25 +1248,25 @@ function mvBank(amt) {
   if(S.stars >= amt) {
     S.stars -= amt;
     S.bank += amt;
-    S.hist.push({t:'use', e:'🏦', l:'Virement Tirelire', v:amt, d:new Date().toLocaleString()});
+    S.hist.push({t:'use', e:'🏦', l:t('app_hist_savings'), v:amt, d:new Date().toLocaleString()});
     sv(SK_STARS, S.stars);
     sv(SK_BANK, S.bank);
     sv(SK_HIST, S.hist);
     renderAll();
-    speak("Transfert réussi !");
+    speak(t('app_robot_transfer_ok'));
     Robot.celebrate();
   } else {
-    speak("Pas assez d'étoiles !");
+    speak(t('app_robot_not_enough_short'));
   }
 }
 
 function openSOS() {
   document.getElementById('sosModal').classList.add('open');
-  // Simple visual breath guide
-  setTimeout(() => { document.getElementById('sosText').textContent = 'Bloque...'; }, 4000);
-  setTimeout(() => { document.getElementById('sosText').textContent = 'Expire...'; }, 8000);
+  document.getElementById('sosText').textContent = t('app_breathe_inhale');
+  setTimeout(() => { document.getElementById('sosText').textContent = t('app_breathe_hold'); }, 4000);
+  setTimeout(() => { document.getElementById('sosText').textContent = t('app_breathe_exhale'); }, 8000);
   setTimeout(() => { 
-    document.getElementById('sosText').textContent = 'On recommence...'; 
+    document.getElementById('sosText').textContent = t('app_breathe_again'); 
     document.getElementById('sosFinish').style.display = 'block';
   }, 14000);
 }
@@ -952,10 +1274,10 @@ function openSOS() {
 function finishSOS() {
   closeModals();
   S.day.e += 1; S.stars += 1;
-  S.hist.push({t:'earn', e:'🧘', l:'Exercice anti-crise', v:1, d:new Date().toLocaleString()});
+  S.hist.push({t:'earn', e:'🧘', l:t('app_hist_crisis'), v:1, d:new Date().toLocaleString()});
   sv(SK_STARS, S.stars); sv(SK_DAY+DDATE, S.day); sv(SK_HIST, S.hist);
   renderAll();
-  Robot.set('happy'); speak('Bravo, tu es super !');
+  Robot.set('happy'); speak(t('app_robot_crisis'));
 }
 
 // =============== HELPER UTILS ===============
@@ -989,17 +1311,31 @@ function shadeColor(color, percent) {
   return "#"+RR+GG+BB;
 }
 
+// =============== CONFETTI ===============
+function burstConfetti() {
+  const container = document.createElement('div');
+  container.className = 'confetti-burst';
+  document.body.appendChild(container);
+  const colors = ['#FFB800','#2ECC71','#00D4FF','#8B5CF6','#E8344A','#FF6B35'];
+  for(let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-particle';
+    const angle = (Math.PI * 2 / 20) * i;
+    const dist = 80 + Math.random() * 120;
+    p.style.setProperty('--cx', `${Math.cos(angle)*dist}px`);
+    p.style.setProperty('--cy', `${Math.sin(angle)*dist - 60}px`);
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.left = '0px'; p.style.top = '0px';
+    container.appendChild(p);
+  }
+  setTimeout(() => container.remove(), 1200);
+}
+
 // =============== ACTIONS ===============
 function toggleDark() {
   const isDark = document.body.classList.toggle('dark');
   localStorage.setItem('ekhio_dark_mode', isDark);
   document.getElementById('darkBtn').textContent = isDark ? '☀️' : '🌙';
-}
-
-// Check dark mode on load
-if(localStorage.getItem('ekhio_dark_mode') === 'true') {
-  document.body.classList.add('dark');
-  document.getElementById('darkBtn').textContent = '☀️';
 }
 
 function speak(txt) {
@@ -1024,7 +1360,7 @@ function repairDashboard() {
   S.behs = JSON.parse(JSON.stringify(defaults)); 
   sv(SK_BEH, S.behs); 
   renderAll();
-  alert("Les défis ont été réinitialisés avec succès.");
+  alert(t('app_robot_repaired'));
 }
 
 function promptAddReward() {
@@ -1043,36 +1379,50 @@ function toggleParentTools() {
 }
 
 function doPromptAddBehavior() {
-  const l = prompt("Nouveau comportement / défi :");
+  const l = prompt(t('app_prompt_new_behavior'));
   if(!l) return;
-  const e = prompt("Emoji (ex: 🧹, 📚, 🤗) :") || '⭐';
-  const s = parseInt(prompt("Nombre d'étoiles gagnées :")) || 1;
+  const e = prompt(t('app_prompt_emoji')) || '⭐';
+  const s = parseInt(prompt(t('app_prompt_stars_earned'))) || 1;
   const id = 'b_cus_' + Date.now();
   S.behs.push({id, e, l, s});
   sv(SK_BEH, S.behs); renderAll();
-  speak("Nouveau défi ajouté !");
+  speak(t('app_robot_new_challenge'));
 }
 
 function doPromptAddReward() {
-  const l = prompt("Nouvelle récompense / cadeau :");
+  const l = prompt(t('app_prompt_new_reward'));
   if(!l) return;
-  const e = prompt("Emoji (ex: 🍦, 🎨, 🏎️) :") || '🎁';
-  const c = parseInt(prompt("Coût en étoiles :")) || 5;
+  const e = prompt(t('app_prompt_emoji_reward')) || '🎁';
+  const c = parseInt(prompt(t('app_prompt_cost'))) || 5;
   const id = 'r_cus_' + Date.now();
   S.rews.push({id, e, l, c});
   sv(SK_REW, S.rews); renderAll();
-  speak("Récompense ajoutée !");
+  speak(t('app_robot_new_reward'));
 }
 
-function tapB(id) {
-  if(S.day.e >= S.sets.mx) { speak("Maximum d'étoiles atteint !"); Robot.set('neutral'); return; }
+function tapB(id, event) {
+  // Ripple effect
+  if(event) {
+    const card = event.currentTarget;
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    const rect = card.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (event.clientX - rect.left - size/2) + 'px';
+    ripple.style.top = (event.clientY - rect.top - size/2) + 'px';
+    card.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+  }
+
+  if(S.day.e >= S.sets.mx) { speak(t('app_robot_max_stars')); Robot.set('neutral'); return; }
   const b = S.behs.find(x=>x.id===id);
   if(!b) return;
   selItem = { ...b };
   document.getElementById('vmEm').textContent = b.e;
   document.getElementById('vmT').textContent = b.l;
-  document.getElementById('vmD').textContent = `Tu as bien réussi ça ?`;
-  document.getElementById('vmOk').textContent = `Gagner ${b.s}⭐`;
+  document.getElementById('vmD').textContent = t('app_modal_did_it');
+  document.getElementById('vmOk').textContent = `${t('app_modal_earn_star')} ${b.s}⭐`;
   document.getElementById('valModal').classList.add('open');
   Robot.set('curious');
 }
@@ -1086,7 +1436,7 @@ function checkBadges(bPoints) {
       S.stats.badges.push(b.id);
       newBadges.push(b);
       S.stars += b.bonus;
-      S.hist.push({t:'earn', e:'🏆', l:`Trophée: ${b.l}`, v:b.bonus, d:new Date().toLocaleString()});
+      S.hist.push({t:'earn', e:'🏆', l:`${t('app_hist_trophy')}: ${t(b.lk)}`, v:b.bonus, d:new Date().toLocaleString()});
     }
   });
   sv(SK_STATS, S.stats);
@@ -1094,12 +1444,12 @@ function checkBadges(bPoints) {
   if(newBadges.length > 0) {
     const last = newBadges[newBadges.length-1];
     document.getElementById('bmEm').textContent = last.e;
-    document.getElementById('bmT').textContent = last.l;
-    document.getElementById('bmD').textContent = `Félicitations ! Tu as gagné un bonus de ${last.bonus}⭐`;
+    document.getElementById('bmT').textContent = t(last.lk);
+    document.getElementById('bmD').textContent = `${t('app_badge_congrats')} ${last.bonus}⭐`;
     setTimeout(() => {
       document.getElementById('badgeModal').classList.add('open');
       Robot.celebrate();
-      speak("Incroyable ! Nouveau trophée débloqué !");
+      speak(t('app_robot_trophy'));
       renderAll();
     }, 2000);
   }
@@ -1124,15 +1474,23 @@ function confirmValidate() {
   renderAll();
   Robot.celebrate();
   Robot.set('excited');
-  speak("Génial ! Je suis fier de toi !");
+  speak(t('app_robot_proud'));
+  burstConfetti();
+  
+  // Pop animation on star counter
+  const tc = document.getElementById('totalStars');
+  if(tc) {
+    tc.classList.add('pop');
+    setTimeout(() => tc.classList.remove('pop'), 400);
+  }
 }
 
 function tapR(id) {
   const r = S.rews.find(x=>x.id===id);
   selItem = r;
   document.getElementById('rmEm').textContent = r.e;
-  document.getElementById('rmT').textContent = r.l;
-  document.getElementById('rmD').textContent = `Dépenser ${r.c}⭐ pour ça ?`;
+  document.getElementById('rmT').textContent = rewLabel(r);
+  document.getElementById('rmD').textContent = `${t('app_modal_spend')} ${r.c}⭐ ${t('app_modal_for_this')}`;
   document.getElementById('rewModal').classList.add('open');
   Robot.set('happy');
 }
@@ -1141,7 +1499,7 @@ function confirmReward() {
   closeModals();
   const r = selItem;
   if(S.stars < r.c) {
-    speak("Tu n'as pas assez d'étoiles pour ça ! Continue tes défis. 💪");
+    speak(t('app_robot_not_enough'));
     return;
   }
   
@@ -1149,7 +1507,7 @@ function confirmReward() {
   S.stars -= r.c;
   
   // Log history
-  S.hist.push({t:'use', e:r.e, l:r.l, v:r.c, d:new Date().toLocaleString()});
+  S.hist.push({t:'use', e:r.e, l:rewLabel(r), v:r.c, d:new Date().toLocaleString()});
   
   // Immediate Save
   sv(SK_STARS, S.stars); 
@@ -1159,7 +1517,7 @@ function confirmReward() {
   renderAll();
   Robot.bounce();
   Robot.set('proud');
-  speak(`Super ! Amuse-toi bien avec : ${r.l} ! 🎁`);
+  speak(`${t('app_robot_enjoy')} ${rewLabel(r)} ! 🎁`);
   
   // Animation on total counter
   const tc = document.getElementById('totalStars');
@@ -1213,7 +1571,7 @@ function addPin(n) {
     } else {
       curPin = '';
       updatePinDots();
-      Robot.shake(); speak("Erreur de code !");
+      Robot.shake(); speak(t('app_robot_pin_error'));
     }
   }
 }
@@ -1242,7 +1600,7 @@ function saveProfileSettings() {
   sv(SK_SET, S.sets);
 
   initUI();
-  speak("Sauvegardé !");
+  speak(t('app_saved'));
 }
 
 function addBehavior() {
@@ -1282,18 +1640,19 @@ function delRule(id) { S.rules = S.rules.filter(x=>x.id!==id); sv(SK_RULES, S.ru
 
 function fastBonus() {
   S.day.e += 1; S.stars += 1;
-  S.hist.push({t:'earn', e:'🎁', l:'Bonus Parent Manuel', v:1, d:new Date().toLocaleString()});
+  S.hist.push({t:'earn', e:'🎁', l:t('app_hist_parent_bonus'), v:1, d:new Date().toLocaleString()});
   sv(SK_STARS, S.stars); sv(SK_DAY+DDATE, S.day); sv(SK_HIST, S.hist);
   renderAll();
-  Robot.celebrate(); speak("Bonus ajouté !");
+  Robot.celebrate(); speak(t('app_robot_bonus'));
+  burstConfetti();
 }
 
 function resetStats() {
-  if(confirm("Remettre à zéro l'historique et les étoiles pour cet enfant ?")) {
+  if(confirm(t('app_prompt_reset_confirm'))) {
     S.stars = 0; S.bank = 0; S.hist = []; S.day = {"e":0,"done":[]};
     sv(SK_STARS, S.stars); sv(SK_BANK, S.bank); sv(SK_HIST, S.hist); sv(SK_DAY+DDATE, S.day);
     renderAll();
-    speak("Stats remises à zéro.");
+    speak(t('app_robot_stats_reset'));
   }
 }
 
@@ -1303,7 +1662,7 @@ function addProfile() {
 
 function deleteProfile(id) {
   if(id === PID) return;
-  if(confirm("Supprimer définitivement ce profil et toutes ses données ? cette action est irréversible.")) {
+  if(confirm(t('app_delete_confirm'))) {
     let all = JSON.parse(localStorage.getItem('ekhio_profiles') || '[]');
     all = all.filter(p => p.id !== id);
     localStorage.setItem('ekhio_profiles', JSON.stringify(all));
@@ -1328,7 +1687,7 @@ function deleteProfile(id) {
     }
     
     initUI();
-    speak("Profil supprimé.");
+    speak(t('app_robot_profile_deleted'));
   }
 }
 
@@ -1363,15 +1722,24 @@ function resetGame() {
   document.getElementById('gLives').textContent = '❤️❤️❤️';
 }
 
+function handleKeyPress(e) {
+  if (e.code === 'Space' || e.code === 'ArrowUp') {
+    // Prevent default scroll behavior when playing game
+    e.preventDefault();
+    jump(e);
+  }
+}
+
 function startGame() {
   if(gameId) cancelAnimationFrame(gameId);
   resetGame();
   GC.addEventListener('touchstart', jump);
   GC.addEventListener('mousedown', jump);
+  window.addEventListener('keydown', handleKeyPress);
   gameLoop();
 }
 
-function jump(e) { e.preventDefault(); if(!isJumping){ pvy = -14; isJumping = true; } }
+function jump(e) { if(e && e.preventDefault) e.preventDefault(); if(!isJumping){ pvy = -14; isJumping = true; } }
 
 function gameLoop() {
   GCTX.clearRect(0,0,GC.width,GC.height);
@@ -1400,7 +1768,8 @@ function gameLoop() {
       document.getElementById('gLives').textContent = '❤️'.repeat(Math.max(0,gLives));
       obstacles.splice(i,1);
       if(gLives<=0) {
-        GCTX.fillStyle = '#1A1208'; GCTX.font = '24px Fredoka One'; GCTX.fillText('Game Over', 130, 100);
+        GCTX.fillStyle = '#1A1208'; GCTX.font = '24px Fredoka One'; GCTX.fillText(t('app_game_over'), 130, 100);
+        window.removeEventListener('keydown', handleKeyPress);
         return; // stop loop
       }
     } else if(ob.x < 20) {

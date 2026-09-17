@@ -3,9 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Ekhio — Onboarding</title>
+  <title>Ekhio — Configuration</title>
+  <meta name="description" content="Configurez le profil de votre enfant sur Ekhio. Application développée par Artean Digital Studio (arteandigital.fr) et déployée par l'Association Herrichain (herrichain.org)." />
+  <!-- PWA Support -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#FFB800" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('Service Worker registered successfully.', reg.scope))
+          .catch(err => console.warn('Service Worker registration failed.', err));
+      });
+    }
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="robot.css">
+  <script src="i18n.js"></script>
   <style>
     :root {
       --bg: #0F0A1E;
@@ -119,8 +136,53 @@
     .btn-primary { background: linear-gradient(135deg, var(--accent), #FF6B35); color: #0F0A1E; box-shadow: 0 6px 20px rgba(255,184,0,0.3); }
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,184,0,0.4); }
     .btn:disabled { opacity: 0.5; pointer-events: none; }
-    .beh-card:active{transform:scale(0.97);}
-    .beh-card.done{opacity:0.4; pointer-events:none;}
+
+    /* Reward selection cards */
+    .rew-select-grid {
+      display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;
+      max-height: 280px; overflow-y: auto; padding-right: 4px;
+    }
+    .rew-select-card {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 16px;
+      background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.15);
+      cursor: pointer; transition: 0.2s; user-select: none;
+    }
+    .rew-select-card.selected {
+      border-color: var(--accent); background: rgba(255,184,0,0.1);
+      box-shadow: 0 0 12px rgba(255,184,0,0.15);
+    }
+    .rew-select-card:active { transform: scale(0.98); }
+    .rew-select-card .rew-em { font-size: 28px; flex-shrink: 0; }
+    .rew-select-card .rew-lbl { flex: 1; font-weight: 800; font-size: 14px; }
+    .rew-select-card .rew-cost { font-family: 'Fredoka One', cursive; font-size: 16px; color: var(--accent); flex-shrink: 0; }
+    .rew-select-card .rew-check {
+      width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      transition: 0.2s; font-size: 12px;
+    }
+    .rew-select-card.selected .rew-check {
+      background: var(--accent); border-color: var(--accent); color: #0F0A1E;
+    }
+
+    /* Custom reward input */
+    .custom-rew-row {
+      display: flex; gap: 8px; margin-bottom: 16px;
+    }
+    .custom-rew-row input {
+      padding: 10px 12px; background: rgba(0,0,0,0.2); border: 2px solid rgba(255,255,255,0.15);
+      border-radius: 12px; color: #FFF; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 13px;
+      outline: none; transition: border-color 0.2s;
+    }
+    .custom-rew-row input:focus { border-color: var(--accent); }
+    .custom-rew-row input:first-child { flex: 1; }
+    .custom-rew-row input:last-of-type { width: 70px; text-align: center; }
+    .custom-rew-row button {
+      padding: 10px 16px; border-radius: 12px; border: none;
+      background: var(--accent); color: #0F0A1E; font-weight: 900; font-size: 13px;
+      cursor: pointer; transition: 0.2s; white-space: nowrap;
+    }
+    .custom-rew-row button:hover { filter: brightness(1.1); }
   </style>
   <script>
     /* Redirect check before rendering */
@@ -143,13 +205,13 @@
         <div class="dot"></div>
         <div class="dot"></div>
         <div class="dot"></div>
+        <div class="dot"></div>
       </div>
     </div>
 
     <!-- Robot Area -->
     <div class="robot-area">
-      <div class="bubble" id="rbBubble">Salut ! Je suis Ekhio.</div>
-      <!-- Robot snippet included directly here for simplicity (can use JS to inject but hardcoding is faster) -->
+      <div class="bubble" id="rbBubble"></div>
       <div class="robot-scene" style="transform: scale(0.9);">
         <div class="robot-float" id="robot-float">
           <div class="walle-wrap curious" id="robot">
@@ -182,34 +244,34 @@
 
     <!-- STEPS -->
     <div class="step-content active" id="step-1">
-      <h1 class="step-title">Bienvenue !</h1>
-      <p class="step-desc">Je suis Ekhio, ton nouveau compagnon pour grandir tous les jours. Ensemble, on va faire de grandes choses !</p>
+      <h1 class="step-title" id="s1-title"></h1>
+      <p class="step-desc" id="s1-desc"></p>
       <div style="flex:1"></div>
-      <button class="btn btn-primary" onclick="nextStep(2)">Commencer 🚀</button>
+      <button class="btn btn-primary" onclick="nextStep(2)" id="s1-btn"></button>
     </div>
 
     <div class="step-content" id="step-2">
-      <h1 class="step-title">Comment tu t'appelles ?</h1>
-      <p class="step-desc">Pour que je puisse t'encourager personnellement.</p>
-      <input type="text" id="ob-name" class="ob-input" placeholder="Ton prénom" autocomplete="off">
+      <h1 class="step-title" id="s2-title"></h1>
+      <p class="step-desc" id="s2-desc"></p>
+      <input type="text" id="ob-name" class="ob-input" autocomplete="off">
       <div style="flex:1"></div>
-      <button class="btn btn-primary" id="btn-s2" onclick="nextStep(3)" disabled>Suivant →</button>
+      <button class="btn btn-primary" id="btn-s2" onclick="nextStep(3)" disabled></button>
     </div>
 
     <div class="step-content" id="step-3">
-      <h1 class="step-title">Quel âge as-tu ?</h1>
-      <p class="step-desc">Pour adapter mes défis à ta taille !</p>
-      <div class="age-display" id="age-val">5 <span style="font-size: 20px;">ans</span></div>
+      <h1 class="step-title" id="s3-title"></h1>
+      <p class="step-desc" id="s3-desc"></p>
+      <div class="age-display" id="age-val">5 <span style="font-size: 20px;" id="age-unit"></span></div>
       <div class="range-wrap">
         <input type="range" id="ob-age" min="3" max="18" value="5" step="1">
       </div>
       <div style="flex:1"></div>
-      <button class="btn btn-primary" onclick="nextStep(4)">Suivant →</button>
+      <button class="btn btn-primary" onclick="nextStep(4)" id="s3-btn"></button>
     </div>
 
     <div class="step-content" id="step-4">
-      <h1 class="step-title">Personnalise-moi !</h1>
-      <p class="step-desc">Choisis ma couleur pour me rendre unique.</p>
+      <h1 class="step-title" id="s4-title"></h1>
+      <p class="step-desc" id="s4-desc"></p>
       <div class="color-grid" id="color-grid">
         <div class="color-btn active" style="background:#FFB800" data-color="#FFB800"></div>
         <div class="color-btn" style="background:#2ECC71" data-color="#2ECC71"></div>
@@ -218,7 +280,24 @@
         <div class="color-btn" style="background:#E8344A" data-color="#E8344A"></div>
       </div>
       <div style="flex:1"></div>
-      <button class="btn btn-primary" onclick="finishOnboarding()">C'est parti ! 🎉</button>
+      <button class="btn btn-primary" onclick="nextStep(5)" id="s4-btn"></button>
+    </div>
+
+    <!-- STEP 5: Rewards Selection -->
+    <div class="step-content" id="step-5">
+      <h1 class="step-title" id="s5-title"></h1>
+      <p class="step-desc" id="s5-desc"></p>
+      
+      <div class="rew-select-grid" id="rewSelectGrid"></div>
+      
+      <div class="custom-rew-row">
+        <input type="text" id="custom-rew-name" placeholder="">
+        <input type="number" id="custom-rew-cost" placeholder="" min="1" value="5">
+        <button onclick="addCustomReward()" id="custom-rew-btn"></button>
+      </div>
+      
+      <div style="flex:1"></div>
+      <button class="btn btn-primary" onclick="finishOnboarding()" id="s5-btn"></button>
     </div>
 
   </div>
@@ -249,9 +328,89 @@
     // Data collection
     let OB = { name: '', age: 5, color: '#FFB800' };
 
+    // Default rewards template
+    const REWARD_TEMPLATES = [
+      { id: 'rt1', e: '🎯', lk: 'rew_family_activity', c: 3, selected: true },
+      { id: 'rt2', e: '🍽️', lk: 'rew_meal_choice', c: 4, selected: true },
+      { id: 'rt3', e: '⏰', lk: 'rew_free_time', c: 5, selected: true },
+      { id: 'rt4', e: '🌳', lk: 'rew_outing', c: 10, selected: true },
+      { id: 'rt5', e: '🎬', lk: 'rew_movie_night', c: 15, selected: false },
+      { id: 'rt6', e: '🎁', lk: 'rew_surprise_gift', c: 30, selected: false }
+    ];
+    let customRewards = [];
+
     // Dark Mode Detection
     if(localStorage.getItem('ekhio_dark_mode') === 'true') {
       document.body.classList.add('dark');
+    }
+
+    // ===== I18N SETUP =====
+    function setupI18n() {
+      // Step 1
+      document.getElementById('s1-title').textContent = t('ob_welcome');
+      document.getElementById('s1-desc').textContent = t('ob_welcome_desc');
+      document.getElementById('s1-btn').textContent = t('ob_start');
+      // Step 2
+      document.getElementById('s2-title').textContent = t('ob_name_title');
+      document.getElementById('s2-desc').textContent = t('ob_name_desc');
+      document.getElementById('ob-name').placeholder = t('ob_name_placeholder');
+      document.getElementById('btn-s2').textContent = t('ob_next');
+      // Step 3
+      document.getElementById('s3-title').textContent = t('ob_age_title');
+      document.getElementById('s3-desc').textContent = t('ob_age_desc');
+      document.getElementById('age-unit').textContent = t('ob_age_unit');
+      document.getElementById('s3-btn').textContent = t('ob_next');
+      // Step 4
+      document.getElementById('s4-title').textContent = t('ob_color_title');
+      document.getElementById('s4-desc').textContent = t('ob_color_desc');
+      document.getElementById('s4-btn').textContent = t('ob_next');
+      // Step 5
+      document.getElementById('s5-title').textContent = t('ob_rewards_title');
+      document.getElementById('s5-desc').textContent = t('ob_rewards_desc');
+      document.getElementById('custom-rew-name').placeholder = t('ob_rewards_custom_placeholder');
+      document.getElementById('custom-rew-cost').placeholder = t('ob_rewards_cost_placeholder');
+      document.getElementById('custom-rew-btn').textContent = t('ob_rewards_add');
+      document.getElementById('s5-btn').textContent = t('ob_finish');
+    }
+
+    // Render reward selection grid
+    function renderRewardGrid() {
+      const grid = document.getElementById('rewSelectGrid');
+      const all = [...REWARD_TEMPLATES, ...customRewards];
+      grid.innerHTML = all.map(r => {
+        const label = r.lk ? t(r.lk) : r.l;
+        return `<div class="rew-select-card ${r.selected?'selected':''}" onclick="toggleReward('${r.id}')">
+          <div class="rew-check">${r.selected ? '✓' : ''}</div>
+          <div class="rew-em">${r.e}</div>
+          <div class="rew-lbl">${label}</div>
+          <div class="rew-cost">${r.c}⭐</div>
+        </div>`;
+      }).join('');
+    }
+
+    function toggleReward(id) {
+      const allRews = [...REWARD_TEMPLATES, ...customRewards];
+      const r = allRews.find(x => x.id === id);
+      if(r) {
+        r.selected = !r.selected;
+        renderRewardGrid();
+      }
+    }
+
+    function addCustomReward() {
+      const name = document.getElementById('custom-rew-name').value.trim();
+      const cost = parseInt(document.getElementById('custom-rew-cost').value) || 5;
+      if(!name) return;
+      customRewards.push({
+        id: 'rc_' + Date.now(),
+        e: '🎁',
+        l: name,
+        c: cost,
+        selected: true
+      });
+      document.getElementById('custom-rew-name').value = '';
+      renderRewardGrid();
+      Robot.bounce();
     }
 
     // Logic
@@ -260,7 +419,7 @@
     nameInput.addEventListener('input', e => {
       OB.name = e.target.value.trim();
       btnS2.disabled = OB.name.length < 2;
-      speak(`Enchanté ${OB.name} !`);
+      speak(`${t('ob_robot_nice')} ${OB.name} !`);
       if(OB.name.length > 2) Robot.set('happy');
     });
 
@@ -303,7 +462,7 @@
     const ageVal = document.getElementById('age-val');
     ageInput.addEventListener('input', e => {
       OB.age = parseInt(e.target.value, 10);
-      ageVal.innerHTML = `${OB.age} <span style="font-size: 20px;">ans</span>`;
+      ageVal.innerHTML = `${OB.age} <span style="font-size: 20px;">${t('ob_age_unit')}</span>`;
       Robot.set('curious');
       let ageColor = '#FFB800';
       if(OB.age >= 7) ageColor = '#2ECC71';
@@ -322,7 +481,7 @@
         OB.color = e.target.dataset.color;
         applyRobotTheme(OB.color);
         Robot.set('excited');
-        speak("Wouah ! J'adore cette couleur !");
+        speak(t('ob_robot_love_color'));
       }
     });
 
@@ -342,14 +501,18 @@
 
       if (step === 2) {
         Robot.set('curious');
-        speak("Dis-moi ton prénom");
+        speak(t('ob_robot_name'));
         setTimeout(() => nameInput.focus(), 300);
       } else if (step === 3) {
         Robot.set('excited');
-        speak("Et ton âge ?");
+        speak(t('ob_robot_age'));
       } else if (step === 4) {
         Robot.set('happy');
-        speak("Choisis ma couleur !");
+        speak(t('ob_robot_color'));
+      } else if (step === 5) {
+        Robot.set('curious');
+        speak(t('ob_robot_rewards'));
+        renderRewardGrid();
       }
     }
 
@@ -371,17 +534,35 @@
       
       localStorage.setItem('ekhio_profiles', JSON.stringify(profiles));
       localStorage.setItem('ekhio_active_profile', id);
-      localStorage.setItem('ekhio_onboarding_done', 'true'); // Just in case, though profile existence is enough
+      localStorage.setItem('ekhio_onboarding_done', 'true');
+      
+      // Save selected rewards for this profile
+      const selectedRewards = [...REWARD_TEMPLATES, ...customRewards]
+        .filter(r => r.selected)
+        .map(r => ({
+          id: r.id,
+          e: r.e,
+          l: r.lk || r.l,
+          c: r.c,
+          i18n: !!r.lk
+        }));
+      
+      if(selectedRewards.length > 0) {
+        localStorage.setItem(`ekhio_rewards_${id}`, JSON.stringify(selectedRewards));
+      }
       
       Robot.celebrate();
-      speak("C'est parti !!");
+      speak(t('ob_robot_go'));
       setTimeout(() => {
         window.location.replace('app.html');
       }, 1500);
     }
 
+    // Init
+    setupI18n();
+    
     setTimeout(() => {
-      speak("Salut ! Je suis Ekhio.");
+      speak(t('ob_robot_hello'));
       Robot.set('welcome'); // Triggers neutral
       Robot.bounce(); // bounce
     }, 1000);

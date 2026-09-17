@@ -1,0 +1,19 @@
+{
+  "name": "Ekhio — Grandir, une étoile à la fois",
+  "short_name": "Ekhio",
+  "description": "Compagnon d'éducation positive et bienveillante basé sur les neurosciences pour les enfants de 3 à 18 ans.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#FFF9F0",
+  "theme_color": "#FFB800",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

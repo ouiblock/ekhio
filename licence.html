@@ -4,6 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ekhio — Licence, CGU, CGV & Données personnelles</title>
+  <meta name="description" content="Licence, conditions d'utilisation et politique de données personnelles pour l'application Ekhio." />
+  <!-- PWA Support -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#FFB800" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('Service Worker registered successfully.', reg.scope))
+          .catch(err => console.warn('Service Worker registration failed.', err));
+      });
+    }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
   <style>
@@ -80,16 +96,17 @@
     <h2>Mentions légales</h2>
 
     <h3>Éditeur de l'application</h3>
-    <p><strong>Artean Digital</strong><br>
-    Développeur et éditeur de l'application Ekhio<br>
-    Site web : <a href="https://arteandigital.fr" target="_blank">arteandigital.fr</a><br>
+    <p><strong>Artean Digital Studio (SAS BASK'IN BIARRITZ)</strong><br>
+    Développeur et propriétaire du code source de l'application Ekhio<br>
+    Site web : <a href="https://www.arteandigital.fr" target="_blank">www.arteandigital.fr</a><br>
     Contact : <a href="mailto:contact@arteandigital.fr">contact@arteandigital.fr</a></p>
 
     <h3>Distributeur</h3>
     <p><strong>Association Herrichain</strong><br>
-    Association loi 1901 à but non lucratif<br>
+    Association loi 1901 à but non lucratif chargee de son déploiement<br>
     Numéro RNA : <strong>W641015204</strong><br>
     Siège social : Bidart, 64210, Pyrénées-Atlantiques, France<br>
+    Site web : <a href="https://herrichain.org" target="_blank">herrichain.org</a><br>
     L'association Herrichain assure la distribution gratuite de l'application Ekhio à destination des familles.</p>
 
     <h3>Hébergement</h3>
@@ -100,10 +117,10 @@
     <p>Code source disponible sur GitHub : <a href="https://github.com/ouiblock/ekhio" target="_blank">github.com/ouiblock/ekhio</a></p>
 
     <h3>Propriété intellectuelle</h3>
-    <p>L'ensemble des éléments constituant l'application Ekhio (code, design, contenus, mascotte, nom, logo) sont la propriété exclusive d'Artean Digital, sauf mention contraire. Le code source est distribué sous licence MIT avec Commons Clause — <strong>tout usage commercial est interdit sans accord écrit préalable d'Artean Digital.</strong></p>
+    <p>L'ensemble des éléments constituant l'application Ekhio (code, design, contenus, mascotte, nom, logo) sont la propriété exclusive d'Artean Digital Studio (SAS BASK'IN BIARRITZ), sauf mention contraire. Le code source est distribué sous licence MIT avec Commons Clause — <strong>tout usage commercial est interdit sans accord écrit préalable de la SAS BASK'IN BIARRITZ.</strong></p>
 
     <h3>Responsabilité</h3>
-    <p>Artean Digital et l'association Herrichain s'efforcent d'assurer l'exactitude des informations diffusées dans l'application, mais ne sauraient être tenus responsables des erreurs ou omissions, ni des conséquences de l'utilisation ou de la non-utilisation des fonctionnalités proposées.</p>
+    <p>Artean Digital Studio and l'association Herrichain s'efforcent d'assurer l'exactitude des informations diffusées dans l'application, mais ne sauraient être tenus responsables des erreurs ou omissions, ni des conséquences de l'utilisation ou de la non-utilisation des fonctionnalités proposées.</p>
     <p>Le contenu à caractère scientifique (neurosciences, psychologie du développement, pédopsychiatrie) est fourni à titre de vulgarisation uniquement et ne constitue en aucun cas un avis médical, psychologique ou psychiatrique.</p>
 
     <h3>Droit applicable</h3>
@@ -115,10 +132,10 @@
     <div class="sec-icon">📄</div>
     <h2>Conditions Générales d'Utilisation (CGU)</h2>
 
-    <div class="highlight"><strong>Version en vigueur :</strong> 1er avril 2026 — Artean Digital / Association Herrichain</div>
+    <div class="highlight"><strong>Version en vigueur :</strong> 1er avril 2026 — Artean Digital Studio (SAS BASK'IN BIARRITZ) / Association Herrichain</div>
 
     <h3>Article 1 — Objet</h3>
-    <p>Les présentes Conditions Générales d'Utilisation (CGU) définissent les modalités d'utilisation de l'application <strong>Ekhio</strong>, développée par Artean Digital et distribuée gratuitement par l'association loi 1901 Herrichain (RNA : W641015204).</p>
+    <p>Les présentes Conditions Générales d'Utilisation (CGU) définissent les modalités d'utilisation de l'application <strong>Ekhio</strong>, développée bénévolement par Artean Digital Studio (SAS BASK'IN BIARRITZ) et distribuée gratuitement par l'association loi 1901 Herrichain (RNA : W641015204).</p>
 
     <h3>Article 2 — Accès et gratuité</h3>
     <p>L'application Ekhio est accessible <strong>gratuitement</strong>, sans inscription, sans création de compte et sans abonnement. Aucun paiement n'est demandé à l'utilisateur pour accéder aux fonctionnalités de l'application.</p>
@@ -210,7 +227,7 @@
     <p>Dans la mesure où <strong>aucune donnée personnelle n'est collectée</strong> par Artean Digital ou Herrichain, ces droits s'exercent directement sur votre appareil via les fonctionnalités de l'application ou les paramètres de votre navigateur.</p>
 
     <h3>Responsable de traitement</h3>
-    <p>Artean Digital — <a href="mailto:contact@arteandigital.fr">contact@arteandigital.fr</a></p>
+    <p>Artean Digital Studio (SAS BASK'IN BIARRITZ) — <a href="mailto:contact@arteandigital.fr">contact@arteandigital.fr</a></p>
     <p>Aucun Délégué à la Protection des Données (DPO) n'est requis au vu de l'absence de traitement de données personnelles.</p>
 
     <h3>Date de mise à jour</h3>
@@ -288,12 +305,12 @@ BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY.</pre>
 
 <footer>
   <div class="footer-logo">☀️ <em>Ekhio</em></div>
-  <p>Développée par <a href="https://arteandigital.fr" target="_blank">Artean Digital</a> · Distribuée par l'association <strong style="color:rgba(255,255,255,.6)">Herrichain</strong> (RNA : W641015204) · Bidart 64210, France</p>
+  <p>Développée par <a href="https://www.arteandigital.fr" target="_blank">Artean Digital Studio</a> · Distribuée par l'association <a href="https://herrichain.org" target="_blank" style="color:rgba(255,255,255,.6);font-weight:bold;text-decoration:underline">Herrichain</a> (RNA : W641015204) · Bidart 64210, France</p>
   <div class="lic-badges">
     <span class="lic-badge">📄 MIT + Commons Clause</span>
     <span class="lic-badge">🚫 Usage commercial interdit</span>
     <span class="lic-badge">✅ Fork personnel autorisé</span>
-    <span class="lic-badge">© 2026 Artean Digital</span>
+    <span class="lic-badge">© 2026 Artean Digital Studio (SAS BASK'IN BIARRITZ)</span>
   </div>
   <p style="font-size:11px;color:rgba(255,255,255,.2);margin-top:10px">⚠️ Application à visée ludique uniquement — Ne constitue pas un avis médical ou psychologique</p>
 </footer>

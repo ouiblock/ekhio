@@ -4,6 +4,27 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Ekhio | Grandir, une étoile à la fois</title>
+<meta name="description" content="Ekhio est une application d'accompagnement parental gratuite et hors ligne basée sur les neurosciences. Développée par Artean Digital Studio (arteandigital.fr) et déployée par l'Association Herrichain (herrichain.org)." />
+<!-- PWA Support -->
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#FFB800" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<link rel="apple-touch-icon" href="icon.svg" />
+<!-- SEO Metadata -->
+<meta property="og:title" content="Ekhio | Grandir, une étoile à la fois" />
+<meta property="og:description" content="Compagnon d'éducation positive par l'Association Herrichain (herrichain.org) et Artean Digital Studio (arteandigital.fr)." />
+<meta property="og:url" content="https://ekhio.herrichain.org" />
+<meta name="twitter:card" content="summary" />
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('Service Worker registered successfully.', reg.scope))
+        .catch(err => console.warn('Service Worker registration failed.', err));
+    });
+  }
+</script>
 <!-- Fonts: Fredoka One (Headlines) & Nunito (Body) -->
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&amp;family=Nunito:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <!-- Icons -->
@@ -105,6 +126,57 @@
       .lang-switch button { padding: 4px 8px; border-radius: 8px; font-size: 12px; font-weight: 800; border: none; cursor: pointer; transition: 0.2s; background: transparent; color: #6B5B3E; }
       .lang-switch button.active { background: #0F0A1E; color: #FFB800; }
       .lang-switch button:hover { background: rgba(15,10,30,0.1); }
+
+      /* Accordion Styles */
+      .ekhio-accordion { transition: box-shadow 0.3s ease; }
+      .ekhio-accordion:hover { box-shadow: 0 8px 32px rgba(15,10,30,0.08); }
+      .accordion-trigger {
+        width: 100%; display: flex; align-items: center; justify-content: space-between;
+        padding: 24px 28px; cursor: pointer; background: none; border: none;
+        font: inherit; text-align: left; gap: 16px;
+        transition: background 0.2s;
+      }
+      .accordion-trigger:hover { background: rgba(255,184,0,0.04); }
+      .accordion-chevron {
+        transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        flex-shrink: 0;
+      }
+      .ekhio-accordion.open .accordion-chevron { transform: rotate(180deg); }
+      .accordion-panel {
+        max-height: 0; overflow: hidden;
+        transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .ekhio-accordion.open .accordion-panel { max-height: 3000px; }
+      .accordion-content { padding: 0 28px 28px; }
+      .sci-block {
+        padding: 20px 0; border-top: 1px solid rgba(15,10,30,0.06);
+      }
+      .sci-block:first-child { border-top: none; padding-top: 8px; }
+      .sci-source {
+        font-size: 12px; color: #6B5B3E; padding: 8px 12px;
+        background: rgba(255,184,0,0.06); border-radius: 8px;
+        margin-top: 8px; line-height: 1.5;
+      }
+      /* FAQ specific */
+      .faq-item {
+        background: rgba(255,255,255,0.6); backdrop-filter: blur(16px);
+        border: 1px solid rgba(15,10,30,0.06);
+      }
+      .faq-trigger { padding: 20px 24px; }
+      .faq-answer { padding: 0 24px 24px; }
+      .faq-answer p { color: #475569; line-height: 1.7; margin-bottom: 12px; font-weight: 500; }
+      .faq-answer ul {
+        list-style: none; padding: 0; margin: 12px 0;
+      }
+      .faq-answer ul li {
+        padding: 8px 0 8px 8px; color: #475569; font-weight: 500;
+        border-bottom: 1px solid rgba(15,10,30,0.04); line-height: 1.6;
+      }
+      .faq-answer ul li:last-child { border-bottom: none; }
+      .faq-answer code {
+        background: rgba(15,10,30,0.06); padding: 2px 6px; border-radius: 4px;
+        font-size: 13px; font-weight: 700;
+      }
     </style>
     <script src="i18n.js"></script>
 </head>
@@ -120,9 +192,10 @@
 </a>
 <div class="hidden md:flex gap-10 items-center">
 <a class="font-bold text-sm text-amber-sun border-b-2 border-amber-sun pb-1" href="#neuro" data-i18n="nav_neuro">Neurosciences</a>
-<a class="font-semibold text-sm text-slate-500 hover:text-midnight transition-colors" href="#" data-i18n="nav_psycho">Psychologie</a>
-<a class="font-semibold text-sm text-slate-500 hover:text-midnight transition-colors" href="#" data-i18n="nav_psychiatry">Psychiatrie</a>
+<a class="font-semibold text-sm text-slate-500 hover:text-midnight transition-colors" href="#psycho" data-i18n="nav_psycho">Psychologie</a>
+<a class="font-semibold text-sm text-slate-500 hover:text-midnight transition-colors" href="#psychiatry" data-i18n="nav_psychiatry">Psychiatrie</a>
 <a class="font-semibold text-sm text-slate-500 hover:text-midnight transition-colors" href="privacy.html" data-i18n="nav_privacy">Confidentialité</a>
+<a class="font-semibold text-sm text-slate-500 hover:text-midnight transition-colors" href="#faq">FAQ</a>
 </div>
 <div class="flex items-center gap-3">
 <div class="lang-switch hidden md:flex">
@@ -204,7 +277,7 @@
 <p class="text-slate-600 text-lg leading-relaxed">Comprendre le développement cérébral pour adapter les défis aux capacités cognitives réelles de l'enfant.</p>
 </div>
 <!-- Psychologie -->
-<div class="glass-card p-12 rounded-2xl hover-lift group">
+<div id="psycho" class="glass-card p-12 rounded-2xl hover-lift group">
 <div class="w-20 h-20 bg-midnight flex items-center justify-center rounded-2xl mb-10 group-hover:bg-amber-sun transition-all duration-500 relative">
 <div class="absolute inset-0 bg-amber-sun blur-xl opacity-0 group-hover:opacity-40 transition-opacity"></div>
 <span class="material-symbols-outlined text-white text-4xl group-hover:text-midnight transition-colors relative z-10">favorite</span>
@@ -213,7 +286,7 @@
 <p class="text-slate-600 text-lg leading-relaxed">Favoriser l'intelligence émotionnelle et la confiance en soi à travers des interactions positives quotidiennes.</p>
 </div>
 <!-- Pédopsychiatrie -->
-<div class="glass-card p-12 rounded-2xl hover-lift group">
+<div id="psychiatry" class="glass-card p-12 rounded-2xl hover-lift group">
 <div class="w-20 h-20 bg-midnight flex items-center justify-center rounded-2xl mb-10 group-hover:bg-amber-sun transition-all duration-500 relative">
 <div class="absolute inset-0 bg-amber-sun blur-xl opacity-0 group-hover:opacity-40 transition-opacity"></div>
 <span class="material-symbols-outlined text-white text-4xl group-hover:text-midnight transition-colors relative z-10">health_and_safety</span>
@@ -364,6 +437,332 @@
 </div>
 </div>
 </section>
+
+<!-- ============================================== -->
+<!-- SECTION: Fondements Scientifiques (Accordéons) -->
+<!-- ============================================== -->
+<section class="py-32 bg-soft-cream/50" id="science-details">
+<div class="max-w-5xl mx-auto px-8">
+<div class="mb-20 text-center max-w-3xl mx-auto">
+  <h2 class="font-headline text-4xl md:text-6xl text-midnight mb-6">Nos fondements scientifiques</h2>
+  <p class="text-slate-500 text-xl font-medium">Explorez en détail les bases académiques et cliniques qui sous-tendent chaque fonctionnalité d'Ekhio.</p>
+</div>
+
+<!-- Accordion: Neurosciences -->
+<div class="ekhio-accordion glass-card rounded-3xl mb-6 overflow-hidden">
+  <button class="accordion-trigger" onclick="this.parentElement.classList.toggle('open')" aria-expanded="false">
+    <div class="flex items-center gap-4">
+      <div class="w-14 h-14 bg-midnight rounded-2xl flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-white text-3xl">psychology</span>
+      </div>
+      <div class="text-left">
+        <h3 class="font-headline text-2xl text-midnight">Neurosciences Cognitives de l'Enfant</h3>
+        <p class="text-slate-500 text-sm font-semibold mt-1">Cortex préfrontal, circuits de la récompense, fenêtres d'apprentissage</p>
+      </div>
+    </div>
+    <span class="accordion-chevron material-symbols-outlined text-amber-sun text-3xl">expand_more</span>
+  </button>
+  <div class="accordion-panel">
+    <div class="accordion-content">
+
+      <div class="sci-block">
+        <h4 class="font-headline text-xl text-midnight mb-3">🧠 Le cortex préfrontal : un chantier de 25 ans</h4>
+        <p class="text-slate-600 leading-relaxed mb-3">Le cortex préfrontal — siège de la planification, du contrôle des impulsions et de la prise de décision — est la dernière région du cerveau à atteindre sa maturation complète (vers 25 ans). Chez un enfant de 3 à 6 ans, cette zone est encore très immature, ce qui explique les difficultés à gérer les frustrations ou à suivre des consignes complexes.</p>
+        <p class="text-slate-600 leading-relaxed mb-3"><strong>Conséquence pour Ekhio :</strong> Les défis proposés sont calibrés selon l'âge, avec des tâches simples et concrètes pour les plus jeunes (brosser les dents, ranger ses jouets) et des responsabilités plus abstraites pour les adolescents (gérer un conflit, avancer un projet personnel).</p>
+        <div class="sci-source">📚 <em>Gogtay et al. (2004). « Dynamic mapping of human cortical development during childhood through early adulthood ». PNAS.</em></div>
+      </div>
+
+      <div class="sci-block">
+        <h4 class="font-headline text-xl text-midnight mb-3">⚡ Circuits de la récompense : dopamine et motivation</h4>
+        <p class="text-slate-600 leading-relaxed mb-3">La dopamine joue un rôle central dans l'apprentissage par renforcement. Lorsqu'un enfant accomplit un défi et reçoit une récompense anticipée (ici, une étoile), le noyau accumbens libère de la dopamine, renforçant le circuit neuronal qui l'a mené à cette réussite. Ce phénomène est plus intense chez l'enfant que chez l'adulte.</p>
+        <p class="text-slate-600 leading-relaxed mb-3"><strong>Approche éthique :</strong> Contrairement aux applications addictives qui sur-stimulent la dopamine de manière artificielle (likes, notifications), Ekhio lie la récompense à un accomplissement réel de la vie quotidienne (renforcement « ancré dans le réel »). Les étoiles ne mènent pas à du temps d'écran supplémentaire mais à des expériences familiales.</p>
+        <div class="sci-source">📚 <em>Schultz, W. (2015). « Neuronal reward and decision signals: from theories to data ». Physiological Reviews.</em></div>
+        <div class="sci-source">📚 <em>Galván, A. (2010). « Adolescent development of the reward system ». Frontiers in Human Neuroscience.</em></div>
+      </div>
+
+      <div class="sci-block">
+        <h4 class="font-headline text-xl text-midnight mb-3">🪟 Fenêtres critiques d'apprentissage</h4>
+        <p class="text-slate-600 leading-relaxed mb-3">Le cerveau de l'enfant traverse des périodes sensibles (ou « fenêtres critiques ») durant lesquelles il est particulièrement réceptif à certains apprentissages. La synaptogenèse atteint son pic dans la petite enfance, puis un processus d'élagage synaptique renforce les connexions les plus utilisées.</p>
+        <p class="text-slate-600 leading-relaxed mb-3"><strong>Dans Ekhio :</strong> Les catégories de défis sont calibrées sur ces phases : exploration sensorielle (3-6 ans), apprentissages structurés (7-12 ans), autonomie et identité (13-18 ans).</p>
+        <div class="sci-source">📚 <em>Huttenlocher, P.R. (1979). « Synaptic density in human frontal cortex ». Brain Research.</em></div>
+        <div class="sci-source">📚 <em>Dehaene, S. (2018). « Apprendre ! Les talents du cerveau, le défi des machines ». Odile Jacob.</em></div>
+      </div>
+
+      <div class="sci-block">
+        <h4 class="font-headline text-xl text-midnight mb-3">🧩 Fonctions exécutives : le muscle cognitif</h4>
+        <p class="text-slate-600 leading-relaxed mb-3">Les fonctions exécutives — mémoire de travail, flexibilité cognitive et inhibition — sont des prédicteurs plus puissants de la réussite scolaire que le QI. Ces compétences se développent activement entre 3 et 12 ans et sont entraînables par la pratique quotidienne.</p>
+        <p class="text-slate-600 leading-relaxed mb-3"><strong>Application :</strong> Chaque défi Ekhio sollicite au moins une fonction exécutive (se rappeler une règle = mémoire de travail ; s'adapter à un changement = flexibilité ; résister à une impulsion = inhibition).</p>
+        <div class="sci-source">📚 <em>Diamond, A. & Lee, K. (2011). « Interventions shown to aid executive function development in children ». Science.</em></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Accordion: Éducation Positive -->
+<div class="ekhio-accordion glass-card rounded-3xl mb-6 overflow-hidden">
+  <button class="accordion-trigger" onclick="this.parentElement.classList.toggle('open')" aria-expanded="false">
+    <div class="flex items-center gap-4">
+      <div class="w-14 h-14 bg-midnight rounded-2xl flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-white text-3xl">favorite</span>
+      </div>
+      <div class="text-left">
+        <h3 class="font-headline text-2xl text-midnight">Éducation Positive & Psychologie</h3>
+        <p class="text-slate-500 text-sm font-semibold mt-1">Renforcement positif, autodétermination, état d'esprit de croissance</p>
+      </div>
+    </div>
+    <span class="accordion-chevron material-symbols-outlined text-amber-sun text-3xl">expand_more</span>
+  </button>
+  <div class="accordion-panel">
+    <div class="accordion-content">
+
+      <div class="sci-block">
+        <h4 class="font-headline text-xl text-midnight mb-3">✅ Renforcement positif : la science derrière les étoiles</h4>
+        <p class="text-slate-600 leading-relaxed mb-3">Le renforcement positif (ajouter un stimulus agréable après un comportement souhaité) est l'une des stratégies les plus validées en psychologie comportementale. Contrairement à la punition, il ne génère ni anxiété ni évitement, mais construit une association durable entre l'effort et la satisfaction.</p>
+        <p class="text-slate-600 leading-relaxed mb-3"><strong>Comment Ekhio l'applique :</strong> Les étoiles sont une forme de « jeton » (token economy) utilisée depuis les années 1960 en psychologie clinique, mais adaptée ici pour le contexte familial. L'enfant voit concrètement ses progrès, ce qui renforce sa motivation intrinsèque.</p>
+        <div class="sci-source">📚 <em>Skinner, B.F. (1953). « Science and Human Behavior ». Macmillan.</em></div>
+        <div class="sci-source">📚 <em>Kazdin, A.E. (1982). « The token economy: A review and evaluation ». Plenum Press.</em></div>
+      </div>
+
+      <div class="sci-block">
+        <h4 class="font-headline text-xl text-midnight mb-3">🧭 Théorie de l'autodétermination (Deci & Ryan)</h4>
+        <p class="text-slate-600 leading-relaxed mb-3">La motivation intrinsèque repose sur trois besoins fondamentaux : <strong>autonomie</strong> (choisir ses actions), <strong>compétence</strong> (sentir qu'on progresse) et <strong>lien social</strong> (se sentir connecté aux autres). Quand ces besoins sont satisfaits, l'individu est naturellement motivé.</p>
+        <p class="text-slate-600 leading-relaxed mb-3"><strong>Dans Ekhio :</strong> L'enfant peut choisir quel défi tenter (autonomie). Le système d'étoiles progressif et les trophées montrent la compétence acquise. Le robot compagnon et le lien parent-enfant renforcent le besoin de connexion sociale.</p>
+        <div class="sci-source">📚 <em>Deci, E.L. & Ryan, R.M. (2000). « Self-Determination Theory and the facilitation of intrinsic motivation ». American Psychologist.</em></div>
+      </div>
+
+      <div class="sci-block">
+        <h4 class="font-headline text-xl text-midnight mb-3">🌱 État d'esprit de croissance (Carol Dweck)</h4>
+        <p class="text-slate-600 leading-relaxed mb-3">Carol Dweck distingue deux états d'esprit : le « fixe » (les capacités sont innées et immuables) et le « de croissance » (les compétences se développent par l'effort). Les enfants encouragés pour leurs efforts — et non pour leur talent inné — développent davantage de résilience et de persévérance.</p>
+        <p class="text-slate-600 leading-relaxed mb-3"><strong>Philosophie Ekhio :</strong> Le robot-compagnon félicite l'effort (« Génial ! Je suis fier de toi ! ») et non le résultat. L'échec n'est jamais puni ; l'enfant peut retenter un défi le lendemain.</p>
+        <div class="sci-source">📚 <em>Dweck, C.S. (2006). « Mindset: The New Psychology of Success ». Random House.</em></div>
+      </div>
+
+      <div class="sci-block">
+        <h4 class="font-headline text-xl text-midnight mb-3">🤝 Attachement sécure et parentalité bienveillante</h4>
+        <p class="text-slate-600 leading-relaxed mb-3">La théorie de l'attachement (Bowlby, Ainsworth) démontre qu'un enfant qui bénéficie d'un lien sécure avec ses figures d'attachement développe une meilleure régulation émotionnelle, une plus grande confiance et davantage d'autonomie. L'éducation positive vise à renforcer ce lien.</p>
+        <p class="text-slate-600 leading-relaxed mb-3"><strong>Rôle d'Ekhio :</strong> L'application crée des moments d'interaction positive entre parent et enfant. La validation d'un défi est un acte parental qui consolide le lien d'attachement.</p>
+        <div class="sci-source">📚 <em>Bowlby, J. (1969). « Attachment and Loss ». Basic Books.</em></div>
+        <div class="sci-source">📚 <em>Nelsen, J. (2006). « Positive Discipline ». Ballantine Books.</em></div>
+        <div class="sci-source">📚 <em>Seligman, M.E.P. (2011). « Flourish ». Free Press.</em></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Accordion: Pédopsychiatrie -->
+<div class="ekhio-accordion glass-card rounded-3xl mb-6 overflow-hidden">
+  <button class="accordion-trigger" onclick="this.parentElement.classList.toggle('open')" aria-expanded="false">
+    <div class="flex items-center gap-4">
+      <div class="w-14 h-14 bg-midnight rounded-2xl flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-white text-3xl">health_and_safety</span>
+      </div>
+      <div class="text-left">
+        <h3 class="font-headline text-2xl text-midnight">Pédopsychiatrie & Régulation Émotionnelle</h3>
+        <p class="text-slate-500 text-sm font-semibold mt-1">Développement émotionnel, gestion de crise, prévention</p>
+      </div>
+    </div>
+    <span class="accordion-chevron material-symbols-outlined text-amber-sun text-3xl">expand_more</span>
+  </button>
+  <div class="accordion-panel">
+    <div class="accordion-content">
+
+      <div class="sci-block">
+        <h4 class="font-headline text-xl text-midnight mb-3">🎭 Développement émotionnel par stades</h4>
+        <p class="text-slate-600 leading-relaxed mb-3">Le développement socio-émotionnel suit des stades prévisibles (Erikson). De 3 à 6 ans, l'enfant explore l'initiative vs la culpabilité. De 7 à 12 ans, c'est la compétence vs l'infériorité. L'adolescent travaille l'identité vs la confusion des rôles. Chaque stade nécessite un soutien adapté.</p>
+        <p class="text-slate-600 leading-relaxed mb-3"><strong>Adaptation Ekhio :</strong> Le ton du robot, les défis proposés et le vocabulaire s'adaptent automatiquement à la tranche d'âge, respectant les capacités émotionnelles de chaque stade.</p>
+        <div class="sci-source">📚 <em>Erikson, E.H. (1950). « Childhood and Society ». Norton.</em></div>
+        <div class="sci-source">📚 <em>Piaget, J. (1952). « The Origins of Intelligence in Children ». International Universities Press.</em></div>
+      </div>
+
+      <div class="sci-block">
+        <h4 class="font-headline text-xl text-midnight mb-3">🌊 Le « flipping du lid » et la gestion de crise</h4>
+        <p class="text-slate-600 leading-relaxed mb-3">Daniel Siegel utilise le modèle du « cerveau dans la main » pour expliquer les crises : lorsque l'amygdale (alarme émotionnelle) prend le contrôle, le cortex préfrontal (raison) « déconnecte ». L'enfant ne peut alors ni raisonner ni se calmer rationnellement.</p>
+        <p class="text-slate-600 leading-relaxed mb-3"><strong>Fonctionnalité SOS d'Ekhio :</strong> Le bouton « Gros chagrin » déclenche un exercice de respiration guidé (cohérence cardiaque adaptée) qui active le nerf vague et réduit l'activation de l'amygdale. C'est une technique validée cliniquement utilisée en pédopsychiatrie.</p>
+        <div class="sci-source">📚 <em>Siegel, D.J. & Bryson, T.P. (2011). « The Whole-Brain Child ». Delacorte Press.</em></div>
+        <div class="sci-source">📚 <em>Porges, S.W. (2011). « The Polyvagal Theory ». Norton.</em></div>
+      </div>
+
+      <div class="sci-block">
+        <h4 class="font-headline text-xl text-midnight mb-3">🔍 Prévention et repérage précoce</h4>
+        <p class="text-slate-600 leading-relaxed mb-3">Le suivi régulier des comportements permet de détecter des patterns qui pourraient signaler un trouble du comportement, de l'anxiété ou un TDAH. Un enfant qui ne parvient jamais à valider certains types de défis (liés à l'attention, à l'impulsivité) peut bénéficier d'un dépistage professionnel.</p>
+        <p class="text-slate-600 leading-relaxed mb-3"><strong>Ekhio comme outil indicatif :</strong> L'historique des étoiles et des comportements donne aux parents une vue objective sur les progrès et les difficultés récurrentes, facilitant le dialogue avec un professionnel de santé si besoin.</p>
+        <div class="sci-source">📚 <em>Gueguen, C. (2014). « Pour une enfance heureuse ». Robert Laffont.</em></div>
+        <div class="sci-source">📚 <em>Filliozat, I. (2011). « J'ai tout essayé ». JC Lattès.</em></div>
+      </div>
+
+      <div class="sci-block">
+        <h4 class="font-headline text-xl text-midnight mb-3">🧘 Cohérence cardiaque et autorégulation</h4>
+        <p class="text-slate-600 leading-relaxed mb-3">La cohérence cardiaque — technique de respiration rythmée (inspirer 4s, bloquer 4s, expirer 6s) — est recommandée par de nombreux pédopsychiatres pour aider les enfants à retrouver le calme. Elle agit sur le système nerveux autonome en activant le parasympathique.</p>
+        <p class="text-slate-600 leading-relaxed mb-3"><strong>Dans Ekhio :</strong> La « bulle magique » de l'exercice SOS guide visuellement la respiration de l'enfant avec un cercle qui gonfle et dégonfle. L'enfant reçoit une étoile bonus pour avoir pratiqué, renforçant positivement le recours à l'auto-régulation.</p>
+        <div class="sci-source">📚 <em>McCraty, R. & Zayas, M.A. (2014). « Cardiac coherence, self-regulation, autonomic stability, and psychosocial well-being ». Frontiers in Psychology.</em></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</div>
+</section>
+
+<!-- ============================================== -->
+<!-- SECTION: FAQ                                   -->
+<!-- ============================================== -->
+<section class="py-32 bg-white" id="faq">
+<div class="max-w-4xl mx-auto px-8">
+<div class="mb-20 text-center">
+  <h2 class="font-headline text-4xl md:text-6xl text-midnight mb-6">Questions Fréquentes</h2>
+  <p class="text-slate-500 text-xl font-medium">Tout ce que vous devez savoir sur Ekhio, expliqué simplement.</p>
+</div>
+
+<div class="faq-list">
+
+  <div class="ekhio-accordion faq-item rounded-2xl mb-4 overflow-hidden">
+    <button class="accordion-trigger faq-trigger" onclick="this.parentElement.classList.toggle('open')">
+      <span class="font-bold text-lg text-midnight text-left">Qu'est-ce qu'Ekhio exactement ?</span>
+      <span class="accordion-chevron material-symbols-outlined text-amber-sun text-2xl">expand_more</span>
+    </button>
+    <div class="accordion-panel">
+      <div class="accordion-content faq-answer">
+        <p>Ekhio est une <strong>application web gratuite</strong> d'accompagnement parental, conçue comme un compagnon quotidien pour les familles. Elle propose un système de défis adapté à l'âge de l'enfant (3-18 ans), un robot-compagnon interactif, et un mécanisme de récompenses éthique basé sur les neurosciences.</p>
+        <p>Contrairement aux applications classiques, Ekhio fonctionne <strong>100% hors ligne</strong>, ne collecte aucune donnée personnelle, et n'a besoin ni d'un compte utilisateur ni d'un téléchargement sur un store.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ekhio-accordion faq-item rounded-2xl mb-4 overflow-hidden">
+    <button class="accordion-trigger faq-trigger" onclick="this.parentElement.classList.toggle('open')">
+      <span class="font-bold text-lg text-midnight text-left">Est-ce scientifiquement fondé ?</span>
+      <span class="accordion-chevron material-symbols-outlined text-amber-sun text-2xl">expand_more</span>
+    </button>
+    <div class="accordion-panel">
+      <div class="accordion-content faq-answer">
+        <p>Oui. L'approche d'Ekhio s'appuie sur trois disciplines complémentaires :</p>
+        <ul>
+          <li><strong>Neurosciences cognitives</strong> : adaptation des défis au stade de développement cérébral de l'enfant (Dehaene, Diamond & Lee, Gogtay).</li>
+          <li><strong>Psychologie positive</strong> : renforcement positif, théorie de l'autodétermination (Deci & Ryan), état d'esprit de croissance (Dweck).</li>
+          <li><strong>Pédopsychiatrie</strong> : régulation émotionnelle, cohérence cardiaque, développement socio-émotionnel (Siegel, Gueguen, Filliozat).</li>
+        </ul>
+        <p>Les références complètes sont disponibles dans la section « Nos fondements scientifiques » ci-dessus.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ekhio-accordion faq-item rounded-2xl mb-4 overflow-hidden">
+    <button class="accordion-trigger faq-trigger" onclick="this.parentElement.classList.toggle('open')">
+      <span class="font-bold text-lg text-midnight text-left">Mes données sont-elles en sécurité ?</span>
+      <span class="accordion-chevron material-symbols-outlined text-amber-sun text-2xl">expand_more</span>
+    </button>
+    <div class="accordion-panel">
+      <div class="accordion-content faq-answer">
+        <p><strong>Absolument.</strong> Ekhio est « privé par conception » (<em>privacy by design</em>) :</p>
+        <ul>
+          <li>🔒 <strong>Aucun serveur</strong> : vos données ne quittent jamais votre appareil.</li>
+          <li>🍪 <strong>Aucun cookie tiers</strong> : zéro traçage, zéro publicité, zéro analytique.</li>
+          <li>📱 <strong>Stockage local uniquement</strong> : tout est dans le <code>localStorage</code> de votre navigateur.</li>
+          <li>👤 <strong>Aucune identification</strong> : ni e-mail, ni nom, ni numéro de téléphone demandé.</li>
+        </ul>
+        <p>Consultez notre <a href="privacy.html" class="text-amber-sun font-bold hover:underline">politique de confidentialité</a> pour plus de détails.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ekhio-accordion faq-item rounded-2xl mb-4 overflow-hidden">
+    <button class="accordion-trigger faq-trigger" onclick="this.parentElement.classList.toggle('open')">
+      <span class="font-bold text-lg text-midnight text-left">À quel âge commencer ?</span>
+      <span class="accordion-chevron material-symbols-outlined text-amber-sun text-2xl">expand_more</span>
+    </button>
+    <div class="accordion-panel">
+      <div class="accordion-content faq-answer">
+        <p>Ekhio est conçu pour les enfants de <strong>3 à 18 ans</strong>, avec quatre tranches d'âge qui ajustent automatiquement l'expérience :</p>
+        <ul>
+          <li>🌈 <strong>3-6 ans (L'Éveil Magique)</strong> : défis sensoriels et ludiques, beaucoup d'émojis, interface très colorée.</li>
+          <li>📚 <strong>7-12 ans (Le Petit Savant)</strong> : défis scolaires, sport, lecture, mini-jeu débloquable.</li>
+          <li>🧭 <strong>13-15 ans (L'Explorateur)</strong> : journal des émotions, objectifs d'autonomie, tirelire de récompenses.</li>
+          <li>🚀 <strong>16-18 ans (Vers le Futur)</strong> : gestion de projets personnels, productivité, préparation à l'indépendance.</li>
+        </ul>
+        <p>Dès 3 ans, un enfant peut participer avec l'aide d'un parent. Le système évolue naturellement avec l'âge.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ekhio-accordion faq-item rounded-2xl mb-4 overflow-hidden">
+    <button class="accordion-trigger faq-trigger" onclick="this.parentElement.classList.toggle('open')">
+      <span class="font-bold text-lg text-midnight text-left">Le système d'étoiles ne risque-t-il pas de rendre l'enfant dépendant ?</span>
+      <span class="accordion-chevron material-symbols-outlined text-amber-sun text-2xl">expand_more</span>
+    </button>
+    <div class="accordion-panel">
+      <div class="accordion-content faq-answer">
+        <p>C'est une question légitime que les chercheurs ont largement étudiée. Voici pourquoi Ekhio évite ce piège :</p>
+        <ul>
+          <li><strong>Récompenses « vie réelle »</strong> : les étoiles ne mènent pas à du temps d'écran, mais à des moments en famille (jeux de société, sortie, repas préféré). Cela renforce les liens sociaux plutôt que l'addiction numérique.</li>
+          <li><strong>Plafond quotidien</strong> : un maximum d'étoiles par jour (défini par le parent) empêche la sur-stimulation dopaminergique.</li>
+          <li><strong>Transition vers l'intrinsèque</strong> : pour les adolescents, le système évolue vers un journal d'émotions et des objectifs personnels, déplaçant progressivement la motivation de l'externe vers l'interne.</li>
+          <li><strong>Pas de punition</strong> : ne pas valider un défi n'entraîne aucune pénalité. L'absence de récompense n'est pas une punition.</li>
+        </ul>
+        <div class="sci-source mt-3">📚 <em>Cameron, J. & Pierce, W.D. (1994). « Reinforcement, reward, and intrinsic motivation: A meta-analysis ». Review of Educational Research.</em></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ekhio-accordion faq-item rounded-2xl mb-4 overflow-hidden">
+    <button class="accordion-trigger faq-trigger" onclick="this.parentElement.classList.toggle('open')">
+      <span class="font-bold text-lg text-midnight text-left">Comment Ekhio diffère-t-il des systèmes de récompenses classiques ?</span>
+      <span class="accordion-chevron material-symbols-outlined text-amber-sun text-2xl">expand_more</span>
+    </button>
+    <div class="accordion-panel">
+      <div class="accordion-content faq-answer">
+        <p>Les tableaux de récompenses traditionnels (gommettes, jetons) ont démontré leur efficacité, mais souffrent de deux limites : ils sont souvent mal calibrés (trop difficiles ou trop faciles) et manquent de progressivité. Ekhio apporte :</p>
+        <ul>
+          <li><strong>Personnalisation dynamique</strong> : les parents peuvent ajouter, supprimer ou ajuster les défis à tout moment.</li>
+          <li><strong>Compagnon émotionnel</strong> : le robot réagit avec empathie, offrant un soutien affectif que les jetons en plastique ne peuvent pas fournir.</li>
+          <li><strong>Trophées et progression</strong> : un système de badges qui récompense la constance sur le long terme, pas juste l'effort ponctuel.</li>
+          <li><strong>Outil SOS</strong> : une fonctionnalité de gestion de crise (respiration guidée) inexistante dans les systèmes physiques.</li>
+          <li><strong>Multi-profils</strong> : gestion de plusieurs enfants avec des paramètres individualisés.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="ekhio-accordion faq-item rounded-2xl mb-4 overflow-hidden">
+    <button class="accordion-trigger faq-trigger" onclick="this.parentElement.classList.toggle('open')">
+      <span class="font-bold text-lg text-midnight text-left">Comment installer Ekhio sur mon téléphone ?</span>
+      <span class="accordion-chevron material-symbols-outlined text-amber-sun text-2xl">expand_more</span>
+    </button>
+    <div class="accordion-panel">
+      <div class="accordion-content faq-answer">
+        <p>Ekhio est une <strong>Progressive Web App (PWA)</strong>. Pour l'installer :</p>
+        <ul>
+          <li><strong>Sur iPhone/iPad</strong> : ouvrez <code>ekhio.herrichain.org</code> dans Safari → tapez le bouton Partager ↗ → « Sur l'écran d'accueil ».</li>
+          <li><strong>Sur Android</strong> : ouvrez l'URL dans Chrome → un bandeau « Ajouter à l'écran d'accueil » apparaît, ou utilisez le menu ⋮ → « Installer l'application ».</li>
+          <li><strong>Sur ordinateur</strong> : dans Chrome/Edge, cliquez sur l'icône d'installation dans la barre d'adresse.</li>
+        </ul>
+        <p>Une fois installée, Ekhio fonctionne comme une application native, même sans connexion internet.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ekhio-accordion faq-item rounded-2xl mb-4 overflow-hidden">
+    <button class="accordion-trigger faq-trigger" onclick="this.parentElement.classList.toggle('open')">
+      <span class="font-bold text-lg text-midnight text-left">Qui est derrière Ekhio ?</span>
+      <span class="accordion-chevron material-symbols-outlined text-amber-sun text-2xl">expand_more</span>
+    </button>
+    <div class="accordion-panel">
+      <div class="accordion-content faq-answer">
+        <p>Ekhio est un projet collaboratif :</p>
+        <ul>
+          <li><strong>Déployé par</strong> l'<a href="https://herrichain.org" target="_blank" class="text-amber-sun font-bold hover:underline">Association Herrichain</a> (loi 1901), dont la mission est de soutenir les familles par des outils éducatifs gratuits.</li>
+          <li><strong>Développé par</strong> <a href="https://www.arteandigital.fr" target="_blank" class="text-amber-sun font-bold hover:underline">Artean Digital Studio</a> (SAS BASK'IN, Biarritz), propriétaire du code source.</li>
+        </ul>
+        <p>Le projet est développé bénévolement et le code est open source sous licence MIT.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+</section>
 </main>
 <!-- Footer -->
 <footer class="bg-midnight text-slate-500 py-32 border-t border-white/5">
@@ -375,10 +774,10 @@
 </div>
 <span class="font-headline text-4xl text-white block">Ekhio</span>
 </div>
-<p class="max-w-md text-lg leading-relaxed font-medium">Une initiative de l'<span class="text-white">Association Herrichain (loi 1901)</span>. Notre mission est de démocratiser les neurosciences pour accompagner les parents et les enfants.</p>
+<p class="max-w-md text-lg leading-relaxed font-medium">Une initiative de l'<a href="https://herrichain.org" target="_blank" class="text-white hover:text-amber-sun underline">Association Herrichain (loi 1901)</a>. Notre mission est de démocratiser les neurosciences pour accompagner les parents et les enfants.</p>
 <div class="space-y-2 pt-4">
 <p class="text-sm leading-relaxed">
-                    Elle est développée bénévolement par <strong class="text-white">Artean Digital</strong>.
+                    Elle est développée bénévolement et le code est la propriété de <a href="https://www.arteandigital.fr" target="_blank" class="text-white hover:text-amber-sun underline">Artean Digital Studio</a>.
                 </p>
 </div>
 <p class="text-xs opacity-50 font-bold uppercase tracking-widest pt-6">© 2026 Ekhio Studio. Design d'exception.</p>
@@ -387,9 +786,10 @@
 <div class="space-y-8">
 <h5 class="text-white font-black text-xs uppercase tracking-[0.3em]">Navigation</h5>
 <ul class="space-y-4 text-base font-semibold">
-<li><a class="hover:text-amber-sun transition-colors" href="#">Notre Vision</a></li>
-<li><a class="hover:text-amber-sun transition-colors" href="#">Neurosciences</a></li>
-<li><a class="hover:text-amber-sun transition-colors" href="#">Comité Scientifique</a></li>
+<li><a class="hover:text-amber-sun transition-colors" href="#vision">Notre Vision</a></li>
+<li><a class="hover:text-amber-sun transition-colors" href="#neuro">Neurosciences</a></li>
+<li><a class="hover:text-amber-sun transition-colors" href="#science-details">Fondements Scientifiques</a></li>
+<li><a class="hover:text-amber-sun transition-colors" href="#faq">FAQ</a></li>
 <li><a class="hover:text-amber-sun transition-colors" href="app.html">Lancer l'application</a></li>
 </ul>
 </div>
@@ -398,7 +798,7 @@
 <ul class="space-y-4 text-base font-semibold">
 <li><a class="hover:text-amber-sun transition-colors" href="privacy.html">Confidentialité</a></li>
 <li><a class="hover:text-amber-sun transition-colors" href="cgu.html">Conditions d'utilisation</a></li>
-<li><a class="hover:text-amber-sun transition-colors" href="#">Contact</a></li>
+<li><a class="hover:text-amber-sun transition-colors" href="mailto:contact@herrichain.org">Contact</a></li>
 </ul>
 </div>
 </div>
