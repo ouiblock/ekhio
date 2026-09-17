@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ekhio-cache-v1';
+const CACHE_NAME = 'ekhio-cache-v2';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -11,6 +11,10 @@ const ASSETS_TO_CACHE = [
   '/robot.js',
   '/i18n.js',
   '/icon.svg',
+  '/icon-192.png',
+  '/icon-512.png',
+  '/icon-maskable-192.png',
+  '/icon-maskable-512.png',
   '/manifest.json'
 ];
 

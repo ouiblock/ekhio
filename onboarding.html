@@ -9,8 +9,10 @@
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#FFB800" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <link rel="apple-touch-icon" href="icon.svg" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Ekhio" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -206,6 +208,7 @@
         <div class="dot"></div>
         <div class="dot"></div>
         <div class="dot"></div>
+        <div class="dot"></div>
       </div>
     </div>
 
@@ -246,6 +249,12 @@
     <div class="step-content active" id="step-1">
       <h1 class="step-title" id="s1-title"></h1>
       <p class="step-desc" id="s1-desc"></p>
+      <div style="display:flex;justify-content:center;gap:10px;margin-bottom:24px;flex-wrap:wrap;">
+        <button class="color-btn" style="width:auto;height:auto;padding:8px 14px;border-radius:12px;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.2);color:#FFF;font-weight:800;font-size:13px;cursor:pointer;transition:0.2s;" onclick="setObLang('fr')">🇫🇷 Français</button>
+        <button class="color-btn" style="width:auto;height:auto;padding:8px 14px;border-radius:12px;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.2);color:#FFF;font-weight:800;font-size:13px;cursor:pointer;transition:0.2s;" onclick="setObLang('en')">🇬🇧 English</button>
+        <button class="color-btn" style="width:auto;height:auto;padding:8px 14px;border-radius:12px;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.2);color:#FFF;font-weight:800;font-size:13px;cursor:pointer;transition:0.2s;" onclick="setObLang('es')">🇪🇸 Español</button>
+        <button class="color-btn" style="width:auto;height:auto;padding:8px 14px;border-radius:12px;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.2);color:#FFF;font-weight:800;font-size:13px;cursor:pointer;transition:0.2s;" onclick="setObLang('eu')">🟢 Euskara</button>
+      </div>
       <div style="flex:1"></div>
       <button class="btn btn-primary" onclick="nextStep(2)" id="s1-btn"></button>
     </div>
@@ -297,7 +306,20 @@
       </div>
       
       <div style="flex:1"></div>
-      <button class="btn btn-primary" onclick="finishOnboarding()" id="s5-btn"></button>
+      <button class="btn btn-primary" onclick="nextStep(6)" id="s5-btn"></button>
+    </div>
+
+    <!-- STEP 6: PIN Code -->
+    <div class="step-content" id="step-6">
+      <h1 class="step-title" id="s6-title"></h1>
+      <p class="step-desc" id="s6-desc"></p>
+      <input type="number" id="ob-pin" class="ob-input" maxlength="4" inputmode="numeric" pattern="[0-9]{4}">
+      <div style="display:flex; gap:12px;">
+        <button class="btn" style="flex:1; background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.15);border-radius:999px;" onclick="skipPin()" id="s6-skip"></button>
+        <button class="btn btn-primary" style="flex:1;" onclick="setPin()" id="s6-set"></button>
+      </div>
+      <div style="flex:1"></div>
+      <button class="btn btn-primary" style="margin-top:16px;" onclick="finishOnboarding()" id="s6-finish"></button>
     </div>
 
   </div>
@@ -370,7 +392,14 @@
       document.getElementById('custom-rew-name').placeholder = t('ob_rewards_custom_placeholder');
       document.getElementById('custom-rew-cost').placeholder = t('ob_rewards_cost_placeholder');
       document.getElementById('custom-rew-btn').textContent = t('ob_rewards_add');
-      document.getElementById('s5-btn').textContent = t('ob_finish');
+      document.getElementById('s5-btn').textContent = t('ob_next');
+      // Step 6
+      document.getElementById('s6-title').textContent = t('ob_pin_title');
+      document.getElementById('s6-desc').textContent = t('ob_pin_desc');
+      document.getElementById('ob-pin').placeholder = t('ob_pin_placeholder');
+      document.getElementById('s6-skip').textContent = t('ob_pin_skip');
+      document.getElementById('s6-set').textContent = t('ob_pin_set');
+      document.getElementById('s6-finish').textContent = t('ob_finish');
     }
 
     // Render reward selection grid
@@ -513,6 +542,9 @@
         Robot.set('curious');
         speak(t('ob_robot_rewards'));
         renderRewardGrid();
+      } else if (step === 6) {
+        Robot.set('curious');
+        speak(t('ob_robot_pin'));
       }
     }
 
@@ -521,6 +553,39 @@
       bubble.textContent = text;
       bubble.classList.add('show');
       setTimeout(() => bubble.classList.remove('show'), 3000);
+    }
+
+    // PIN management
+    let obPin = '';
+    
+    function setPin() {
+      const val = document.getElementById('ob-pin').value;
+      if(val && val.length === 4 && /^\d{4}$/.test(val)) {
+        obPin = val;
+        speak(t('ob_robot_pin_set'));
+        Robot.celebrate();
+        document.getElementById('ob-pin').style.borderColor = '#2ECC71';
+      } else {
+        document.getElementById('ob-pin').style.borderColor = '#E8344A';
+        speak('4 digits!');
+      }
+    }
+    
+    function skipPin() {
+      obPin = '';
+      document.getElementById('ob-pin').value = '';
+      speak(t('ob_robot_pin_skip'));
+      Robot.set('happy');
+    }
+    
+    // Language selector on step 1
+    function setObLang(lang) {
+      localStorage.setItem('ekhio_lang', lang);
+      setupI18n();
+      // Re-render reward grid if visible
+      renderRewardGrid();
+      speak(t('ob_robot_hello'));
+      Robot.bounce();
     }
 
     function finishOnboarding() {
@@ -550,6 +615,10 @@
       if(selectedRewards.length > 0) {
         localStorage.setItem(`ekhio_rewards_${id}`, JSON.stringify(selectedRewards));
       }
+      
+      // Save PIN settings
+      const settings = { mx: 5, pin: obPin };
+      localStorage.setItem(`ekhio_settings_${id}`, JSON.stringify(settings));
       
       Robot.celebrate();
       speak(t('ob_robot_go'));
