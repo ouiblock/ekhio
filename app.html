@@ -975,7 +975,7 @@ function syncState() {
     hist: JSON.parse(localStorage.getItem(SK_HIST)||'[]'),
     rules: JSON.parse(localStorage.getItem(SK_RULES)||'null'),
     day: JSON.parse(localStorage.getItem(SK_DAY+DDATE)||'{"e":0,"done":[]}'),
-    sets: JSON.parse(localStorage.getItem(SK_SET)||`{"mx":5, "pin":"0000"}`),
+    sets: JSON.parse(localStorage.getItem(SK_SET)||`{"mx":5, "pin":""}`),
     stats: JSON.parse(localStorage.getItem(SK_STATS)||'null'),
     weekHist: JSON.parse(localStorage.getItem(SK_WEEK)||'{}')
   };
@@ -1382,7 +1382,8 @@ function speak(txt) {
 }
 
 function promptAddBehavior() {
-  if(!activePinMode) {
+  const pinEnabled = S.sets.pin && S.sets.pin.length === 4;
+  if(!activePinMode && pinEnabled) {
     targetModal = 'addBeh';
     const pinMod = document.getElementById('pinModal');
     if(pinMod) pinMod.classList.add('open');
@@ -1401,7 +1402,8 @@ function repairDashboard() {
 }
 
 function promptAddReward() {
-  if(!activePinMode) {
+  const pinEnabled = S.sets.pin && S.sets.pin.length === 4;
+  if(!activePinMode && pinEnabled) {
     targetModal = 'addRew';
     const pinMod = document.getElementById('pinModal');
     if(pinMod) pinMod.classList.add('open');
