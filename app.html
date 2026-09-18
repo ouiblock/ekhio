@@ -653,6 +653,16 @@ body.dark .pin-btn { background: rgba(255,255,255,0.06); }
         <input type="color" id="set-color" class="s-input" style="width:80px;height:40px;padding:2px;margin:0" onchange="saveProfileSettings()">
       </div>
       <div class="s-row">
+        <div><strong data-i18n="settings_photo"></strong></div>
+        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
+          <input type="file" id="set-photo-upload" accept="image/*" style="display:none;" onchange="handleSettingsPhotoUpload(event)">
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-s" style="padding:6px 10px; font-size:12px;" onclick="document.getElementById('set-photo-upload').click()" data-i18n="settings_photo_change"></button>
+            <button class="btn btn-s" style="padding:6px 10px; font-size:12px; border-color:#E8344A; color:#E8344A;" id="btn-remove-photo" onclick="removeSettingsPhoto()" data-i18n="settings_photo_remove"></button>
+          </div>
+        </div>
+      </div>
+      <div class="s-row">
         <div><strong data-i18n="app_max_stars_day"></strong></div>
         <input type="number" id="set-max" class="s-input" min="1" max="10" style="width:80px;margin:0" onchange="saveProfileSettings()">
       </div>
@@ -1056,7 +1066,9 @@ function initUI() {
   sel.style.display = 'flex';
   sel.innerHTML = profiles.map(pr => `
     <div class="p-sel-item ${pr.id===PID?'act':''}" onclick="switchP('${pr.id}')">
-      <div class="av" style="background:${pr.avatar}"></div>
+      <div class="av" style="background:${pr.avatar}; overflow:hidden;">
+        ${localStorage.getItem(`ekhio_photo_${pr.id}`) ? `<img src="${localStorage.getItem(`ekhio_photo_${pr.id}`)}" style="width:100%;height:100%;object-fit:cover;">` : ''}
+      </div>
       <div style="font-size:11px;font-weight:800">${pr.name}</div>
     </div>
   `).join('') + `
@@ -1083,7 +1095,9 @@ function initUI() {
     pList.innerHTML = profiles.map(pr => `
       <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(0,0,0,0.03);border-radius:12px;">
         <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:12px;height:12px;border-radius:50%;background:${pr.avatar}"></div>
+          <div style="width:24px;height:24px;border-radius:50%;background:${pr.avatar};overflow:hidden;">
+            ${localStorage.getItem(`ekhio_photo_${pr.id}`) ? `<img src="${localStorage.getItem(`ekhio_photo_${pr.id}`)}" style="width:100%;height:100%;object-fit:cover;">` : ''}
+          </div>
           <span style="font-weight:800;font-size:14px;">${pr.name} ${pr.id===PID?t('app_current'):''}</span>
         </div>
         ${pr.id!==PID ? `<button onclick="deleteProfile('${pr.id}')" style="color:#E8344A;font-weight:900;font-size:12px;padding:4px 8px;border:1.5px solid #E8344A;border-radius:8px;">${t('app_delete_profile')}</button>` : ''}
@@ -1668,6 +1682,37 @@ function fastBonus() {
   renderAll();
   Robot.celebrate(); speak(t('app_robot_bonus'));
   burstConfetti();
+}
+
+function handleSettingsPhotoUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      const MAX_SIZE = 200;
+      let width = img.width; let height = img.height;
+      if (width > height) {
+        if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
+      } else {
+        if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
+      }
+      canvas.width = width; canvas.height = height;
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+      const dataUrl = canvas.toDataURL('image/webp', 0.8);
+      localStorage.setItem(`ekhio_photo_${PID}`, dataUrl);
+      loadProfile(); // Refresh UI
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeSettingsPhoto() {
+  localStorage.removeItem(`ekhio_photo_${PID}`);
+  loadProfile(); // Refresh UI
 }
 
 function resetStats() {

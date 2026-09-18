@@ -336,6 +336,16 @@
     <div class="step-content" id="step-4">
       <h1 class="step-title" id="s2-title"></h1>
       <p class="step-desc" id="s2-desc"></p>
+
+      <!-- Avatar Upload -->
+      <div class="avatar-upload-wrap" style="display:flex; flex-direction:column; align-items:center; margin-bottom: 24px;">
+        <div id="avatar-preview" style="width:80px; height:80px; border-radius:50%; background:rgba(255,255,255,0.1); border:2px dashed rgba(255,255,255,0.4); display:flex; justify-content:center; align-items:center; cursor:pointer; overflow:hidden; position:relative; transition:0.3s;" onclick="document.getElementById('ob-photo').click()">
+          <span style="font-size:30px; opacity:0.5;">📷</span>
+        </div>
+        <input type="file" id="ob-photo" accept="image/*" style="display:none;" onchange="handlePhotoUpload(event)">
+        <div id="ob-photo-label" style="font-size:12px; font-weight:600; color:rgba(255,255,255,0.7); margin-top:10px; cursor:pointer; background:rgba(255,255,255,0.1); padding:4px 12px; border-radius:99px;" onclick="document.getElementById('ob-photo').click()"></div>
+      </div>
+
       <input type="text" id="ob-name" class="ob-input" autocomplete="off">
       <div style="flex:1"></div>
       <button class="btn btn-primary" id="btn-s2" onclick="nextStep(5)" disabled></button>
@@ -477,6 +487,7 @@
       document.getElementById('s2-title').textContent = t('ob_name_title');
       document.getElementById('s2-desc').textContent = t('ob_name_desc');
       document.getElementById('ob-name').placeholder = t('ob_name_placeholder');
+      document.getElementById('ob-photo-label').textContent = t('ob_photo_add');
       document.getElementById('btn-s2').textContent = t('ob_next');
       // Step 5: Age
       document.getElementById('s3-title').textContent = t('ob_age_title');
@@ -687,6 +698,49 @@
       setTimeout(() => finishOnboarding(), 800);
     }
     
+    // Photo Upload and Compression
+    let uploadedPhotoBase64 = null;
+    function handlePhotoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const MAX_SIZE = 200;
+          let width = img.width;
+          let height = img.height;
+
+          // Resize maintaining aspect ratio
+          if (width > height) {
+            if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
+          } else {
+            if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Compress to WebP
+          const dataUrl = canvas.toDataURL('image/webp', 0.8);
+          uploadedPhotoBase64 = dataUrl;
+
+          // Show preview
+          const preview = document.getElementById('avatar-preview');
+          preview.innerHTML = `<img src="${dataUrl}" style="width:100%; height:100%; object-fit:cover;">`;
+          preview.style.border = '2px solid #FFF';
+          
+          Robot.set('excited');
+          Robot.bounce();
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
     // Disclaimer acceptance
     function acceptDisclaimer() {
       localStorage.setItem('ekhio_cgu_accepted', 'true');
@@ -736,6 +790,10 @@
       // Save PIN settings
       const settings = { mx: 5, pin: obPin };
       localStorage.setItem(`ekhio_settings_${id}`, JSON.stringify(settings));
+
+      if (uploadedPhotoBase64) {
+        localStorage.setItem(`ekhio_photo_${id}`, uploadedPhotoBase64);
+      }
       
       Robot.celebrate();
       speak(t('ob_robot_go'));
