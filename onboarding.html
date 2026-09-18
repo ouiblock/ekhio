@@ -67,12 +67,12 @@
     /* Scene: Robot Area */
     .robot-area {
       flex-shrink: 0; display: flex; justify-content: center; align-items: flex-end;
-      height: 220px; position:relative; margin-bottom: 20px;
+      height: 200px; position:relative; margin-bottom: 20px; margin-top: 35px;
     }
 
     /* Bubble */
     .bubble {
-      position: absolute; top: -10px; left: 50%; transform: translateX(-50%) translateY(20px);
+      position: absolute; top: -55px; left: 50%; transform: translateX(-50%) translateY(20px);
       background: #FFF; color: #1A1208; padding: 12px 18px; border-radius: 18px;
       font-weight: 800; font-size: 15px; text-align: center; width:max-content; max-width: 280px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.3); opacity: 0; transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -185,6 +185,48 @@
       cursor: pointer; transition: 0.2s; white-space: nowrap;
     }
     .custom-rew-row button:hover { filter: brightness(1.1); }
+
+    /* Disclaimer step */
+    .disclaimer-list {
+      list-style: none; padding: 0; margin: 0 0 20px;
+    }
+    .disclaimer-list li {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; margin-bottom: 8px;
+      background: rgba(255,255,255,0.05); border-radius: 14px;
+      font-weight: 700; font-size: 14px; line-height: 1.4;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .disclaimer-list li span.d-icon {
+      font-size: 22px; flex-shrink: 0;
+    }
+    .cgu-links {
+      text-align: center; font-size: 12px; color: rgba(255,255,255,0.5);
+      margin-bottom: 20px; line-height: 1.6;
+    }
+    .cgu-links a {
+      color: var(--accent); text-decoration: underline;
+    }
+
+    /* Parent intro / incentive cards */
+    .intro-card {
+      padding: 14px 16px; margin-bottom: 10px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px; transition: 0.2s;
+    }
+    .intro-card-title {
+      font-weight: 900; font-size: 15px; margin-bottom: 4px;
+    }
+    .intro-card-text {
+      font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.5;
+    }
+    .intro-highlight {
+      background: rgba(255,184,0,0.08); border-color: rgba(255,184,0,0.2);
+    }
+    .intro-scroll {
+      max-height: 340px; overflow-y: auto; padding-right: 4px;
+      margin-bottom: 16px;
+    }
   </style>
   <script>
     /* Redirect check before rendering */
@@ -204,6 +246,8 @@
       <div class="logo">☀️ Ekhio</div>
       <div class="progress-dots" id="dots">
         <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
         <div class="dot"></div>
         <div class="dot"></div>
         <div class="dot"></div>
@@ -246,7 +290,23 @@
     </div>
 
     <!-- STEPS -->
+
+    <!-- STEP 1: Disclaimer / CGU -->
     <div class="step-content active" id="step-1">
+      <h1 class="step-title" id="s0-title"></h1>
+      <ul class="disclaimer-list">
+        <li><span class="d-icon">🆓</span> <span id="d-free"></span></li>
+        <li><span class="d-icon">🔒</span> <span id="d-nodata"></span></li>
+        <li><span class="d-icon">🍪</span> <span id="d-cookies"></span></li>
+        <li><span class="d-icon">📱</span> <span id="d-local"></span></li>
+      </ul>
+      <div class="cgu-links" id="cgu-links"></div>
+      <div style="flex:1"></div>
+      <button class="btn btn-primary" onclick="acceptDisclaimer()" id="s0-btn"></button>
+    </div>
+
+    <!-- STEP 2: Welcome + Language -->
+    <div class="step-content" id="step-2">
       <h1 class="step-title" id="s1-title"></h1>
       <p class="step-desc" id="s1-desc"></p>
       <div style="display:flex;justify-content:center;gap:10px;margin-bottom:24px;flex-wrap:wrap;">
@@ -256,18 +316,33 @@
         <button class="color-btn" style="width:auto;height:auto;padding:8px 14px;border-radius:12px;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.2);color:#FFF;font-weight:800;font-size:13px;cursor:pointer;transition:0.2s;" onclick="setObLang('eu')">🟢 Euskara</button>
       </div>
       <div style="flex:1"></div>
-      <button class="btn btn-primary" onclick="nextStep(2)" id="s1-btn"></button>
+      <button class="btn btn-primary" onclick="nextStep(3)" id="s1-btn"></button>
     </div>
 
-    <div class="step-content" id="step-2">
+    <!-- STEP 3: Parent Intro / Incentive Education -->
+    <div class="step-content" id="step-3">
+      <h1 class="step-title" id="si-title"></h1>
+      <p class="step-desc" id="si-desc"></p>
+      <div class="intro-scroll">
+        <div class="intro-card" id="ic1"><div class="intro-card-title" id="ic1t"></div><div class="intro-card-text" id="ic1d"></div></div>
+        <div class="intro-card" id="ic2"><div class="intro-card-title" id="ic2t"></div><div class="intro-card-text" id="ic2d"></div></div>
+        <div class="intro-card" id="ic3"><div class="intro-card-title" id="ic3t"></div><div class="intro-card-text" id="ic3d"></div></div>
+        <div class="intro-card intro-highlight" id="ic4"><div class="intro-card-title" id="ic4t"></div><div class="intro-card-text" id="ic4d"></div></div>
+      </div>
+      <button class="btn btn-primary" onclick="nextStep(4)" id="si-btn"></button>
+    </div>
+
+    <!-- STEP 4: Name -->
+    <div class="step-content" id="step-4">
       <h1 class="step-title" id="s2-title"></h1>
       <p class="step-desc" id="s2-desc"></p>
       <input type="text" id="ob-name" class="ob-input" autocomplete="off">
       <div style="flex:1"></div>
-      <button class="btn btn-primary" id="btn-s2" onclick="nextStep(3)" disabled></button>
+      <button class="btn btn-primary" id="btn-s2" onclick="nextStep(5)" disabled></button>
     </div>
 
-    <div class="step-content" id="step-3">
+    <!-- STEP 5: Age -->
+    <div class="step-content" id="step-5">
       <h1 class="step-title" id="s3-title"></h1>
       <p class="step-desc" id="s3-desc"></p>
       <div class="age-display" id="age-val">5 <span style="font-size: 20px;" id="age-unit"></span></div>
@@ -275,10 +350,11 @@
         <input type="range" id="ob-age" min="3" max="18" value="5" step="1">
       </div>
       <div style="flex:1"></div>
-      <button class="btn btn-primary" onclick="nextStep(4)" id="s3-btn"></button>
+      <button class="btn btn-primary" onclick="nextStep(6)" id="s3-btn"></button>
     </div>
 
-    <div class="step-content" id="step-4">
+    <!-- STEP 6: Color -->
+    <div class="step-content" id="step-6">
       <h1 class="step-title" id="s4-title"></h1>
       <p class="step-desc" id="s4-desc"></p>
       <div class="color-grid" id="color-grid">
@@ -289,11 +365,11 @@
         <div class="color-btn" style="background:#E8344A" data-color="#E8344A"></div>
       </div>
       <div style="flex:1"></div>
-      <button class="btn btn-primary" onclick="nextStep(5)" id="s4-btn"></button>
+      <button class="btn btn-primary" onclick="nextStep(7)" id="s4-btn"></button>
     </div>
 
-    <!-- STEP 5: Rewards Selection -->
-    <div class="step-content" id="step-5">
+    <!-- STEP 7: Rewards Selection -->
+    <div class="step-content" id="step-7">
       <h1 class="step-title" id="s5-title"></h1>
       <p class="step-desc" id="s5-desc"></p>
       
@@ -306,11 +382,11 @@
       </div>
       
       <div style="flex:1"></div>
-      <button class="btn btn-primary" onclick="nextStep(6)" id="s5-btn"></button>
+      <button class="btn btn-primary" onclick="nextStep(8)" id="s5-btn"></button>
     </div>
 
-    <!-- STEP 6: PIN Code -->
-    <div class="step-content" id="step-6">
+    <!-- STEP 8: PIN Code -->
+    <div class="step-content" id="step-8">
       <h1 class="step-title" id="s6-title"></h1>
       <p class="step-desc" id="s6-desc"></p>
       <input type="number" id="ob-pin" class="ob-input" maxlength="4" inputmode="numeric" pattern="[0-9]{4}">
@@ -368,32 +444,57 @@
 
     // ===== I18N SETUP =====
     function setupI18n() {
-      // Step 1
+      // Step 1: Disclaimer
+      document.getElementById('s0-title').textContent = t('ob_disclaimer_title');
+      document.getElementById('d-free').textContent = t('ob_disclaimer_free');
+      document.getElementById('d-nodata').textContent = t('ob_disclaimer_nodata');
+      document.getElementById('d-cookies').textContent = t('ob_disclaimer_cookies');
+      document.getElementById('d-local').textContent = t('ob_disclaimer_local');
+      document.getElementById('cgu-links').innerHTML = 
+        t('ob_disclaimer_cgu') + ' <a href="cgu.html" target="_blank">' + t('ob_disclaimer_cgu_link') + '</a> ' +
+        t('ob_disclaimer_and') + ' <a href="privacy.html" target="_blank">' + t('ob_disclaimer_privacy_link') + '</a>.';
+      document.getElementById('s0-btn').textContent = t('ob_disclaimer_accept');
+
+      // Step 2: Welcome
       document.getElementById('s1-title').textContent = t('ob_welcome');
       document.getElementById('s1-desc').textContent = t('ob_welcome_desc');
       document.getElementById('s1-btn').textContent = t('ob_start');
-      // Step 2
+
+      // Step 3: Parent Intro
+      document.getElementById('si-title').textContent = t('ob_intro_title');
+      document.getElementById('si-desc').textContent = t('ob_intro_desc');
+      document.getElementById('ic1t').textContent = t('ob_intro_p1_title');
+      document.getElementById('ic1d').textContent = t('ob_intro_p1');
+      document.getElementById('ic2t').textContent = t('ob_intro_p2_title');
+      document.getElementById('ic2d').textContent = t('ob_intro_p2');
+      document.getElementById('ic3t').textContent = t('ob_intro_p3_title');
+      document.getElementById('ic3d').textContent = t('ob_intro_p3');
+      document.getElementById('ic4t').textContent = t('ob_intro_p4_title');
+      document.getElementById('ic4d').textContent = t('ob_intro_p4');
+      document.getElementById('si-btn').textContent = t('ob_intro_btn');
+
+      // Step 4: Name
       document.getElementById('s2-title').textContent = t('ob_name_title');
       document.getElementById('s2-desc').textContent = t('ob_name_desc');
       document.getElementById('ob-name').placeholder = t('ob_name_placeholder');
       document.getElementById('btn-s2').textContent = t('ob_next');
-      // Step 3
+      // Step 5: Age
       document.getElementById('s3-title').textContent = t('ob_age_title');
       document.getElementById('s3-desc').textContent = t('ob_age_desc');
       document.getElementById('age-unit').textContent = t('ob_age_unit');
       document.getElementById('s3-btn').textContent = t('ob_next');
-      // Step 4
+      // Step 6: Color
       document.getElementById('s4-title').textContent = t('ob_color_title');
       document.getElementById('s4-desc').textContent = t('ob_color_desc');
       document.getElementById('s4-btn').textContent = t('ob_next');
-      // Step 5
+      // Step 7: Rewards
       document.getElementById('s5-title').textContent = t('ob_rewards_title');
       document.getElementById('s5-desc').textContent = t('ob_rewards_desc');
       document.getElementById('custom-rew-name').placeholder = t('ob_rewards_custom_placeholder');
       document.getElementById('custom-rew-cost').placeholder = t('ob_rewards_cost_placeholder');
       document.getElementById('custom-rew-btn').textContent = t('ob_rewards_add');
       document.getElementById('s5-btn').textContent = t('ob_next');
-      // Step 6
+      // Step 8: PIN
       document.getElementById('s6-title').textContent = t('ob_pin_title');
       document.getElementById('s6-desc').textContent = t('ob_pin_desc');
       document.getElementById('ob-pin').placeholder = t('ob_pin_placeholder');
@@ -529,20 +630,26 @@
       });
 
       if (step === 2) {
+        Robot.set('happy');
+        speak(t('ob_robot_hello'));
+      } else if (step === 3) {
+        Robot.set('curious');
+        speak(t('ob_robot_intro'));
+      } else if (step === 4) {
         Robot.set('curious');
         speak(t('ob_robot_name'));
         setTimeout(() => nameInput.focus(), 300);
-      } else if (step === 3) {
+      } else if (step === 5) {
         Robot.set('excited');
         speak(t('ob_robot_age'));
-      } else if (step === 4) {
+      } else if (step === 6) {
         Robot.set('happy');
         speak(t('ob_robot_color'));
-      } else if (step === 5) {
+      } else if (step === 7) {
         Robot.set('curious');
         speak(t('ob_robot_rewards'));
         renderRewardGrid();
-      } else if (step === 6) {
+      } else if (step === 8) {
         Robot.set('curious');
         speak(t('ob_robot_pin'));
       }
@@ -576,9 +683,19 @@
       document.getElementById('ob-pin').value = '';
       speak(t('ob_robot_pin_skip'));
       Robot.set('happy');
+      // Directly finish onboarding when skipping
+      setTimeout(() => finishOnboarding(), 800);
     }
     
-    // Language selector on step 1
+    // Disclaimer acceptance
+    function acceptDisclaimer() {
+      localStorage.setItem('ekhio_cgu_accepted', 'true');
+      Robot.set('happy');
+      speak(t('ob_robot_disclaimer'));
+      nextStep(2);
+    }
+    
+    // Language selector on step 2
     function setObLang(lang) {
       localStorage.setItem('ekhio_lang', lang);
       setupI18n();
@@ -631,9 +748,9 @@
     setupI18n();
     
     setTimeout(() => {
-      speak(t('ob_robot_hello'));
-      Robot.set('welcome'); // Triggers neutral
-      Robot.bounce(); // bounce
+      speak(t('ob_robot_disclaimer'));
+      Robot.set('welcome');
+      Robot.bounce();
     }, 1000);
 
   </script>
